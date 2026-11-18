@@ -3,53 +3,212 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AniGuide — Complete Anime Watch Orders, Filler Skip Lists & Manga Deals</title>
-  <meta name="description" content="Save 200+ hours with exact canon episode guides and watch orders for Naruto, One Piece, Bleach, Attack on Titan, Demon Slayer, JJK, Fate, and Dragon Ball." />
-  <meta name="keywords" content="anime watch order, naruto filler list, one piece filler guide, bleach skip list, fate watch order, attack on titan watch order" />
-  <meta property="og:title" content="AniGuide — Anime Watch Orders & Filler Skip Lists" />
-  <meta property="og:description" content="Exact canon episode guides, watch orders, and trending anime tracker." />
+  <title>AniGuide — Complete Anime Watch Orders, 2026 Releases & Manga Deals</title>
+  <meta name="description" content="Save 200+ hours with exact canon episode guides, 2026 anime release schedules, and watch orders for Naruto, One Piece, Bleach, Attack on Titan, Demon Slayer, JJK, Fate, and Dragon Ball." />
+  <meta name="keywords" content="anime watch order, 2026 anime schedule, naruto filler list, one piece filler guide, bleach skip list, fate watch order, attack on titan watch order" />
+  <meta property="og:title" content="AniGuide — Anime Watch Orders & 2026 Release Tracker" />
+  <meta property="og:description" content="Exact canon episode guides, watch orders, and 2026 anime release tracker." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://aniguide.aniguide-hub.workers.dev/" />
   <style>
-    :root { --bg: #0d1117; --card: #161b22; --accent: #ff4757; --green: #238636; --blue: #1f6feb; --text: #f0f6fc; --muted: #8b949e; }
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --card-2: #1f2630;
+      --border: #30363d;
+      --accent: #ff4757;
+      --accent-grad: linear-gradient(135deg, #ff4757, #7c3aed);
+      --green: #238636;
+      --blue: #1f6feb;
+      --text: #f0f6fc;
+      --muted: #8b949e;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 14px; max-width: 1020px; margin: auto; }
-    header { text-align: center; padding: 18px 0; border-bottom: 1px solid #30363d; }
+    body { background: var(--bg); color: var(--text); padding: 14px; max-width: 1080px; margin: auto; -webkit-font-smoothing: antialiased; }
+
+    /* Non-Intrusive Top Notice Banner Controlled by Admin */
+    .top-notice {
+      display: none; background: linear-gradient(90deg, #2b1d0e, #1f1722);
+      border: 1px solid #f59e0b; color: #fde68a; border-radius: 10px;
+      padding: 9px 14px; margin-bottom: 12px; font-size: 0.84rem;
+      align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .top-notice.show { display: flex; }
+
+    header { text-align: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
     header h1 { color: var(--accent); font-size: 1.9rem; letter-spacing: -0.5px; }
-    header p { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
-    .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 16px 0; padding-bottom: 8px; scrollbar-width: thin; }
-    .tab-btn { background: var(--card); color: var(--text); border: 1px solid #30363d; padding: 8px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; }
-    .tab-btn.active { background: var(--accent); border-color: var(--accent); font-weight: bold; }
-    .search-box { display: flex; gap: 8px; margin-bottom: 16px; }
-    input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background: var(--card); color: var(--text); font-size: 1rem; }
-    button.primary { background: var(--accent); color: #fff; border: none; padding: 0 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    .guide-box { background: var(--card); border: 1px solid #30363d; border-radius: 10px; padding: 16px; margin-bottom: 18px; display: none; }
+    header p { color: var(--muted); font-size: 0.9rem; margin-top: 5px; }
+
+    .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 14px 0 8px; padding-bottom: 6px; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: var(--card); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.84rem;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); font-weight: bold; color: #fff; }
+
+    .guide-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; display: none; }
     .guide-box.show { display: block; }
-    .guide-box h2 { color: var(--accent); margin-bottom: 10px; font-size: 1.15rem; }
-    .guide-box ul { padding-left: 18px; line-height: 1.75; color: #c9d1d9; font-size: 0.92rem; }
-    .guide-cta { display: inline-block; margin-top: 12px; background: var(--green); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; }
-    .ad-slot { margin: 14px 0; text-align: center; min-height: 20px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
-    .card { background: var(--card); border: 1px solid #30363d; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-    .card img { width: 100%; height: 225px; object-fit: cover; }
+    .guide-box h2 { color: var(--accent); margin-bottom: 10px; font-size: 1.12rem; }
+    .guide-box ul { padding-left: 18px; line-height: 1.75; color: #c9d1d9; font-size: 0.9rem; }
+    .guide-cta { display: inline-block; margin-top: 12px; background: var(--green); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.84rem; font-weight: bold; }
+
+    .ad-slot { margin: 12px 0; text-align: center; min-height: 20px; }
+
+    .search-box { display: flex; gap: 8px; margin-bottom: 14px; }
+    .search-box input { flex: 1; padding: 11px 13px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 0.95rem; outline: none; }
+    .search-box input:focus { border-color: var(--accent); }
+    button.primary { background: var(--accent); color: #fff; border: none; padding: 0 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(162px, 1fr)); gap: 13px; }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover { transform: translateY(-3px); border-color: #484f58; }
+    .poster-wrap { position: relative; cursor: pointer; overflow: hidden; }
+    .poster-wrap img { width: 100%; height: 225px; object-fit: cover; display: block; }
+    .air-badge {
+      position: absolute; top: 7px; left: 7px; right: 7px;
+      background: rgba(13, 17, 23, 0.9); border-left: 3px solid var(--accent);
+      color: #ff8b96; font-size: 0.7rem; font-weight: 700; padding: 4px 6px; border-radius: 4px;
+    }
     .card-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .card-title { font-size: 0.92rem; font-weight: bold; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-meta { font-size: 0.78rem; color: var(--muted); }
+    .card-title { font-size: 0.9rem; font-weight: bold; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-meta { font-size: 0.76rem; color: var(--muted); }
     .btn-row { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
     .buy-btn { display: block; text-align: center; background: var(--green); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
     .merch-btn { display: block; text-align: center; background: var(--blue); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
-    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; padding-top: 16px; border-top: 1px solid #30363d; line-height: 1.6; }
+
+    .skeleton {
+      height: 310px; border-radius: 10px;
+      background: linear-gradient(90deg, #161b22 25%, #21262d 50%, #161b22 75%);
+      background-size: 200% 100%; animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .overlay {
+      position: fixed; inset: 0; z-index: 60; background: rgba(0, 0, 0, 0.85);
+      display: none; justify-content: center; align-items: flex-end;
+    }
+    .overlay.open { display: flex; }
+    .sheet {
+      background: #0d1117; width: 100%; max-width: 840px; height: 92vh;
+      border-radius: 18px 18px 0 0; overflow-y: auto; border: 1px solid var(--border);
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .close-btn {
+      position: sticky; top: 12px; float: right; margin: 12px; z-index: 10;
+      background: var(--card-2); color: #fff; border: 1px solid var(--border);
+      width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer;
+    }
+    .hero { padding: 22px 16px 14px; text-align: center; background: linear-gradient(to bottom, #161b22, #0d1117); }
+    .hero-banner-img { width: 100%; max-height: 165px; object-fit: cover; border-radius: 10px; margin-bottom: -44px; opacity: 0.72; border: 1px solid var(--border); }
+    .hero-poster { position: relative; width: 136px; border-radius: 10px; box-shadow: 0 10px 26px rgba(0,0,0,0.8); border: 2px solid var(--border); }
+    .hero-title { font-size: 1.25rem; font-weight: 800; margin-top: 10px; }
+    .hero-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    .hero-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+    .hero-actions a { padding: 8px 14px; font-size: 0.8rem; }
+
+    .detail-tabs { display: flex; border-bottom: 1px solid var(--border); margin: 8px 16px 0; }
+    .d-tab {
+      flex: 1; background: none; border: none; color: var(--muted); padding: 11px;
+      font-size: 0.9rem; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent;
+    }
+    .d-tab.active { color: #fff; border-bottom-color: var(--accent); }
+    .d-panel { padding: 16px; display: none; }
+    .d-panel.active { display: block; }
+
+    .synopsis { font-size: 0.88rem; line-height: 1.65; color: #c9d1d9; margin-bottom: 14px; }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 0.83rem; color: #c9d1d9; }
+    .meta-grid span { color: var(--accent); font-weight: 700; }
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .tag { background: var(--card); border: 1px solid var(--border); color: #ff8b96; padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 600; }
+
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+    .rec-card { background: var(--card); border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); }
+    .rec-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+    .rec-card p { padding: 6px; font-size: 0.76rem; font-weight: 600; }
+
+    .comments { margin: 14px 16px 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .comments h3 { font-size: 1.05rem; margin-bottom: 4px; }
+    .comments .note { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; }
+    .comments textarea, .comments input[type="text"], .comments input[type="email"] {
+      width: 100%; background: var(--card); border: 1px solid var(--border);
+      color: var(--text); border-radius: 8px; padding: 10px 12px; font-size: 0.86rem; margin-top: 6px;
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .save-row { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 0.78rem; color: var(--muted); }
+    .post-btn { background: var(--accent-grad); color: #fff; border: none; padding: 9px 20px; border-radius: 20px; font-weight: 700; font-size: 0.84rem; cursor: pointer; }
+    .c-list { margin-top: 14px; display: flex; flex-direction: column; gap: 9px; }
+    .c-item { background: var(--card); border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px; }
+    .c-item strong { color: #ff8b96; font-size: 0.83rem; }
+    .admin-tag { background: var(--accent); color: #fff; font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+    .c-item small { color: var(--muted); margin-left: 8px; font-size: 0.72rem; }
+    .c-item p { margin-top: 5px; font-size: 0.85rem; line-height: 1.45; }
+
+    .popup {
+      position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 365px; margin: auto;
+      z-index: 80; background: var(--card); border: 1px solid #484f58;
+      border-radius: 14px; padding: 15px; box-shadow: 0 16px 36px rgba(0,0,0,0.85);
+      display: none;
+    }
+    .popup.show { display: block; animation: slideUp 0.25s ease-out; }
+    .popup-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .popup-close { background: var(--card-2); border: 1px solid var(--border); color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-weight: 700; }
+    .popup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .popup-opt { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: left; }
+    .popup-opt:hover { border-color: var(--accent); }
+
+    .ab-wall {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(9, 11, 16, 0.96); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; padding: 18px;
+    }
+    .ab-wall.active { display: flex; }
+    .ab-card {
+      background: #161b22; border: 1px solid #ff4757; border-radius: 16px;
+      max-width: 420px; width: 100%; padding: 24px 20px; text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    }
+    .ab-icon { font-size: 2.4rem; margin-bottom: 10px; }
+    .ab-card h2 { color: #ff4757; font-size: 1.25rem; margin-bottom: 8px; }
+    .ab-card p { color: #c9d1d9; font-size: 0.88rem; line-height: 1.55; margin-bottom: 14px; }
+    .ab-steps {
+      background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+      padding: 12px; text-align: left; font-size: 0.8rem; color: #8b949e;
+      line-height: 1.6; margin-bottom: 16px;
+    }
+    .ab-steps strong { color: #f0f6fc; }
+    .ab-reload {
+      width: 100%; background: linear-gradient(135deg, #ff4757, #7c3aed);
+      color: #fff; border: none; padding: 12px; border-radius: 10px;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    }
+
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.6; }
   </style>
 </head>
 <body>
 
+  <!-- Admin-Controlled Top Notice Bar -->
+  <div class="top-notice" id="topNotice">
+    <span id="topNoticeText"></span>
+  </div>
+
   <header>
     <h1>AniGuide</h1>
-    <p>Canon Watch Orders, Filler Skip Lists & Official Manga / Merch Deals</p>
+    <p>2026 Release Schedules, Canon Watch Orders & Official Manga / Merch Deals</p>
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('trending', this)">Trending</button>
+    <button class="tab-btn active" onclick="showTab('this_month', this)">New This Month (Nov 2026)</button>
+    <button class="tab-btn" onclick="showTab('this_year', this)">Best of 2026</button>
+    <button class="tab-btn" onclick="showTab('trending', this)">Trending</button>
     <button class="tab-btn" onclick="showTab('naruto', this)">Naruto</button>
     <button class="tab-btn" onclick="showTab('onepiece', this)">One Piece</button>
     <button class="tab-btn" onclick="showTab('bleach', this)">Bleach</button>
@@ -164,51 +323,151 @@
     <button class="primary" onclick="searchAnime()">Search</button>
   </div>
 
-  <div class="grid" id="anime-grid">Loading trending anime...</div>
+  <div class="grid" id="anime-grid"></div>
 
-<div style="margin-top:26px;padding:14px;background:#161b22;border:1px solid #30363d;border-radius:10px;"><strong style="color:#ff4757;display:block;margin-bottom:8px;">Full Watch Order, Filler Skip & Manga Continuation Guides:</strong><a href="naruto-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Naruto</a> • <a href="one-piece-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">One Piece</a> • <a href="bleach-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Bleach</a> • <a href="solo-leveling-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Solo Leveling</a> • <a href="chainsaw-man-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Chainsaw Man</a> • <a href="dandadan-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Dan Da Dan</a> • <a href="attack-on-titan-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Attack on Titan</a> • <a href="jujutsu-kaisen-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Jujutsu Kaisen</a> • <a href="demon-slayer-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Demon Slayer</a> • <a href="my-hero-academia-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">My Hero Academia</a> • <a href="black-clover-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Black Clover</a> • <a href="fate-series-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Fate Series</a> • <a href="dragon-ball-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Dragon Ball</a> • <a href="hunter-x-hunter-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Hunter x Hunter</a></div>
+  <div style="margin-top:26px;padding:14px;background:#161b22;border:1px solid #30363d;border-radius:10px;">
+    <strong style="color:#ff4757;display:block;margin-bottom:8px;">Full Watch Order, Filler Skip & Manga Continuation Guides:</strong>
+    <a href="naruto-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Naruto</a> •
+    <a href="one-piece-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">One Piece</a> •
+    <a href="bleach-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Bleach</a> •
+    <a href="solo-leveling-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Solo Leveling</a> •
+    <a href="chainsaw-man-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Chainsaw Man</a> •
+    <a href="dandadan-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Dan Da Dan</a> •
+    <a href="attack-on-titan-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Attack on Titan</a> •
+    <a href="jujutsu-kaisen-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Jujutsu Kaisen</a> •
+    <a href="demon-slayer-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Demon Slayer</a> •
+    <a href="my-hero-academia-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">My Hero Academia</a> •
+    <a href="black-clover-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Black Clover</a> •
+    <a href="fate-series-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Fate Series</a> •
+    <a href="dragon-ball-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Dragon Ball</a> •
+    <a href="hunter-x-hunter-watch-order.html" style="color:#58a6ff;text-decoration:none;font-size:0.85rem;">Hunter x Hunter</a>
+  </div>
 
   <footer>
     <p>As an Amazon Associate, AniGuide earns from qualifying purchases. Live anime data via AniList API.</p>
   </footer>
 
+  <!-- Animated Anime Detail Modal -->
+  <div class="overlay" id="detailOverlay" onclick="if(event.target===this) closeDetail()">
+    <div class="sheet">
+      <button class="close-btn" onclick="closeDetail()">✕</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <!-- Dynamic One-Time Visitor Popup (Controlled by Admin) -->
+  <div class="popup" id="surveyPopup">
+    <div class="popup-top">
+      <strong id="popupTitle" style="font-size:0.9rem;">How did you hear about AniGuide?</strong>
+      <button class="popup-close" onclick="closeSurvey()">✕</button>
+    </div>
+    <p style="font-size:0.76rem;color:var(--muted);">Tap one option to help us improve:</p>
+    <div class="popup-grid" id="popupOptions"></div>
+  </div>
+
+  <!-- Anti-Adblock Full-Screen Wall -->
+  <div class="ab-wall" id="abWall">
+    <div class="ab-card">
+      <div class="ab-icon">🛡️</div>
+      <h2>Ad Blocker Detected</h2>
+      <p>AniGuide stays 100% free with live 2026 anime schedules and watch orders thanks to our sponsors. Please disable your ad blocker to continue.</p>
+      <div class="ab-steps">
+        • <strong>Brave / Soul Browser:</strong> Tap the Shield / AdBlock icon in the address bar and turn it <strong>OFF</strong>.<br>
+        • <strong>AdGuard / Private DNS / VPN:</strong> Pause protection for this site.<br>
+        • <strong>Browser Extensions:</strong> Disable uBlock / AdBlock on this page.
+      </div>
+      <button class="ab-reload" onclick="location.reload()">I've Disabled It — Reload Page</button>
+    </div>
+  </div>
+
   <script>
     const AMAZON_TAG = "aniguide-21";
+    const FIREBASE_DB_URL = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const animeCache = {};
+    let activePopupId = "default_v1";
+
+    function formatSchedule(m) {
+      if (m.nextAiringEpisode) {
+        const d = new Date(m.nextAiringEpisode.airingAt * 1000);
+        const day = d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
+        const time = d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+        return `Ep ${m.nextAiringEpisode.episode} • ${day}, ${time}`;
+      }
+      if (m.startDate && m.startDate.year) {
+        const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return `${m.startDate.day || ""} ${months[m.startDate.month] || ""} ${m.startDate.year}`.trim();
+      }
+      return `${m.season || ""} ${m.seasonYear || "2026"}`.trim();
+    }
 
     function showTab(tab, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       document.querySelectorAll('.guide-box').forEach(g => g.classList.remove('show'));
-      if (tab !== 'trending') {
+
+      if (tab === 'this_month' || tab === 'this_year' || tab === 'trending') {
+        loadAnime(null, tab);
+      } else {
         document.getElementById('guide-' + tab).classList.add('show');
       }
     }
 
-    async function loadAnime(searchQuery = null) {
+    async function loadAnime(searchQuery = null, mode = 'this_month') {
       const grid = document.getElementById('anime-grid');
-      grid.innerHTML = 'Loading...';
+      grid.innerHTML = Array(10).fill('<div class="skeleton"></div>').join('');
 
       const gqlQuery = `
-        query ($search: String) {
-          Page(page: 1, perPage: 20) {
-            media(search: $search, type: ANIME, sort: TRENDING_DESC, isAdult: false) {
-              title { english romaji }
-              coverImage { large }
-              averageScore
+        query ($search: String, $season: MediaSeason, $seasonYear: Int, $sort: [MediaSort]) {
+          Page(page: 1, perPage: 24) {
+            media(search: $search, season: $season, seasonYear: $seasonYear, type: ANIME, sort: $sort, isAdult: false) {
+              id
+              title { english romaji native }
+              format
               episodes
+              status
+              duration
+              season
+              seasonYear
+              averageScore
+              description(asHtml: false)
+              bannerImage
+              coverImage { extraLarge large }
+              startDate { year month day }
+              nextAiringEpisode { airingAt episode }
+              studios(isMain: true) { nodes { name } }
+              genres
+              recommendations(perPage: 6, sort: RATING_DESC) {
+                nodes {
+                  mediaRecommendation {
+                    id
+                    title { romaji english }
+                    coverImage { large }
+                  }
+                }
+              }
             }
           }
         }
       `;
 
+      const vars = { sort: ["TRENDING_DESC"] };
+      if (searchQuery) {
+        vars.search = searchQuery;
+        vars.sort = ["SEARCH_MATCH"];
+      } else if (mode === 'this_month') {
+        vars.season = "FALL";
+        vars.seasonYear = 2026;
+        vars.sort = ["TRENDING_DESC"];
+      } else if (mode === 'this_year') {
+        vars.seasonYear = 2026;
+        vars.sort = ["SCORE_DESC"];
+      }
+
       try {
         const res = await fetch('https://graphql.anilist.co', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            query: gqlQuery,
-            variables: searchQuery ? { search: searchQuery } : {}
-          })
+          body: JSON.stringify({ query: gqlQuery, variables: vars })
         });
         const json = await res.json();
         const list = json.data.Page.media;
@@ -219,15 +478,19 @@
         }
 
         grid.innerHTML = list.map(a => {
+          animeCache[a.id] = a;
           const title = a.title.english || a.title.romaji;
           const mangaUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' manga box set')}&tag=${AMAZON_TAG}`;
           const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' action figure hoodie')}&tag=${AMAZON_TAG}`;
           return `
             <div class="card">
-              <img src="${a.coverImage.large}" alt="${title}" loading="lazy" />
+              <div class="poster-wrap" onclick="openDetail(${a.id})">
+                <img src="${a.coverImage.large}" alt="${title}" loading="lazy" />
+                <div class="air-badge">${formatSchedule(a)}</div>
+              </div>
               <div class="card-body">
-                <div class="card-title">${title}</div>
-                <div class="card-meta">Score: ${a.averageScore ? (a.averageScore / 10).toFixed(1) : 'N/A'} • ${a.episodes || '?'} Eps</div>
+                <div class="card-title" onclick="openDetail(${a.id})">${title}</div>
+                <div class="card-meta">Score: ${a.averageScore ? (a.averageScore / 10).toFixed(1) : 'New'} • ${a.episodes || '?'} Eps</div>
                 <div class="btn-row">
                   <a class="buy-btn" href="${mangaUrl}" target="_blank" rel="nofollow noopener">Manga Box Sets</a>
                   <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Hoodies</a>
@@ -240,14 +503,229 @@
       }
     }
 
-    function searchAnime() {
-      const q = document.getElementById('query').value.trim();
-      loadAnime(q || null);
+    function openDetail(id) {
+      const a = animeCache[id];
+      if (!a) return;
+      const title = a.title.english || a.title.romaji;
+      const mangaUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' manga box set')}&tag=${AMAZON_TAG}`;
+      const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' action figure hoodie')}&tag=${AMAZON_TAG}`;
+      const recs = (a.recommendations?.nodes || []).map(n => n.mediaRecommendation).filter(Boolean);
+      const savedName = localStorage.getItem("ag_name") || "";
+      const savedEmail = localStorage.getItem("ag_email") || "";
+
+      document.getElementById("detailContent").innerHTML = `
+        <div class="hero">
+          ${a.bannerImage ? `<img class="hero-banner-img" src="${a.bannerImage}" alt="" />` : ""}
+          <img class="hero-poster" src="${a.coverImage.extraLarge}" alt="${title}" />
+          <div class="hero-title">${title}</div>
+          <div class="hero-sub">${a.title.romaji} • ${formatSchedule(a)}</div>
+          <div class="hero-actions">
+            <a class="buy-btn" href="${mangaUrl}" target="_blank" rel="nofollow noopener">Buy Manga Box Set</a>
+            <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Hoodies</a>
+          </div>
+        </div>
+
+        <div class="detail-tabs">
+          <button class="d-tab active" onclick="switchDetailTab('tabSummary', this)">Summary & Info</button>
+          <button class="d-tab" onclick="switchDetailTab('tabRecs', this)">Recommendations (${recs.length})</button>
+        </div>
+
+        <div class="d-panel active" id="tabSummary">
+          <p class="synopsis">${(a.description || "Summary coming soon.").replace(/<[^>]*>/g, "")}</p>
+          <div class="meta-grid">
+            <div><strong>Japanese:</strong> ${a.title.native || "—"}</div>
+            <div><strong>Type:</strong> <span>${a.format || "TV"}</span></div>
+            <div><strong>Episodes:</strong> ${a.episodes || "Ongoing"}</div>
+            <div><strong>Status:</strong> <span>${a.status}</span></div>
+            <div><strong>Duration:</strong> ${a.duration || 24} mins</div>
+            <div><strong>Schedule:</strong> ${formatSchedule(a)}</div>
+            <div><strong>Season:</strong> <span>${a.season || ""} ${a.seasonYear || ""}</span></div>
+            <div><strong>Studio:</strong> ${(a.studios?.nodes || []).map(s => s.name).join(", ") || "TBA"}</div>
+          </div>
+          <div class="tags">${(a.genres || []).map(g => `<span class="tag">${g}</span>`).join("")}</div>
+        </div>
+
+        <div class="d-panel" id="tabRecs">
+          <div class="rec-grid">
+            ${recs.length ? recs.map(r => `
+              <div class="rec-card" onclick="searchDirect('${(r.title.english || r.title.romaji).replace(/'/g, "")}')">
+                <img src="${r.coverImage.large}" loading="lazy" />
+                <p>${r.title.english || r.title.romaji}</p>
+              </div>
+            `).join("") : "<p style='color:var(--muted);'>No recommendations available yet.</p>"}
+          </div>
+        </div>
+
+        <div class="comments">
+          <h3>Comment</h3>
+          <p class="note">Leave a Reply — Your email address will not be published. Required fields are marked *</p>
+          <textarea id="cText" rows="3" placeholder="Comment *"></textarea>
+          <div class="two-col">
+            <input type="text" id="cName" value="${savedName}" placeholder="Name *" />
+            <input type="email" id="cEmail" value="${savedEmail}" placeholder="Email *" />
+          </div>
+          <label class="save-row">
+            <input type="checkbox" id="cSave" ${savedName ? "checked" : ""} />
+            Save my name and email in this browser for next time.
+          </label>
+          <button class="post-btn" onclick="postComment(${id})">Post Comment</button>
+          <div class="c-list" id="cList"></div>
+        </div>
+      `;
+
+      document.getElementById("detailOverlay").classList.add("open");
+      loadComments(id);
     }
 
-    loadAnime();
+    function closeDetail() { document.getElementById("detailOverlay").classList.remove("open"); }
+
+    function switchDetailTab(id, btn) {
+      document.querySelectorAll(".d-tab").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".d-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(id).classList.add("active");
+    }
+
+    function searchDirect(title) {
+      closeDetail();
+      document.getElementById("query").value = title;
+      loadAnime(title);
+    }
+
+    function searchAnime() {
+      const q = document.getElementById('query').value.trim();
+      loadAnime(q || null, 'this_month');
+    }
+
+    async function loadComments(id) {
+      const list = document.getElementById("cList");
+      try {
+        const r = await fetch(`${FIREBASE_DB_URL}/comments/${id}.json`);
+        const data = await r.json();
+        const items = data ? Object.values(data).reverse() : [];
+        list.innerHTML = items.map(c => `
+          <div class="c-item">
+            <strong>${c.name}</strong>${c.isAdmin ? '<span class="admin-tag">ADMIN</span>' : ''}<small>${c.date}</small>
+            <p>${c.text}</p>
+          </div>
+        `).join("");
+      } catch {}
+    }
+
+    async function postComment(id) {
+      const text = document.getElementById("cText").value.trim();
+      const name = document.getElementById("cName").value.trim();
+      const email = document.getElementById("cEmail").value.trim();
+      if (!text || !name || !email) return alert("Please enter Comment, Name, and Email.");
+
+      if (document.getElementById("cSave").checked) {
+        localStorage.setItem("ag_name", name);
+        localStorage.setItem("ag_email", email);
+      }
+      const animeObj = animeCache[id];
+      const animeTitle = animeObj ? (animeObj.title.english || animeObj.title.romaji) : "";
+      const entry = { name, text, animeTitle, date: new Date().toLocaleDateString() };
+      await fetch(`${FIREBASE_DB_URL}/comments/${id}.json`, {
+        method: "POST",
+        body: JSON.stringify(entry)
+      });
+      document.getElementById("cText").value = "";
+      loadComments(id);
+    }
+
+    // Load Admin Notice & Dynamic One-Time Popup
+    async function initSiteConfig() {
+      let popTitle = "How did you hear about AniGuide?";
+      let popOpts = ["Instagram", "Heard from Friends", "YouTube", "Google Search", "Telegram / Discord", "Other"];
+      let shouldShowPopup = true;
+
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/site_config.json`);
+        const cfg = await res.json();
+        if (cfg && cfg.notice && cfg.notice.active && cfg.notice.text) {
+          document.getElementById("topNoticeText").textContent = cfg.notice.text;
+          document.getElementById("topNotice").classList.add("show");
+        }
+        if (cfg && cfg.popup) {
+          if (cfg.popup.active === false) {
+            shouldShowPopup = false;
+          } else if (cfg.popup.id) {
+            activePopupId = cfg.popup.id;
+            popTitle = cfg.popup.title || popTitle;
+            popOpts = cfg.popup.options || popOpts;
+          }
+        }
+      } catch {}
+
+      if (shouldShowPopup && !localStorage.getItem("ag_seen_" + activePopupId)) {
+        document.getElementById("popupTitle").textContent = popTitle;
+        document.getElementById("popupOptions").innerHTML = popOpts.map(opt =>
+          `<button class="popup-opt" onclick="saveSurvey('${opt.replace(/'/g, "")}')">${opt}</button>`
+        ).join("");
+        setTimeout(() => document.getElementById("surveyPopup").classList.add("show"), 5500);
+      }
+    }
+
+    function closeSurvey() {
+      localStorage.setItem("ag_seen_" + activePopupId, "dismissed");
+      document.getElementById("surveyPopup").classList.remove("show");
+    }
+
+    function saveSurvey(source) {
+      localStorage.setItem("ag_seen_" + activePopupId, source);
+      document.getElementById("surveyPopup").classList.remove("show");
+      fetch(`${FIREBASE_DB_URL}/visitor_sources.json`, {
+        method: "POST",
+        body: JSON.stringify({ popupId: activePopupId, source, time: Date.now() })
+      });
+    }
+
+    // Multi-Layer Anti-Adblock Engine
+    function triggerAdBlockWall() {
+      document.getElementById("abWall").classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    async function runAntiAdblock() {
+      const bait = document.createElement("div");
+      bait.className = "adsbox ad-banner ad-unit pub_300x250 textads";
+      bait.style.cssText = "width:1px;height:1px;position:absolute;left:-9999px;top:-9999px;";
+      document.body.appendChild(bait);
+
+      setTimeout(() => {
+        const hiddenByCSS = bait.offsetHeight === 0 || window.getComputedStyle(bait).display === "none";
+        bait.remove();
+        if (hiddenByCSS) triggerAdBlockWall();
+      }, 250);
+
+      try {
+        await fetch("https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1", {
+          method: "HEAD",
+          mode: "no-cors",
+          cache: "no-store"
+        });
+      } catch (err) {
+        triggerAdBlockWall();
+        return;
+      }
+
+      setTimeout(() => {
+        const container = document.getElementById("container-f1020225a43a6e61284781660ae4e2a1");
+        if (container && container.innerHTML.trim() === "") {
+          triggerAdBlockWall();
+        }
+      }, 4000);
+    }
+
+    window.addEventListener("load", () => {
+      initSiteConfig();
+      runAntiAdblock();
+    });
+
+    loadAnime(null, 'this_month');
   </script>
 
+  <!-- ADSTERRA SOCIAL BAR SCRIPT -->
   <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
 
 </body>
