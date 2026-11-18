@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://koushikshety.github.io/aniguide/sitemap.xml
