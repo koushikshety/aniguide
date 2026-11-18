@@ -3,61 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AniGuide — Anime Watch Order, Filler Lists & Live Tracker</title>
-  <meta name="description" content="Complete anime watch orders, canon episode guides, and live trending anime search." />
+  <title>AniGuide — Complete Anime Watch Orders, Filler Skip Lists & Manga Deals</title>
+  <meta name="description" content="Save 200+ hours with exact canon episode guides and watch orders for Naruto, One Piece, Bleach, Attack on Titan, Demon Slayer, JJK, Fate, and Dragon Ball." />
+  <meta name="keywords" content="anime watch order, naruto filler list, one piece filler guide, bleach skip list, fate watch order, attack on titan watch order" />
+  <meta property="og:title" content="AniGuide — Anime Watch Orders & Filler Skip Lists" />
+  <meta property="og:description" content="Exact canon episode guides, watch orders, and trending anime tracker." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://koushikshety.github.io/aniguide/" />
   <style>
-    :root { --bg: #0d1117; --card: #161b22; --accent: #ff4757; --text: #f0f6fc; --muted: #8b949e; }
+    :root { --bg: #0d1117; --card: #161b22; --accent: #ff4757; --green: #238636; --blue: #1f6feb; --text: #f0f6fc; --muted: #8b949e; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 16px; max-width: 960px; margin: auto; }
-    header { text-align: center; padding: 20px 0; border-bottom: 1px solid #30363d; }
-    header h1 { color: var(--accent); font-size: 1.8rem; }
+    body { background: var(--bg); color: var(--text); padding: 14px; max-width: 1020px; margin: auto; }
+    header { text-align: center; padding: 18px 0; border-bottom: 1px solid #30363d; }
+    header h1 { color: var(--accent); font-size: 1.9rem; letter-spacing: -0.5px; }
     header p { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
-    .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 16px 0; padding-bottom: 6px; }
-    .tab-btn { background: var(--card); color: var(--text); border: 1px solid #30363d; padding: 8px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
+    .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 16px 0; padding-bottom: 8px; scrollbar-width: thin; }
+    .tab-btn { background: var(--card); color: var(--text); border: 1px solid #30363d; padding: 8px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; }
     .tab-btn.active { background: var(--accent); border-color: var(--accent); font-weight: bold; }
-    .search-box { display: flex; gap: 8px; margin-bottom: 18px; }
+    .search-box { display: flex; gap: 8px; margin-bottom: 16px; }
     input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background: var(--card); color: var(--text); font-size: 1rem; }
     button.primary { background: var(--accent); color: #fff; border: none; padding: 0 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    .guide-box { background: var(--card); border: 1px solid #30363d; border-radius: 10px; padding: 16px; margin-bottom: 20px; display: none; }
+    .guide-box { background: var(--card); border: 1px solid #30363d; border-radius: 10px; padding: 16px; margin-bottom: 18px; display: none; }
     .guide-box.show { display: block; }
-    .guide-box h2 { color: var(--accent); margin-bottom: 10px; font-size: 1.2rem; }
-    .guide-box ul { padding-left: 18px; line-height: 1.7; color: #c9d1d9; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    .guide-box h2 { color: var(--accent); margin-bottom: 10px; font-size: 1.15rem; }
+    .guide-box ul { padding-left: 18px; line-height: 1.75; color: #c9d1d9; font-size: 0.92rem; }
+    .guide-cta { display: inline-block; margin-top: 12px; background: var(--green); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; }
+    .ad-slot { margin: 14px 0; text-align: center; min-height: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
     .card { background: var(--card); border: 1px solid #30363d; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-    .card img { width: 100%; height: 220px; object-fit: cover; }
-    .card-body { padding: 10px; }
-    .card-title { font-size: 0.95rem; font-weight: bold; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 10px; }
-    .buy-btn { display: block; text-align: center; background: #238636; color: #fff; text-decoration: none; padding: 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
-    .ad-slot { margin: 16px 0; text-align: center; min-height: 50px; }
-    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; padding-top: 16px; border-top: 1px solid #30363d; }
+    .card img { width: 100%; height: 225px; object-fit: cover; }
+    .card-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .card-title { font-size: 0.92rem; font-weight: bold; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-meta { font-size: 0.78rem; color: var(--muted); }
+    .btn-row { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .buy-btn { display: block; text-align: center; background: var(--green); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
+    .merch-btn { display: block; text-align: center; background: var(--blue); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; padding-top: 16px; border-top: 1px solid #30363d; line-height: 1.6; }
   </style>
 </head>
 <body>
 
   <header>
     <h1>AniGuide</h1>
-    <p>Watch Orders, Filler Skip Lists & Trending Anime Database</p>
+    <p>Canon Watch Orders, Filler Skip Lists & Official Manga / Merch Deals</p>
   </header>
 
-  <!-- TOP BANNER AD SLOT (Paste Adsterra Banner Code Here) -->
-  <div class="ad-slot" id="top-ad"></div>
-
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('trending', this)">Trending Anime</button>
-    <button class="tab-btn" onclick="showTab('naruto', this)">Naruto Filler Guide</button>
-    <button class="tab-btn" onclick="showTab('onepiece', this)">One Piece Arcs</button>
-    <button class="tab-btn" onclick="showTab('fate', this)">Fate Watch Order</button>
-    <button class="tab-btn" onclick="showTab('bleach', this)">Bleach Skip List</button>
+    <button class="tab-btn active" onclick="showTab('trending', this)">Trending</button>
+    <button class="tab-btn" onclick="showTab('naruto', this)">Naruto</button>
+    <button class="tab-btn" onclick="showTab('onepiece', this)">One Piece</button>
+    <button class="tab-btn" onclick="showTab('bleach', this)">Bleach</button>
+    <button class="tab-btn" onclick="showTab('aot', this)">Attack on Titan</button>
+    <button class="tab-btn" onclick="showTab('fate', this)">Fate Series</button>
+    <button class="tab-btn" onclick="showTab('ds', this)">Demon Slayer</button>
+    <button class="tab-btn" onclick="showTab('jjk', this)">Jujutsu Kaisen</button>
+    <button class="tab-btn" onclick="showTab('dbz', this)">Dragon Ball</button>
+    <button class="tab-btn" onclick="showTab('hxh', this)">Hunter x Hunter</button>
   </div>
 
   <div id="guide-naruto" class="guide-box">
     <h2>Naruto & Shippuden Filler Skip Guide (Save 150+ Hours)</h2>
     <ul>
       <li><strong>Naruto (2002):</strong> Watch Ep 1–25, 27–96, 98–100, 107–135. Skip Ep 136–219 (pure filler), watch final half of Ep 220.</li>
-      <li><strong>Naruto Shippuden:</strong> Canon arcs: Ep 1–56, 72–89, 113–143, 152–169, 172–175, 197–222, 243–256, 261–270, 272–289, 296–302, 321–346, 362–375, 378–388, 391–393, 414–421, 424–426, 451–458, 463, 470–479, 484–500.</li>
+      <li><strong>Naruto Shippuden:</strong> Canon: Ep 1–56, 72–89, 113–143, 152–169, 172–175, 197–222, 243–256, 261–270, 272–289, 296–302, 321–346, 362–375, 378–388, 391–393, 414–421, 424–426, 451–458, 463, 470–479, 484–500.</li>
       <li><strong>Movie:</strong> Watch <em>The Last: Naruto the Movie</em> after Ep 493.</li>
     </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Naruto+Manga+Box+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Naruto Manga Box Sets on Amazon</a>
   </div>
 
   <div id="guide-onepiece" class="guide-box">
@@ -65,9 +76,31 @@
     <ul>
       <li><strong>East Blue Saga:</strong> Ep 1–61 (Skip Ep 54–60 Warship Island filler).</li>
       <li><strong>Alabasta & Skypiea:</strong> Ep 62–195 (Skip Ep 131–143).</li>
-      <li><strong>Water 7 & Enies Lobby:</strong> Ep 207–325 (Watch G-8 filler Ep 196–206 — fan favorite!).</li>
-      <li><strong>Marineford & Timeskip:</strong> Ep 385–516 -> Fish-Man Island (517–574) -> Dressrosa (629–746) -> Wano (890–1085) -> Egghead (1086+).</li>
+      <li><strong>Water 7 & Enies Lobby:</strong> Ep 207–325 (Watch G-8 filler Ep 196–206 — fan favorite).</li>
+      <li><strong>Marineford to Egghead:</strong> Ep 385–516 -> Fish-Man Island (517–574) -> Dressrosa (629–746) -> Wano (890–1085) -> Egghead (1086+).</li>
     </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=One+Piece+Manga+Box+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop One Piece Manga & Figures on Amazon</a>
+  </div>
+
+  <div id="guide-bleach" class="guide-box">
+    <h2>Bleach & TYBW Filler Skip Guide</h2>
+    <ul>
+      <li><strong>Canon Episodes:</strong> 1–32, 34–49, 51–63, 110–127, 138–146, 150–167, 190–203, 206–212, 215–226, 266–286, 288–297, 300–302, 306–310, 343–354, 356–366.</li>
+      <li><strong>Skip Completely:</strong> Bount Arc (64–108), New Captain Arc (168–189), Zanpakuto Rebellion (230–265).</li>
+      <li><strong>Sequel:</strong> <em>Bleach: Thousand-Year Blood War</em> (100% Canon).</li>
+    </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Bleach+Manga+Box+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Bleach Manga & Merch on Amazon</a>
+  </div>
+
+  <div id="guide-aot" class="guide-box">
+    <h2>Attack on Titan Complete Watch Order (With OVAs)</h2>
+    <ul>
+      <li>1. <strong>Season 1 (Ep 1–25)</strong> -> Watch <em>Ilse's Notebook</em> & <em>No Regrets</em> OVAs.</li>
+      <li>2. <strong>Season 2 (Ep 26–37)</strong> -> <strong>Season 3 Part 1 (Ep 38–49)</strong> -> Watch <em>Lost Girls</em> OVAs.</li>
+      <li>3. <strong>Season 3 Part 2 (Ep 50–59)</strong> -> <strong>Final Season Part 1 & 2 (Ep 60–87)</strong>.</li>
+      <li>4. <strong>The Final Chapters (Special 1 & Special 2)</strong> — Series Finale.</li>
+    </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Attack+on+Titan+Manga+Box+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Attack on Titan Box Sets on Amazon</a>
   </div>
 
   <div id="guide-fate" class="guide-box">
@@ -78,29 +111,63 @@
       <li>3. <strong>Fate/Zero (2011)</strong> — Prequel set 10 years earlier.</li>
       <li>4. <strong>Spin-offs (Any order):</strong> Fate/Apocrypha, Fate/Grand Order: Babylonia.</li>
     </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Fate+stay+night+manga+figure&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Fate Figures & Light Novels on Amazon</a>
   </div>
 
-  <div id="guide-bleach" class="guide-box">
-    <h2>Bleach & TYBW Filler Skip Guide</h2>
+  <div id="guide-ds" class="guide-box">
+    <h2>Demon Slayer: Kimetsu no Yaiba Chronological Order</h2>
     <ul>
-      <li><strong>Canon Episodes:</strong> 1–32, 34–49, 51–63, 110–127, 138–146, 150–167, 190–203, 206–212, 215–226, 266–286, 288–297, 300–302, 306–310, 343–354, 356–366.</li>
-      <li><strong>Skip Completely:</strong> Bount Arc (Ep 64–108), New Captain Arc (Ep 168–189), Zanpakuto Rebellion (Ep 230–265).</li>
-      <li><strong>Sequel:</strong> <em>Bleach: Thousand-Year Blood War</em> (100% Canon).</li>
+      <li>1. <strong>Season 1: Unwavering Resolve Arc</strong> (Ep 1–26).</li>
+      <li>2. <strong>Mugen Train Arc</strong> (Movie OR TV Ep 1–7 — Ep 1 is anime-original Rengoku prequel).</li>
+      <li>3. <strong>Entertainment District Arc</strong> (Ep 1–11) -> <strong>Swordsmith Village Arc</strong> (Ep 1–11).</li>
+      <li>4. <strong>Hashira Training Arc</strong> (Ep 1–8) -> <strong>Infinity Castle Movie Trilogy</strong>.</li>
     </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Demon+Slayer+Manga+Box+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Demon Slayer Box Sets & Katanas on Amazon</a>
   </div>
+
+  <div id="guide-jjk" class="guide-box">
+    <h2>Jujutsu Kaisen Chronological vs Release Watch Order</h2>
+    <ul>
+      <li><strong>Recommended Release Order:</strong> JJK Season 1 (Ep 1–24) -> <em>Jujutsu Kaisen 0</em> Movie -> JJK Season 2 (Ep 25–47: Hidden Inventory + Shibuya Incident).</li>
+      <li><strong>Chronological Order:</strong> Season 2 Ep 25–29 (Gojo's Past) -> <em>JJK 0</em> Movie -> Season 1 (Ep 1–24) -> Season 2 Ep 30–47.</li>
+    </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Jujutsu+Kaisen+Manga+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Jujutsu Kaisen Manga & Hoodies on Amazon</a>
+  </div>
+
+  <div id="guide-dbz" class="guide-box">
+    <h2>Dragon Ball Canon Watch Order (Zero Filler)</h2>
+    <ul>
+      <li>1. <strong>Dragon Ball (1986):</strong> Ep 1–153 (Skip filler Ep 134–148).</li>
+      <li>2. <strong>Dragon Ball Z Kai (2009):</strong> Ep 1–167 (Remastered, cuts 120+ filler episodes from original DBZ).</li>
+      <li>3. <strong>Dragon Ball Super:</strong> Ep 1–131 (Or watch <em>Battle of Gods</em> & <em>Resurrection 'F'</em> movies, then start at Ep 28).</li>
+      <li>4. <strong>Movies & Sequels:</strong> <em>DBS: Broly</em> -> <em>DBS: Super Hero</em> -> <em>Dragon Ball Daima</em>.</li>
+    </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Dragon+Ball+Z+Manga+Box+Set&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Dragon Ball Manga & Figures on Amazon</a>
+  </div>
+
+  <div id="guide-hxh" class="guide-box">
+    <h2>Hunter x Hunter (2011) Arc & Filler Guide</h2>
+    <ul>
+      <li><strong>Hunter Exam & Zoldyck Family:</strong> Ep 1–26 (Skip recap Ep 13 & 26).</li>
+      <li><strong>Heavens Arena & Yorknew City:</strong> Ep 27–58 (100% Canon).</li>
+      <li><strong>Greed Island & Chimera Ant Arc:</strong> Ep 59–136 (100% Canon).</li>
+      <li><strong>13th Hunter Chairman Election Arc:</strong> Ep 137–148.</li>
+    </ul>
+    <a class="guide-cta" href="https://www.amazon.in/s?k=Hunter+x+Hunter+Manga&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Hunter x Hunter Manga on Amazon</a>
+  </div>
+
+  <!-- ADSTERRA NATIVE BANNER SLOT -->
+  <div class="ad-slot" id="native-ad-slot"></div>
 
   <div class="search-box">
-    <input type="text" id="query" placeholder="Search any anime (e.g. Solo Leveling, JJK)..." />
+    <input type="text" id="query" placeholder="Search any anime (e.g. Solo Leveling, Chainsaw Man)..." onkeydown="if(event.key==='Enter') searchAnime()" />
     <button class="primary" onclick="searchAnime()">Search</button>
   </div>
 
   <div class="grid" id="anime-grid">Loading trending anime...</div>
 
-  <!-- BOTTOM AD SLOT -->
-  <div class="ad-slot" id="bottom-ad"></div>
-
   <footer>
-    <p>As an Amazon Associate, AniGuide earns from qualifying purchases. Data via AniList API.</p>
+    <p>As an Amazon Associate, AniGuide earns from qualifying purchases. Live anime data via AniList API.</p>
   </footer>
 
   <script>
@@ -121,7 +188,7 @@
 
       const gqlQuery = `
         query ($search: String) {
-          Page(page: 1, perPage: 16) {
+          Page(page: 1, perPage: 20) {
             media(search: $search, type: ANIME, sort: TRENDING_DESC, isAdult: false) {
               title { english romaji }
               coverImage { large }
@@ -151,14 +218,18 @@
 
         grid.innerHTML = list.map(a => {
           const title = a.title.english || a.title.romaji;
-          const amazonUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' manga')}&tag=${AMAZON_TAG}`;
+          const mangaUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' manga box set')}&tag=${AMAZON_TAG}`;
+          const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' action figure hoodie')}&tag=${AMAZON_TAG}`;
           return `
             <div class="card">
               <img src="${a.coverImage.large}" alt="${title}" loading="lazy" />
               <div class="card-body">
                 <div class="card-title">${title}</div>
                 <div class="card-meta">Score: ${a.averageScore ? (a.averageScore / 10).toFixed(1) : 'N/A'} • ${a.episodes || '?'} Eps</div>
-                <a class="buy-btn" href="${amazonUrl}" target="_blank" rel="nofollow noopener">Buy Manga / Merch</a>
+                <div class="btn-row">
+                  <a class="buy-btn" href="${mangaUrl}" target="_blank" rel="nofollow noopener">Manga Box Sets</a>
+                  <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Hoodies</a>
+                </div>
               </div>
             </div>`;
         }).join('');
