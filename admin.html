@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>AniGuide Admin Control</title>
+  <style>
+    :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --accent: #ff4757; --green: #238636; --blue: #1f6feb; --text: #f0f6fc; --muted: #8b949e; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 16px; max-width: 900px; margin: auto; }
+    h1 { color: var(--accent); font-size: 1.5rem; margin-bottom: 14px; }
+    .box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .box h2 { font-size: 1.05rem; margin-bottom: 10px; color: #ff8b96; }
+    input, textarea {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text);
+      padding: 10px 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 10px;
+    }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    button {
+      background: var(--accent); color: #fff; border: none; padding: 10px 16px;
+      border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;
+    }
+    button.green { background: var(--green); }
+    button.blue { background: var(--blue); }
+    button.gray { background: #30363d; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+    .stat { background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 8px; text-align: center; }
+    .stat strong { display: block; font-size: 1.3rem; color: var(--accent); }
+    .c-card { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+    .c-head { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+    .c-text { font-size: 0.9rem; margin-bottom: 8px; }
+    .admin-badge { background: var(--accent); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 6px; }
+    #panel { display: none; }
+  </style>
+</head>
+<body>
+
+  <h1>🛡️ AniGuide Owner Dashboard</h1>
+
+  <!-- Login Gate -->
+  <div class="box" id="loginBox">
+    <h2>Enter Admin PIN</h2>
+    <input type="password" id="pinInput" placeholder="Enter your secret Firebase admin PIN..." />
+    <button onclick="unlockAdmin()">Unlock Dashboard</button>
+  </div>
+
+  <div id="panel">
+    <!-- 1. Top Notice Bar Control -->
+    <div class="box">
+      <h2>1. Top Notice Banner (Stays until you remove it)</h2>
+      <input type="text" id="noticeText" placeholder="e.g. Server busy — all functions work normally until next Monday." />
+      <div class="row">
+        <button class="green" onclick="saveNotice(true)">Publish Notice</button>
+        <button class="gray" onclick="saveNotice(false)">Remove Notice</button>
+      </div>
+      <p id="noticeStatus" style="font-size:0.8rem;color:var(--muted);margin-top:8px;"></p>
+    </div>
+
+    <!-- 2. Create New One-Time Popup for All Visitors -->
+    <div class="box">
+      <h2>2. Push New One-Time Popup (To Both New & Old Visitors)</h2>
+      <input type="text" id="popTitle" placeholder="Popup Question (e.g. Which 2026 anime guide should we add next?)" />
+      <input type="text" id="popOptions" placeholder="Comma-separated options (e.g. Instagram, Friends, YouTube, Google, Telegram, Other)" />
+      <div class="row">
+        <button class="blue" onclick="publishPopup()">Push New Popup Now</button>
+        <button class="gray" onclick="disablePopup()">Turn Off Popup</button>
+      </div>
+      <p id="popupStatus" style="font-size:0.8rem;color:var(--muted);margin-top:8px;"></p>
+    </div>
+
+    <!-- 3. Visitor Feedback & Survey Stats -->
+    <div class="box">
+      <h2>3. Visitor Survey & Feedback Answers</h2>
+      <div class="stat-grid" id="surveyStats">Loading...</div>
+    </div>
+
+    <!-- 4. All Comments & Admin Reply -->
+    <div class="box">
+      <h2>4. All Anime Comments & Direct Reply</h2>
+      <div id="allComments">Loading comments...</div>
+    </div>
+  </div>
+
+  <script>
+    const DB = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
+    let ADMIN_PIN = sessionStorage.getItem("ag_admin_pin") || "";
+
+    if (ADMIN_PIN) unlockAdmin(true);
+
+    async function unlockAdmin(auto = false) {
+      const pin = auto ? ADMIN_PIN : document.getElementById("pinInput").value.trim();
+      if (!pin) return alert("Enter PIN");
+      // Verify PIN by writing a timestamp check to site_config/lastLogin
+      const res = await fetch(`${DB}/site_config/lastLogin.json`, {
+        method: "PUT",
+        body: JSON.stringify({ at: Date.now(), adminPin: pin })
+      });
+      if (!res.ok) {
+        sessionStorage.removeItem("ag_admin_pin");
+        return alert("Wrong PIN or Firebase Rules not published yet!");
+      }
+      ADMIN_PIN = pin;
+      sessionStorage.setItem("ag_admin_pin", pin);
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("panel").style.display = "block";
+      loadDashboard();
+    }
+
+    async function loadDashboard() {
+      // Load Config
+      const cfgRes = await fetch(`${DB}/site_config.json`);
+      const cfg = (await cfgRes.json()) || {};
+      if (cfg.notice) {
+        document.getElementById("noticeText").value = cfg.notice.text || "";
+        document.getElementById("noticeStatus").textContent = cfg.notice.active ? "Status: LIVE on website" : "Status: Hidden";
+      }
+      if (cfg.popup) {
+        document.getElementById("popTitle").value = cfg.popup.title || "";
+        document.getElementById("popOptions").value = (cfg.popup.options || []).join(", ");
+        document.getElementById("popupStatus").textContent = cfg.popup.active ? `Active Popup ID: ${cfg.popup.id}` : "Popup Off";
+      }
+
+      // Load Survey Answers
+      const sRes = await fetch(`${DB}/visitor_sources.json`);
+      const sData = (await sRes.json()) || {};
+      const counts = {};
+      Object.values(sData).forEach(item => {
+        if (item && item.source) counts[item.source] = (counts[item.source] || 0) + 1;
+      });
+      document.getElementById("surveyStats").innerHTML = Object.keys(counts).length
+        ? Object.entries(counts).map(([k, v]) => `<div class="stat"><strong>${v}</strong><span>${k}</span></div>`).join("")
+        : "<p style='color:var(--muted);font-size:0.85rem;'>No survey responses yet.</p>";
+
+      // Load All Comments
+      const cRes = await fetch(`${DB}/comments.json`);
+      const cData = (await cRes.json()) || {};
+      const container = document.getElementById("allComments");
+      let html = "";
+
+      Object.entries(cData).forEach(([animeId, thread]) => {
+        if (!thread) return;
+        Object.entries(thread).forEach(([commentId, c]) => {
+          if (!c || !c.text) return;
+          html += `
+            <div class="c-card">
+              <div class="c-head">
+                <span><strong>${c.name}</strong> ${c.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + animeId}</span>
+                <span>${c.date || ''}</span>
+              </div>
+              <div class="c-text">${c.text}</div>
+              <div class="row">
+                <input type="text" id="rep_${commentId}" placeholder="Write reply as Admin..." style="flex:1;margin:0;" />
+                <button class="green" onclick="replyComment('${animeId}', '${(c.animeTitle || '').replace(/'/g, '')}', '${commentId}')">Reply</button>
+                <button class="gray" onclick="deleteComment('${animeId}', '${commentId}')">Delete</button>
+              </div>
+            </div>
+          `;
+        });
+      });
+      container.innerHTML = html || "<p style='color:var(--muted);font-size:0.85rem;'>No comments yet.</p>";
+    }
+
+    async function saveNotice(active) {
+      const text = document.getElementById("noticeText").value.trim();
+      await fetch(`${DB}/site_config/notice.json`, {
+        method: "PUT",
+        body: JSON.stringify({ active, text, adminPin: ADMIN_PIN })
+      });
+      loadDashboard();
+    }
+
+    async function publishPopup() {
+      const title = document.getElementById("popTitle").value.trim();
+      const rawOpts = document.getElementById("popOptions").value.trim();
+      if (!title || !rawOpts) return alert("Enter popup title and options.");
+      const options = rawOpts.split(",").map(s => s.trim()).filter(Boolean);
+      const id = "pop_" + Date.now();
+      await fetch(`${DB}/site_config/popup.json`, {
+        method: "PUT",
+        body: JSON.stringify({ active: true, id, title, options, adminPin: ADMIN_PIN })
+      });
+      loadDashboard();
+    }
+
+    async function disablePopup() {
+      await fetch(`${DB}/site_config/popup.json`, {
+        method: "PUT",
+        body: JSON.stringify({ active: false, adminPin: ADMIN_PIN })
+      });
+      loadDashboard();
+    }
+
+    async function replyComment(animeId, animeTitle, commentId) {
+      const text = document.getElementById("rep_" + commentId).value.trim();
+      if (!text) return;
+      await fetch(`${DB}/comments/${animeId}.json`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: "AniGuide Admin",
+          text,
+          animeTitle,
+          isAdmin: true,
+          date: new Date().toLocaleDateString(),
+          adminPin: ADMIN_PIN
+        })
+      });
+      loadDashboard();
+    }
+
+    async function deleteComment(animeId, commentId) {
+      if (!confirm("Delete this comment?")) return;
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, {
+        method: "PUT",
+        body: JSON.stringify({ deleted: true, adminPin: ADMIN_PIN })
+      });
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, { method: "DELETE" });
+      loadDashboard();
+    }
+  </script>
+</body>
+</html>
