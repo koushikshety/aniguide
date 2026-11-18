@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>AniGuide Admin Control</title>
   <style>
-    :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --accent: #ff4757; --green: #238636; --blue: #1f6feb; --text: #f0f6fc; --muted: #8b949e; }
+    :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --accent: #ff4757; --green: #238636; --blue: #1f6feb; --purple: #7c3aed; --text: #f0f6fc; --muted: #8b949e; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: var(--bg); color: var(--text); padding: 16px; max-width: 900px; margin: auto; }
     h1 { color: var(--accent); font-size: 1.5rem; margin-bottom: 14px; }
@@ -16,13 +16,14 @@
       width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text);
       padding: 10px 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 10px;
     }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     button {
-      background: var(--accent); color: #fff; border: none; padding: 10px 16px;
-      border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;
+      background: var(--accent); color: #fff; border: none; padding: 9px 14px;
+      border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.82rem;
     }
     button.green { background: var(--green); }
     button.blue { background: var(--blue); }
+    button.purple { background: var(--purple); }
     button.gray { background: #30363d; }
     .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
     .stat { background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 8px; text-align: center; }
@@ -32,9 +33,16 @@
       border: 1px solid var(--border); border-radius: 8px; font-size: 0.84rem;
       color: #c9d1d9; line-height: 1.6;
     }
+    .sub-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .sub-tab {
+      background: var(--bg); border: 1px solid var(--border); color: var(--muted);
+      padding: 7px 14px; border-radius: 20px; font-size: 0.82rem; cursor: pointer;
+    }
+    .sub-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
     .c-card { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
-    .c-head { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
-    .c-text { font-size: 0.9rem; margin-bottom: 8px; }
+    .c-card.unread { border-left: 3px solid var(--accent); }
+    .c-head { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; gap: 8px; }
+    .c-text { font-size: 0.9rem; margin-bottom: 10px; line-height: 1.45; }
     .admin-badge { background: var(--accent); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 6px; }
     #panel { display: none; }
   </style>
@@ -83,8 +91,12 @@
 
     <!-- 4. All Comments & Admin Reply -->
     <div class="box">
-      <h2>4. All Anime Comments & Direct Reply</h2>
-      <input type="text" id="commentSearch" placeholder="Filter comments by anime title, user name, or text..." oninput="filterComments()" />
+      <h2>4. Anime Comments Inbox</h2>
+      <div class="sub-tabs">
+        <button class="sub-tab active" id="tabNew" onclick="switchCommentFilter('new', this)">New Comments (0)</button>
+        <button class="sub-tab" id="tabSeen" onclick="switchCommentFilter('seen', this)">Seen / Archive (0)</button>
+      </div>
+      <input type="text" id="commentSearch" placeholder="Filter by anime title, user name, or text..." oninput="renderComments()" />
       <div id="allComments">Loading comments...</div>
     </div>
   </div>
@@ -92,6 +104,8 @@
   <script>
     const DB = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
     let ADMIN_PIN = sessionStorage.getItem("ag_admin_pin") || "";
+    let cachedComments = [];
+    let currentFilter = "new";
 
     if (ADMIN_PIN) unlockAdmin(true);
 
@@ -127,7 +141,7 @@
         document.getElementById("popupStatus").textContent = cfg.popup.active ? `Active Popup ID: ${cfg.popup.id}` : "Popup Off";
       }
 
-      // 2. Load Survey Answers + Custom "Other" Responses
+      // 2. Load Survey Answers
       const sRes = await fetch(`${DB}/visitor_sources.json`);
       const sData = (await sRes.json()) || {};
       const counts = {};
@@ -153,38 +167,78 @@
       // 3. Load All Comments
       const cRes = await fetch(`${DB}/comments.json`);
       const cData = (await cRes.json()) || {};
-      const container = document.getElementById("allComments");
-      let html = "";
+      cachedComments = [];
 
       Object.entries(cData).forEach(([animeId, thread]) => {
         if (!thread) return;
         Object.entries(thread).forEach(([commentId, c]) => {
           if (!c || !c.text) return;
-          const searchBlob = `${c.name || ""} ${c.animeTitle || ""} ${c.text || ""}`.toLowerCase();
-          html += `
-            <div class="c-card" data-search="${searchBlob.replace(/"/g, "&quot;")}">
-              <div class="c-head">
-                <span><strong>${c.name}</strong> ${c.isAdmin ? '<span class="admin-tag">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + animeId}</span>
-                <span>${c.date || ''}</span>
-              </div>
-              <div class="c-text">${c.text}</div>
-              <div class="row">
-                <input type="text" id="rep_${commentId}" placeholder="Write reply as Admin..." style="flex:1;margin:0;" />
-                <button class="green" onclick="replyComment('${animeId}', '${(c.animeTitle || '').replace(/'/g, '')}', '${commentId}')">Reply</button>
-                <button class="gray" onclick="deleteComment('${animeId}', '${commentId}')">Delete</button>
-              </div>
-            </div>
-          `;
+          cachedComments.push({ animeId, commentId, ...c });
         });
       });
-      container.innerHTML = html || "<p style='color:var(--muted);font-size:0.85rem;'>No comments yet.</p>";
+
+      cachedComments.reverse();
+      renderComments();
     }
 
-    function filterComments() {
+    function switchCommentFilter(mode, btn) {
+      currentFilter = mode;
+      document.querySelectorAll(".sub-tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderComments();
+    }
+
+    function renderComments() {
       const q = document.getElementById("commentSearch").value.trim().toLowerCase();
-      document.querySelectorAll(".c-card").forEach(card => {
-        card.style.display = card.dataset.search.includes(q) ? "block" : "none";
+      const newCount = cachedComments.filter(c => !c.seen && !c.isAdmin).length;
+      const seenCount = cachedComments.filter(c => c.seen || c.isAdmin).length;
+      document.getElementById("tabNew").textContent = `New Comments (${newCount})`;
+      document.getElementById("tabSeen").textContent = `Seen / Archive (${seenCount})`;
+
+      const filtered = cachedComments.filter(c => {
+        const isSeen = Boolean(c.seen || c.isAdmin);
+        if (currentFilter === "new" && isSeen) return false;
+        if (currentFilter === "seen" && !isSeen) return false;
+        const blob = `${c.name || ""} ${c.animeTitle || ""} ${c.text || ""}`.toLowerCase();
+        return blob.includes(q);
       });
+
+      const container = document.getElementById("allComments");
+      if (!filtered.length) {
+        container.innerHTML = `<p style='color:var(--muted);font-size:0.85rem;'>No ${currentFilter === "new" ? "new unread" : "seen"} comments right now.</p>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => {
+        const safeTitle = (c.animeTitle || "").replace(/'/g, "");
+        const gotoUrl = `index.html?anime=${encodeURIComponent(c.animeId)}&comment=${encodeURIComponent(c.commentId)}`;
+        return `
+          <div class="c-card ${!c.seen && !c.isAdmin ? "unread" : ""}">
+            <div class="c-head">
+              <span><strong>${c.name}</strong> ${c.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + c.animeId}</span>
+              <span>${c.date || ''}</span>
+            </div>
+            <div class="c-text">${c.text}</div>
+            <div class="row" style="margin-bottom:8px;">
+              ${!c.seen && !c.isAdmin ? `<button class="blue" onclick="markSeen('${c.animeId}', '${c.commentId}')">✓ Seen</button>` : ""}
+              <button class="purple" onclick="window.open('${gotoUrl}', '_blank')">↗ Go To</button>
+              <button class="gray" onclick="deleteComment('${c.animeId}', '${c.commentId}')">Delete</button>
+            </div>
+            <div class="row">
+              <input type="text" id="rep_${c.commentId}" placeholder="Reply as Admin (auto-marks Seen)..." style="flex:1;margin:0;" />
+              <button class="green" onclick="replyComment('${c.animeId}', '${safeTitle}', '${c.commentId}')">Reply</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function markSeen(animeId, commentId) {
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, {
+        method: "PATCH",
+        body: JSON.stringify({ seen: true, adminPin: ADMIN_PIN })
+      });
+      loadDashboard();
     }
 
     async function saveNotice(active) {
@@ -220,6 +274,7 @@
     async function replyComment(animeId, animeTitle, commentId) {
       const text = document.getElementById("rep_" + commentId).value.trim();
       if (!text) return;
+      // 1. Post Admin Reply (marked seen: true)
       await fetch(`${DB}/comments/${animeId}.json`, {
         method: "POST",
         body: JSON.stringify({
@@ -227,9 +282,15 @@
           text,
           animeTitle,
           isAdmin: true,
+          seen: true,
           date: new Date().toLocaleDateString(),
           adminPin: ADMIN_PIN
         })
+      });
+      // 2. Mark original visitor comment as seen: true so it leaves New Comments
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, {
+        method: "PATCH",
+        body: JSON.stringify({ seen: true, adminPin: ADMIN_PIN })
       });
       loadDashboard();
     }
