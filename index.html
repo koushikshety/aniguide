@@ -26,7 +26,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: var(--bg); color: var(--text); padding: 14px; max-width: 1080px; margin: auto; -webkit-font-smoothing: antialiased; }
 
-    /* Non-Intrusive Top Notice Banner Controlled by Admin */
     .top-notice {
       display: none; background: linear-gradient(90deg, #2b1d0e, #1f1722);
       border: 1px solid #f59e0b; color: #fde68a; border-radius: 10px;
@@ -97,7 +96,7 @@
     .sheet {
       background: #0d1117; width: 100%; max-width: 840px; height: 92vh;
       border-radius: 18px 18px 0 0; overflow-y: auto; border: 1px solid var(--border);
-      animation: slideUp 0.25s ease-out; position: relative;
+      animation: slideUp 0.25s ease-out; position: relative; scroll-behavior: smooth;
     }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -158,7 +157,19 @@
     .save-row { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 0.78rem; color: var(--muted); }
     .post-btn { background: var(--accent-grad); color: #fff; border: none; padding: 9px 20px; border-radius: 20px; font-weight: 700; font-size: 0.84rem; cursor: pointer; }
     .c-list { margin-top: 14px; display: flex; flex-direction: column; gap: 9px; }
-    .c-item { background: var(--card); border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px; }
+    .c-item {
+      background: var(--card); border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .c-item.glow-target {
+      border-color: #ff4757;
+      background: #231520;
+      animation: targetGlow 1.6s ease-in-out 3;
+    }
+    @keyframes targetGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(255, 71, 87, 0.45), 0 0 18px rgba(124, 58, 237, 0.3); }
+      50% { box-shadow: 0 0 22px rgba(255, 71, 87, 0.95), 0 0 36px rgba(124, 58, 237, 0.75); }
+    }
     .c-item strong { color: #ff8b96; font-size: 0.83rem; }
     .admin-tag { background: var(--accent); color: #fff; font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
     .c-item small { color: var(--muted); margin-left: 8px; font-size: 0.72rem; }
@@ -221,7 +232,6 @@
 </head>
 <body>
 
-  <!-- Admin-Controlled Top Notice Bar -->
   <div class="top-notice" id="topNotice">
     <span id="topNoticeText"></span>
   </div>
@@ -375,7 +385,7 @@
 
   <!-- Animated Anime Detail Modal -->
   <div class="overlay" id="detailOverlay" onclick="if(event.target===this) closeDetail()">
-    <div class="sheet">
+    <div class="sheet" id="detailSheet">
       <button class="close-btn" onclick="closeDetail()">✕</button>
       <div id="detailContent"></div>
     </div>
@@ -534,9 +544,60 @@
       }
     }
 
-    function openDetail(id) {
-      const a = animeCache[id];
+    // Fetch single anime by ID if opened directly from Admin "Go To" link
+    async function fetchSingleAnime(id) {
+      if (animeCache[id]) return animeCache[id];
+      const gql = `
+        query ($id: Int) {
+          Media(id: $id, type: ANIME) {
+            id
+            title { english romaji native }
+            format
+            episodes
+            status
+            duration
+            season
+            seasonYear
+            averageScore
+            description(asHtml: false)
+            bannerImage
+            coverImage { extraLarge large }
+            startDate { year month day }
+            nextAiringEpisode { airingAt episode }
+            studios(isMain: true) { nodes { name } }
+            genres
+            recommendations(perPage: 6, sort: RATING_DESC) {
+              nodes {
+                mediaRecommendation {
+                  id
+                  title { romaji english }
+                  coverImage { large }
+                }
+              }
+            }
+          }
+        }
+      `;
+      try {
+        const res = await fetch('https://graphql.anilist.co', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ query: gql, variables: { id: Number(id) } })
+        });
+        const json = await res.json();
+        if (json.data && json.data.Media) {
+          animeCache[id] = json.data.Media;
+          return json.data.Media;
+        }
+      } catch {}
+      return null;
+    }
+
+    async function openDetail(id, highlightCommentId = null) {
+      let a = animeCache[id];
+      if (!a) a = await fetchSingleAnime(id);
       if (!a) return;
+
       const title = a.title.english || a.title.romaji;
       const mangaUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' manga box set')}&tag=${AMAZON_TAG}`;
       const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' action figure hoodie')}&tag=${AMAZON_TAG}`;
@@ -609,7 +670,7 @@
       `;
 
       document.getElementById("detailOverlay").classList.add("open");
-      loadComments(id);
+      await loadComments(id, highlightCommentId);
     }
 
     function closeDetail() { document.getElementById("detailOverlay").classList.remove("open"); }
@@ -632,18 +693,27 @@
       loadAnime(q || null, 'this_month');
     }
 
-    async function loadComments(id) {
+    async function loadComments(id, highlightCommentId = null) {
       const list = document.getElementById("cList");
       try {
         const r = await fetch(`${FIREBASE_DB_URL}/comments/${id}.json`);
         const data = await r.json();
-        const items = data ? Object.values(data).reverse() : [];
-        list.innerHTML = items.map(c => `
-          <div class="c-item">
+        const entries = data ? Object.entries(data).reverse() : [];
+        list.innerHTML = entries.map(([cid, c]) => `
+          <div class="c-item ${cid === highlightCommentId ? 'glow-target' : ''}" id="comment_${cid}">
             <strong>${c.name}</strong>${c.isAdmin ? '<span class="admin-tag">ADMIN</span>' : ''}<small>${c.date}</small>
             <p>${c.text}</p>
           </div>
         `).join("");
+
+        if (highlightCommentId) {
+          const targetEl = document.getElementById("comment_" + highlightCommentId);
+          if (targetEl) {
+            setTimeout(() => {
+              targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 180);
+          }
+        }
       } catch {}
     }
 
@@ -659,7 +729,7 @@
       }
       const animeObj = animeCache[id];
       const animeTitle = animeObj ? (animeObj.title.english || animeObj.title.romaji) : "";
-      const entry = { name, text, animeTitle, date: new Date().toLocaleDateString() };
+      const entry = { name, text, animeTitle, seen: false, date: new Date().toLocaleDateString() };
       await fetch(`${FIREBASE_DB_URL}/comments/${id}.json`, {
         method: "POST",
         body: JSON.stringify(entry)
@@ -773,6 +843,14 @@
     window.addEventListener("load", () => {
       initSiteConfig();
       runAntiAdblock();
+
+      // Check if opened via Admin "Go To" deep link (?anime=...&comment=...)
+      const params = new URLSearchParams(window.location.search);
+      const targetAnime = params.get("anime");
+      const targetComment = params.get("comment");
+      if (targetAnime) {
+        openDetail(Number(targetAnime), targetComment);
+      }
     });
 
     loadAnime(null, 'this_month');
