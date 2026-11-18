@@ -97,18 +97,31 @@
     .sheet {
       background: #0d1117; width: 100%; max-width: 840px; height: 92vh;
       border-radius: 18px 18px 0 0; overflow-y: auto; border: 1px solid var(--border);
-      animation: slideUp 0.25s ease-out;
+      animation: slideUp 0.25s ease-out; position: relative;
     }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     .close-btn {
-      position: sticky; top: 12px; float: right; margin: 12px; z-index: 10;
-      background: var(--card-2); color: #fff; border: 1px solid var(--border);
+      position: sticky; top: 12px; float: right; margin: 12px; z-index: 20;
+      background: rgba(13, 17, 23, 0.8); color: #fff; border: 1px solid rgba(255,255,255,0.2);
       width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer;
     }
-    .hero { padding: 22px 16px 14px; text-align: center; background: linear-gradient(to bottom, #161b22, #0d1117); }
-    .hero-banner-img { width: 100%; max-height: 165px; object-fit: cover; border-radius: 10px; margin-bottom: -44px; opacity: 0.72; border: 1px solid var(--border); }
-    .hero-poster { position: relative; width: 136px; border-radius: 10px; box-shadow: 0 10px 26px rgba(0,0,0,0.8); border: 2px solid var(--border); }
+    .hero {
+      position: relative; padding: 38px 16px 16px; text-align: center;
+      overflow: hidden; background: #161b22; clear: both; margin-top: -58px;
+    }
+    .hero-bg-wrap {
+      position: absolute; inset: 0; height: 225px; z-index: 1; pointer-events: none;
+    }
+    .hero-banner-img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
+    }
+    .hero-bg-wrap::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(13,17,23,0.18) 0%, rgba(13,17,23,0.75) 65%, #0d1117 100%);
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-poster { width: 136px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.85); border: 2px solid rgba(255,255,255,0.18); }
     .hero-title { font-size: 1.25rem; font-weight: 800; margin-top: 10px; }
     .hero-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
     .hero-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
@@ -163,6 +176,19 @@
     .popup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
     .popup-opt { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: left; }
     .popup-opt:hover { border-color: var(--accent); }
+
+    .other-box { display: none; margin-top: 10px; text-align: left; }
+    .other-box.show { display: block; }
+    .other-box label { display: block; font-size: 0.78rem; font-weight: 700; color: #f0f6fc; margin-bottom: 5px; }
+    .other-box label span { color: var(--accent); }
+    .other-box input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); padding: 9px 11px; border-radius: 8px; font-size: 0.84rem; margin-bottom: 8px;
+    }
+    .other-submit {
+      width: 100%; background: var(--accent-grad); color: #fff; border: none;
+      padding: 9px; border-radius: 8px; font-weight: 700; font-size: 0.84rem; cursor: pointer;
+    }
 
     .ab-wall {
       position: fixed; inset: 0; z-index: 9999;
@@ -363,6 +389,11 @@
     </div>
     <p style="font-size:0.76rem;color:var(--muted);">Tap one option to help us improve:</p>
     <div class="popup-grid" id="popupOptions"></div>
+    <div class="other-box" id="otherBox">
+      <label for="otherInput">Please specify <span>*</span></label>
+      <input type="text" id="otherInput" placeholder="Tell us where you found us..." maxlength="120" />
+      <button class="other-submit" onclick="submitOtherSurvey()">Submit Feedback</button>
+    </div>
   </div>
 
   <!-- Anti-Adblock Full-Screen Wall -->
@@ -515,13 +546,17 @@
 
       document.getElementById("detailContent").innerHTML = `
         <div class="hero">
-          ${a.bannerImage ? `<img class="hero-banner-img" src="${a.bannerImage}" alt="" />` : ""}
-          <img class="hero-poster" src="${a.coverImage.extraLarge}" alt="${title}" />
-          <div class="hero-title">${title}</div>
-          <div class="hero-sub">${a.title.romaji} • ${formatSchedule(a)}</div>
-          <div class="hero-actions">
-            <a class="buy-btn" href="${mangaUrl}" target="_blank" rel="nofollow noopener">Buy Manga Box Set</a>
-            <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Hoodies</a>
+          <div class="hero-bg-wrap">
+            <img class="hero-banner-img" src="${a.bannerImage || a.coverImage.extraLarge}" alt="" />
+          </div>
+          <div class="hero-content">
+            <img class="hero-poster" src="${a.coverImage.extraLarge}" alt="${title}" />
+            <div class="hero-title">${title}</div>
+            <div class="hero-sub">${a.title.romaji} • ${formatSchedule(a)}</div>
+            <div class="hero-actions">
+              <a class="buy-btn" href="${mangaUrl}" target="_blank" rel="nofollow noopener">Buy Manga Box Set</a>
+              <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Hoodies</a>
+            </div>
           </div>
         </div>
 
@@ -633,7 +668,6 @@
       loadComments(id);
     }
 
-    // Load Admin Notice & Dynamic One-Time Popup
     async function initSiteConfig() {
       let popTitle = "How did you hear about AniGuide?";
       let popOpts = ["Instagram", "Heard from Friends", "YouTube", "Google Search", "Telegram / Discord", "Other"];
@@ -660,10 +694,30 @@
       if (shouldShowPopup && !localStorage.getItem("ag_seen_" + activePopupId)) {
         document.getElementById("popupTitle").textContent = popTitle;
         document.getElementById("popupOptions").innerHTML = popOpts.map(opt =>
-          `<button class="popup-opt" onclick="saveSurvey('${opt.replace(/'/g, "")}')">${opt}</button>`
+          `<button class="popup-opt" onclick="handleSurveyClick('${opt.replace(/'/g, "")}')">${opt}</button>`
         ).join("");
         setTimeout(() => document.getElementById("surveyPopup").classList.add("show"), 5500);
       }
+    }
+
+    function handleSurveyClick(source) {
+      if (source.toLowerCase() === "other") {
+        const box = document.getElementById("otherBox");
+        box.classList.add("show");
+        document.getElementById("otherInput").focus();
+        return;
+      }
+      saveSurvey(source, "");
+    }
+
+    function submitOtherSurvey() {
+      const detail = document.getElementById("otherInput").value.trim();
+      if (!detail) {
+        alert("Please fill in the required * field before submitting.");
+        document.getElementById("otherInput").focus();
+        return;
+      }
+      saveSurvey("Other", detail);
     }
 
     function closeSurvey() {
@@ -671,16 +725,15 @@
       document.getElementById("surveyPopup").classList.remove("show");
     }
 
-    function saveSurvey(source) {
-      localStorage.setItem("ag_seen_" + activePopupId, source);
+    function saveSurvey(source, detail) {
+      localStorage.setItem("ag_seen_" + activePopupId, detail ? `${source}: ${detail}` : source);
       document.getElementById("surveyPopup").classList.remove("show");
       fetch(`${FIREBASE_DB_URL}/visitor_sources.json`, {
         method: "POST",
-        body: JSON.stringify({ popupId: activePopupId, source, time: Date.now() })
+        body: JSON.stringify({ popupId: activePopupId, source, detail, time: Date.now() })
       });
     }
 
-    // Multi-Layer Anti-Adblock Engine
     function triggerAdBlockWall() {
       document.getElementById("abWall").classList.add("active");
       document.body.style.overflow = "hidden";
