@@ -27,6 +27,11 @@
     .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
     .stat { background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 8px; text-align: center; }
     .stat strong { display: block; font-size: 1.3rem; color: var(--accent); }
+    .other-notes {
+      margin-top: 12px; padding: 11px 13px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px; font-size: 0.84rem;
+      color: #c9d1d9; line-height: 1.6;
+    }
     .c-card { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
     .c-head { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
     .c-text { font-size: 0.9rem; margin-bottom: 8px; }
@@ -41,7 +46,7 @@
   <!-- Login Gate -->
   <div class="box" id="loginBox">
     <h2>Enter Admin PIN</h2>
-    <input type="password" id="pinInput" placeholder="Enter your secret Firebase admin PIN..." />
+    <input type="password" id="pinInput" placeholder="Enter your secret Firebase admin PIN..." onkeydown="if(event.key==='Enter') unlockAdmin()" />
     <button onclick="unlockAdmin()">Unlock Dashboard</button>
   </div>
 
@@ -73,11 +78,13 @@
     <div class="box">
       <h2>3. Visitor Survey & Feedback Answers</h2>
       <div class="stat-grid" id="surveyStats">Loading...</div>
+      <div id="otherNotesWrap"></div>
     </div>
 
     <!-- 4. All Comments & Admin Reply -->
     <div class="box">
       <h2>4. All Anime Comments & Direct Reply</h2>
+      <input type="text" id="commentSearch" placeholder="Filter comments by anime title, user name, or text..." oninput="filterComments()" />
       <div id="allComments">Loading comments...</div>
     </div>
   </div>
@@ -91,7 +98,6 @@
     async function unlockAdmin(auto = false) {
       const pin = auto ? ADMIN_PIN : document.getElementById("pinInput").value.trim();
       if (!pin) return alert("Enter PIN");
-      // Verify PIN by writing a timestamp check to site_config/lastLogin
       const res = await fetch(`${DB}/site_config/lastLogin.json`, {
         method: "PUT",
         body: JSON.stringify({ at: Date.now(), adminPin: pin })
@@ -108,7 +114,7 @@
     }
 
     async function loadDashboard() {
-      // Load Config
+      // 1. Load Config
       const cfgRes = await fetch(`${DB}/site_config.json`);
       const cfg = (await cfgRes.json()) || {};
       if (cfg.notice) {
@@ -121,18 +127,30 @@
         document.getElementById("popupStatus").textContent = cfg.popup.active ? `Active Popup ID: ${cfg.popup.id}` : "Popup Off";
       }
 
-      // Load Survey Answers
+      // 2. Load Survey Answers + Custom "Other" Responses
       const sRes = await fetch(`${DB}/visitor_sources.json`);
       const sData = (await sRes.json()) || {};
       const counts = {};
+      const otherNotes = [];
       Object.values(sData).forEach(item => {
-        if (item && item.source) counts[item.source] = (counts[item.source] || 0) + 1;
+        if (item && item.source) {
+          counts[item.source] = (counts[item.source] || 0) + 1;
+          if (item.detail) {
+            const when = item.time ? new Date(item.time).toLocaleDateString() : "";
+            otherNotes.push(`• <strong>${item.detail}</strong> <small style="color:var(--muted);">(${when})</small>`);
+          }
+        }
       });
+
       document.getElementById("surveyStats").innerHTML = Object.keys(counts).length
         ? Object.entries(counts).map(([k, v]) => `<div class="stat"><strong>${v}</strong><span>${k}</span></div>`).join("")
         : "<p style='color:var(--muted);font-size:0.85rem;'>No survey responses yet.</p>";
 
-      // Load All Comments
+      document.getElementById("otherNotesWrap").innerHTML = otherNotes.length
+        ? `<div class="other-notes"><strong style="color:#ff8b96;display:block;margin-bottom:4px;">Custom "Other" Visitor Responses:</strong>${otherNotes.reverse().join("<br>")}</div>`
+        : "";
+
+      // 3. Load All Comments
       const cRes = await fetch(`${DB}/comments.json`);
       const cData = (await cRes.json()) || {};
       const container = document.getElementById("allComments");
@@ -142,10 +160,11 @@
         if (!thread) return;
         Object.entries(thread).forEach(([commentId, c]) => {
           if (!c || !c.text) return;
+          const searchBlob = `${c.name || ""} ${c.animeTitle || ""} ${c.text || ""}`.toLowerCase();
           html += `
-            <div class="c-card">
+            <div class="c-card" data-search="${searchBlob.replace(/"/g, "&quot;")}">
               <div class="c-head">
-                <span><strong>${c.name}</strong> ${c.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + animeId}</span>
+                <span><strong>${c.name}</strong> ${c.isAdmin ? '<span class="admin-tag">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + animeId}</span>
                 <span>${c.date || ''}</span>
               </div>
               <div class="c-text">${c.text}</div>
@@ -159,6 +178,13 @@
         });
       });
       container.innerHTML = html || "<p style='color:var(--muted);font-size:0.85rem;'>No comments yet.</p>";
+    }
+
+    function filterComments() {
+      const q = document.getElementById("commentSearch").value.trim().toLowerCase();
+      document.querySelectorAll(".c-card").forEach(card => {
+        card.style.display = card.dataset.search.includes(q) ? "block" : "none";
+      });
     }
 
     async function saveNotice(active) {
