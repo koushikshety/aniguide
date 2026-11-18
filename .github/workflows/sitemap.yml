@@ -1,0 +1,63 @@
+name: Auto-Update Sitemap
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'sitemap.xml'
+      - 'robots.txt'
+  schedule:
+    - cron: '0 0 * * 1' # Also refreshes every Monday
+
+permissions:
+  contents: write
+
+jobs:
+  build-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate sitemap.xml and robots.txt
+        run: |
+          BASE_URL="https://aniguide.aniguide-hub.workers.dev"
+          TODAY=$(date -u +"%Y-%m-%d")
+          cat <<EOF > sitemap.xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url>
+              <loc>${BASE_URL}/</loc>
+              <lastmod>${TODAY}</lastmod>
+              <changefreq>daily</changefreq>
+              <priority>1.0</priority>
+            </url>
+          EOF
+
+          for file in *-watch-order.html; do
+            if [ -f "$file" ]; then
+              cat <<EOF >> sitemap.xml
+            <url>
+              <loc>${BASE_URL}/${file}</loc>
+              <lastmod>${TODAY}</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>0.8</priority>
+            </url>
+          EOF
+            fi
+          done
+
+          echo "</urlset>" >> sitemap.xml
+
+          cat <<EOF > robots.txt
+          User-agent: *
+          Allow: /
+          Disallow: /admin.html
+          Sitemap: ${BASE_URL}/sitemap.xml
+          EOF
+
+      - name: Commit updated sitemap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml robots.txt
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update sitemap.xml [skip ci]" && git push)
