@@ -52,6 +52,7 @@
     .ad-slot { margin: 14px 0; text-align: center; }
     footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 28px; padding-top: 16px; border-top: 1px solid #30363d; }
   </style>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
 </head>
 <body>
   <header>
@@ -75,7 +76,15 @@
     <a class="nav-pill" href="fate-series-watch-order.html">Fate Series</a>
     <a class="nav-pill" href="dragon-ball-watch-order.html">Dragon Ball</a>
     <a class="nav-pill active" href="hunter-x-hunter-watch-order.html">Hunter x Hunter</a>
-  </nav>
+    <div id="live-stats-bar" style="display:inline-flex; gap:10px; align-items:center; font-size:12px; padding:5px 10px; background:rgba(15,23,42,0.85); border:1px solid #334155; color:#f1f5f9; border-radius:999px; margin-left:auto;">
+    <span style="display:flex; align-items:center;">
+      <span style="display:inline-block; width:7px; height:7px; background:#22c55e; border-radius:50%; margin-right:5px; box-shadow:0 0 6px #22c55e;"></span>
+      <strong id="online-users" style="margin-right:3px;">0</strong> Live
+    </span>
+    <span style="color:#64748b;">|</span>
+    <span>👁️ <strong id="total-views">0</strong></span>
+  </div>
+</nav>
 
   <div class="ad-slot">
     <script async="async" data-cfasync="false" src="https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1"></script>
@@ -142,5 +151,73 @@
     }
   </script>
   <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
+
+<script>
+(function () {
+  // 1. Owner / Admin Exclusion
+  if (location.search.includes('admin=true')) {
+    localStorage.setItem('aniguide_ignore_me', 'true');
+  }
+  const isOwner = localStorage.getItem('aniguide_ignore_me') === 'true';
+
+  // 2. Firebase Live Visitors & Page Views
+  function initAnalytics() {
+    if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
+      setTimeout(initAnalytics, 300);
+      return;
+    }
+    const db = firebase.database();
+    const pageSlug = (location.pathname.replace(/[^a-zA-Z0-9]/g, '_') || 'home');
+    
+    const viewsRef = db.ref(`analytics/views/${pageSlug}`);
+    const onlineListRef = db.ref('analytics/online');
+    const connectedRef = db.ref('.info/connected');
+
+    const viewEl = document.getElementById('total-views');
+    const onlineEl = document.getElementById('online-users');
+
+    // Count 1 view per browser session for real visitors (never for you)
+    const sessionKey = 'viewed_' + pageSlug;
+    if (!isOwner && !sessionStorage.getItem(sessionKey)) {
+      viewsRef.set(firebase.database.ServerValue.increment(1));
+      sessionStorage.setItem(sessionKey, '1');
+    }
+
+    // Listen to total page views
+    viewsRef.on('value', (snap) => {
+      if (viewEl) {
+        viewEl.textContent = (snap.val() || 0).toLocaleString();
+      }
+    });
+
+    // Track live active visitors (auto-removes on tab close)
+    if (!isOwner) {
+      connectedRef.on('value', (snap) => {
+        if (snap.val() === true) {
+          const userRef = onlineListRef.push();
+          userRef.onDisconnect().remove();
+          userRef.set({
+            page: pageSlug,
+            joinedAt: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
+      });
+    }
+
+    // Listen to live active count
+    onlineListRef.on('value', (snap) => {
+      if (onlineEl) {
+        onlineEl.textContent = snap.numChildren();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnalytics);
+  } else {
+    initAnalytics();
+  }
+})();
+</script>
 </body>
 </html>

@@ -229,6 +229,7 @@
 
     footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.6; }
   </style>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
 </head>
 <body>
 
@@ -859,5 +860,73 @@
   <!-- ADSTERRA SOCIAL BAR SCRIPT -->
   <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
 
+
+<script>
+(function () {
+  // 1. Owner / Admin Exclusion
+  if (location.search.includes('admin=true')) {
+    localStorage.setItem('aniguide_ignore_me', 'true');
+  }
+  const isOwner = localStorage.getItem('aniguide_ignore_me') === 'true';
+
+  // 2. Firebase Live Visitors & Page Views
+  function initAnalytics() {
+    if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
+      setTimeout(initAnalytics, 300);
+      return;
+    }
+    const db = firebase.database();
+    const pageSlug = (location.pathname.replace(/[^a-zA-Z0-9]/g, '_') || 'home');
+    
+    const viewsRef = db.ref(`analytics/views/${pageSlug}`);
+    const onlineListRef = db.ref('analytics/online');
+    const connectedRef = db.ref('.info/connected');
+
+    const viewEl = document.getElementById('total-views');
+    const onlineEl = document.getElementById('online-users');
+
+    // Count 1 view per browser session for real visitors (never for you)
+    const sessionKey = 'viewed_' + pageSlug;
+    if (!isOwner && !sessionStorage.getItem(sessionKey)) {
+      viewsRef.set(firebase.database.ServerValue.increment(1));
+      sessionStorage.setItem(sessionKey, '1');
+    }
+
+    // Listen to total page views
+    viewsRef.on('value', (snap) => {
+      if (viewEl) {
+        viewEl.textContent = (snap.val() || 0).toLocaleString();
+      }
+    });
+
+    // Track live active visitors (auto-removes on tab close)
+    if (!isOwner) {
+      connectedRef.on('value', (snap) => {
+        if (snap.val() === true) {
+          const userRef = onlineListRef.push();
+          userRef.onDisconnect().remove();
+          userRef.set({
+            page: pageSlug,
+            joinedAt: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
+      });
+    }
+
+    // Listen to live active count
+    onlineListRef.on('value', (snap) => {
+      if (onlineEl) {
+        onlineEl.textContent = snap.numChildren();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnalytics);
+  } else {
+    initAnalytics();
+  }
+})();
+</script>
 </body>
 </html>
