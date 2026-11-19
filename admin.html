@@ -102,7 +102,14 @@
   </div>
 
   
-  <div id="admin-analytics-card" class="card" style="background:#161b22; border:1px solid #30363d; border-radius:10px; padding:16px; margin-top:16px;">
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    if (!firebase.apps.length) {
+      firebase.initializeApp({ databaseURL: "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app" });
+    }
+  </script>
+<div id="admin-analytics-card" class="card" style="background:#161b22; border:1px solid #30363d; border-radius:10px; padding:16px; margin-top:16px;">
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
       <h3 style="margin:0; color:#ff4757; font-size:1rem;">5. Live Visitors &amp; Page Views</h3>
       <span id="owner-status-badge" style="font-size:11px; padding:3px 8px; border-radius:999px; background:#1f2937; color:#22c55e; border:1px solid #374151;"></span>
