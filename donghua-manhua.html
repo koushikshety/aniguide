@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AniGuide — Donghua & Manhua Catalog, 2026 Releases & Cultivation Guides</title>
+  <meta name="description" content="Explore top Chinese Donghua and Manhua including Renegade Immortal, Battle Through the Heavens, Soul Land, Against the Gods, and Martial Peak." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --accent: #ff4757;
+      --gold: #f59e0b;
+      --green: #238636;
+      --blue: #1f6feb;
+      --text: #f0f6fc;
+      --muted: #8b949e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 14px; max-width: 1080px; margin: auto; -webkit-font-smoothing: antialiased; }
+
+    nav {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    }
+    .back-link {
+      color: #58a6ff; text-decoration: none; font-size: 0.85rem; font-weight: 700;
+      background: var(--card); border: 1px solid var(--border); padding: 6px 12px; border-radius: 8px;
+    }
+
+    header { text-align: center; padding: 16px 0 10px; }
+    header h1 { color: var(--gold); font-size: 1.8rem; letter-spacing: -0.5px; }
+    header p { color: var(--muted); font-size: 0.88rem; margin-top: 5px; }
+
+    .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 12px 0; padding-bottom: 6px; scrollbar-width: none; }
+    .tab-btn {
+      background: var(--card); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; font-weight: 600;
+    }
+    .tab-btn.active { background: var(--gold); border-color: var(--gold); color: #0d1117; font-weight: 800; }
+
+    .ad-slot { margin: 12px 0; text-align: center; min-height: 90px; }
+
+    .search-box { display: flex; gap: 8px; margin-bottom: 12px; }
+    .search-box input { flex: 1; padding: 11px 13px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 0.95rem; outline: none; }
+    .search-box input:focus { border-color: var(--gold); }
+    button.primary { background: var(--gold); color: #0d1117; border: none; padding: 0 18px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(162px, 1fr)); gap: 13px; }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .poster-wrap { position: relative; overflow: hidden; }
+    .poster-wrap img { width: 100%; height: 225px; object-fit: cover; display: block; }
+    .air-badge {
+      position: absolute; top: 7px; left: 7px; right: 7px;
+      background: rgba(13, 17, 23, 0.92); border-left: 3px solid var(--gold);
+      color: #fde68a; font-size: 0.7rem; font-weight: 700; padding: 4px 6px; border-radius: 4px;
+    }
+    .card-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .card-title { font-size: 0.9rem; font-weight: bold; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-meta { font-size: 0.76rem; color: var(--muted); }
+    .btn-row { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .buy-btn { display: block; text-align: center; background: var(--green); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
+    .merch-btn { display: block; text-align: center; background: var(--blue); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
+
+    .skeleton {
+      height: 310px; border-radius: 10px;
+      background: linear-gradient(90deg, #161b22 25%, #21262d 50%, #161b22 75%);
+      background-size: 200% 100%; animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="back-link" href="index.html">← Anime & Manga Home</a>
+    <div id="live-stats-bar" style="display:inline-flex; gap:10px; align-items:center; font-size:12px; padding:5px 12px; background:#161b22; border:1px solid #30363d; color:#f1f5f9; border-radius:999px;">
+      <span style="display:flex; align-items:center;">
+        <span style="display:inline-block; width:7px; height:7px; background:#22c55e; border-radius:50%; margin-right:5px; box-shadow:0 0 6px #22c55e;"></span>
+        <strong id="online-users" style="margin-right:3px;">0</strong> Live
+      </span>
+      <span style="color:#64748b;">|</span>
+      <span>👁️ <strong id="total-views">0</strong></span>
+    </div>
+  </nav>
+
+  <header>
+    <h1>🐉 Donghua & Manhua Hub</h1>
+    <p>3D Cultivation Donghua, Chinese Webtoons & Novel Box Sets</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchCatalog('DONGHUA', this)">🔥 Popular Donghua</button>
+    <button class="tab-btn" onclick="switchCatalog('DONGHUA_NEW', this)">🆕 New 2026 Donghua</button>
+    <button class="tab-btn" onclick="switchCatalog('MANHUA', this)">📜 All Manhua (5,000+)</button>
+  </div>
+
+  <!-- 1-Second Delayed Native Ad -->
+  <div class="ad-slot" id="native-ad-slot"></div>
+
+  <div class="search-box">
+    <input type="text" id="cnQuery" placeholder="Search Donghua or Manhua (e.g. Renegade Immortal, Soul Land)..." onkeydown="if(event.key==='Enter') searchCn()" />
+    <button class="primary" onclick="searchCn()">Search</button>
+  </div>
+
+  <div id="catalog-status" style="font-size:0.8rem; color:#8b949e; margin-bottom:10px;"></div>
+  <div class="grid" id="cn-grid"></div>
+  <div id="load-more-wrap" style="text-align:center; margin-top:18px; display:none;">
+    <button class="primary" id="loadMoreBtn" onclick="loadNextCnPage()" style="padding:11px 26px; font-size:0.9rem;">Load More Titles</button>
+  </div>
+
+  <footer>
+    <p><a href="index.html" style="color:#58a6ff; text-decoration:none;">Back to AniGuide Main</a> • Live Chinese Animation & Manhua Data via AniList API</p>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    const AMAZON_TAG = "aniguide-21";
+    const FIREBASE_DB_URL = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
+    }
+
+    let cnPage = 1;
+    let cnMode = "DONGHUA";
+    let cnSearch = null;
+    let cnHasNext = true;
+    let cnLoading = false;
+
+    function switchCatalog(mode, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('cnQuery').value = '';
+      loadCnCatalog(null, mode, false);
+    }
+
+    function searchCn() {
+      const q = document.getElementById('cnQuery').value.trim();
+      loadCnCatalog(q || null, cnMode, false);
+    }
+
+    function loadNextCnPage() {
+      if (!cnHasNext || cnLoading) return;
+      cnPage++;
+      loadCnCatalog(cnSearch, cnMode, true);
+    }
+
+    async function loadCnCatalog(searchQuery = null, mode = "DONGHUA", append = false) {
+      if (cnLoading) return;
+      cnLoading = true;
+
+      const grid = document.getElementById('cn-grid');
+      const loadWrap = document.getElementById('load-more-wrap');
+      const loadBtn = document.getElementById('loadMoreBtn');
+      const statusEl = document.getElementById('catalog-status');
+
+      if (!append) {
+        cnPage = 1;
+        cnMode = mode;
+        cnSearch = searchQuery;
+        grid.innerHTML = Array(12).fill('<div class="skeleton"></div>').join('');
+        loadWrap.style.display = 'none';
+      } else if (loadBtn) {
+        loadBtn.textContent = 'Loading more...';
+      }
+
+      const isManhua = (mode === "MANHUA");
+      const mediaType = isManhua ? "MANGA" : "ANIME";
+      const sortOrder = (mode === "DONGHUA_NEW") ? ["START_DATE_DESC"] : ["POPULARITY_DESC"];
+
+      const query = `
+        query ($page: Int, $search: String, $type: MediaType, $sort: [MediaSort]) {
+          Page(page: $page, perPage: 48) {
+            pageInfo { total hasNextPage }
+            media(search: $search, type: $type, countryOfOrigin: "CN", sort: $sort, isAdult: false) {
+              id
+              type
+              title { english romaji }
+              episodes
+              chapters
+              status
+              averageScore
+              coverImage { large }
+            }
+          }
+        }
+      `;
+
+      const vars = {
+        page: cnPage,
+        type: mediaType,
+        sort: searchQuery ? ["SEARCH_MATCH"] : sortOrder
+      };
+      if (searchQuery) vars.search = searchQuery;
+
+      try {
+        const res = await fetch('https://graphql.anilist.co', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ query, variables: vars })
+        });
+        const json = await res.json();
+        const pageData = json.data.Page;
+        const list = pageData.media;
+        cnHasNext = pageData.pageInfo.hasNextPage;
+
+        if (!append && !list.length) {
+          grid.innerHTML = 'No Donghua or Manhua found. Try another search.';
+          statusEl.textContent = '';
+          cnLoading = false;
+          return;
+        }
+
+        const html = list.map(item => {
+          const title = item.title.english || item.title.romaji;
+          const badge = isManhua
+            ? `MANHUA • ${item.chapters ? item.chapters + ' Ch' : item.status}`
+            : `DONGHUA • ${item.episodes ? item.episodes + ' Eps' : item.status}`;
+          const novelUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' novel manga')}&tag=${AMAZON_TAG}`;
+          const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' figure merch')}&tag=${AMAZON_TAG}`;
+
+          return `
+            <div class="card">
+              <div class="poster-wrap">
+                <img src="${item.coverImage.large}" alt="${title}" loading="lazy" />
+                <div class="air-badge">${badge}</div>
+              </div>
+              <div class="card-body">
+                <div class="card-title">${title}</div>
+                <div class="card-meta">Score: ${item.averageScore ? (item.averageScore / 10).toFixed(1) : 'Top'} • ${item.status}</div>
+                <div class="btn-row">
+                  <a class="buy-btn" href="${novelUrl}" target="_blank" rel="nofollow noopener">Novels & Books</a>
+                  <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Merch</a>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+
+        if (append) {
+          grid.insertAdjacentHTML('beforeend', html);
+        } else {
+          grid.innerHTML = html;
+        }
+
+        const loadedCount = grid.querySelectorAll('.card').length;
+        const totalAvail = pageData.pageInfo.total ? Number(pageData.pageInfo.total).toLocaleString() : '5,000+';
+        statusEl.textContent = `Showing ${loadedCount.toLocaleString()} of ${totalAvail} Chinese ${isManhua ? 'Manhua' : 'Donghua'} titles`;
+
+        if (cnHasNext) {
+          loadWrap.style.display = 'block';
+          loadBtn.textContent = `Load More (${loadedCount.toLocaleString()} loaded)`;
+        } else {
+          loadWrap.style.display = 'none';
+        }
+      } catch (e) {
+        if (!append) grid.innerHTML = 'Could not load catalog. Check internet and refresh.';
+      } finally {
+        cnLoading = false;
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
+        loadNextCnPage();
+      }
+    });
+
+    // 1-Second Delayed Native Ad
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const slot = document.getElementById('native-ad-slot');
+        if (!slot || slot.dataset.loaded) return;
+        slot.dataset.loaded = 'true';
+
+        const container = document.createElement('div');
+        container.id = 'container-f1020225a43a6e61284781660ae4e2a1';
+        slot.appendChild(container);
+
+        const s = document.createElement('script');
+        s.async = true;
+        s.setAttribute('data-cfasync', 'false');
+        s.src = 'https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1';
+        slot.appendChild(s);
+      }, 1000);
+    });
+
+    // Firebase Live Visitors & Views (Excludes Owner)
+    (function () {
+      if (location.search.includes('admin=true')) {
+        localStorage.setItem('aniguide_ignore_me', 'true');
+      }
+      const isOwner = localStorage.getItem('aniguide_ignore_me') === 'true';
+      const db = firebase.database();
+      const pageSlug = 'donghua_manhua_html';
+      const viewsRef = db.ref(`analytics/views/${pageSlug}`);
+      const onlineListRef = db.ref('analytics/online');
+
+      const sessionKey = 'viewed_' + pageSlug;
+      if (!isOwner && !sessionStorage.getItem(sessionKey)) {
+        viewsRef.set(firebase.database.ServerValue.increment(1));
+        sessionStorage.setItem(sessionKey, '1');
+      }
+
+      viewsRef.on('value', (snap) => {
+        document.getElementById('total-views').textContent = (snap.val() || 0).toLocaleString();
+      });
+
+      if (!isOwner) {
+        db.ref('.info/connected').on('value', (snap) => {
+          if (snap.val() === true) {
+            const userRef = onlineListRef.push();
+            userRef.onDisconnect().remove();
+            userRef.set({ page: pageSlug, joinedAt: firebase.database.ServerValue.TIMESTAMP });
+          }
+        });
+      }
+
+      onlineListRef.on('value', (snap) => {
+        document.getElementById('online-users').textContent = snap.numChildren();
+      });
+    })();
+
+    loadCnCatalog(null, 'DONGHUA', false);
+  </script>
+  <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
+</body>
+</html>
