@@ -10,7 +10,6 @@
   <meta property="og:description" content="Exact canon episode guides, watch orders, and 2026 anime release tracker." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://aniguide.aniguide-hub.workers.dev/" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
   <style>
     :root {
       --bg: #0d1117;
@@ -39,21 +38,6 @@
     header h1 { color: var(--accent); font-size: 1.9rem; letter-spacing: -0.5px; }
     header p { color: var(--muted); font-size: 0.9rem; margin-top: 5px; }
 
-    .live-pill {
-      display: inline-flex; gap: 10px; align-items: center; font-size: 0.78rem;
-      padding: 5px 12px; background: var(--card); border: 1px solid var(--border);
-      color: var(--text); border-radius: 999px; margin-top: 10px;
-    }
-    .live-dot {
-      display: inline-block; width: 8px; height: 8px; background: #22c55e;
-      border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px #22c55e;
-      animation: pulseDot 1.8s infinite;
-    }
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.85); }
-    }
-
     .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 14px 0 8px; padding-bottom: 6px; scrollbar-width: none; }
     .tabs::-webkit-scrollbar { display: none; }
     .tab-btn {
@@ -69,7 +53,7 @@
     .guide-box ul { padding-left: 18px; line-height: 1.75; color: #c9d1d9; font-size: 0.9rem; }
     .guide-cta { display: inline-block; margin-top: 12px; background: var(--green); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.84rem; font-weight: bold; }
 
-    .ad-slot { margin: 12px 0; text-align: center; min-height: 90px; }
+    .ad-slot { margin: 12px 0; text-align: center; min-height: 20px; }
 
     .search-box { display: flex; gap: 8px; margin-bottom: 14px; }
     .search-box input { flex: 1; padding: 11px 13px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 0.95rem; outline: none; }
@@ -245,6 +229,7 @@
 
     footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.6; }
   </style>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
 </head>
 <body>
 
@@ -255,20 +240,13 @@
   <header>
     <h1>AniGuide</h1>
     <p>2026 Release Schedules, Canon Watch Orders & Official Manga / Merch Deals</p>
-    <div class="live-pill" id="live-stats-bar">
-      <span style="display:flex; align-items:center;">
-        <span class="live-dot"></span>
-        <strong id="online-users" style="margin-right:4px;">0</strong> Watching Now
-      </span>
-      <span style="color:#484f58;">|</span>
-      <span>👁️ <strong id="total-views">0</strong> Views</span>
-    </div>
   </header>
 
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('this_month', this)">New This Month (Nov 2026)</button>
     <button class="tab-btn" onclick="showTab('this_year', this)">Best of 2026</button>
     <button class="tab-btn" onclick="showTab('trending', this)">Trending</button>
+    <button class="tab-btn" onclick="showTab('manga', this)">📚 All Manga (10,000+)</button>
     <button class="tab-btn" onclick="showTab('naruto', this)">Naruto</button>
     <button class="tab-btn" onclick="showTab('onepiece', this)">One Piece</button>
     <button class="tab-btn" onclick="showTab('bleach', this)">Bleach</button>
@@ -375,15 +353,19 @@
     <a class="guide-cta" href="https://www.amazon.in/s?k=Hunter+x+Hunter+Manga&tag=aniguide-21" target="_blank" rel="nofollow noopener">Shop Hunter x Hunter Manga on Amazon</a>
   </div>
 
-  <!-- ADSTERRA NATIVE BANNER SLOT (Loads 1s after page enter) -->
-  <div class="ad-slot" id="native-ad-slot"></div>
+  <!-- ADSTERRA NATIVE BANNER SLOT -->
+  <div class="ad-slot" id="native-ad-slot"><script async="async" data-cfasync="false" src="https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1"></script><div id="container-f1020225a43a6e61284781660ae4e2a1"></div></div>
 
   <div class="search-box">
     <input type="text" id="query" placeholder="Search any anime (e.g. Solo Leveling, Chainsaw Man)..." onkeydown="if(event.key==='Enter') searchAnime()" />
     <button class="primary" onclick="searchAnime()">Search</button>
   </div>
 
+  <div id="catalog-status" style="font-size:0.8rem; color:#8b949e; margin-bottom:10px;"></div>
   <div class="grid" id="anime-grid"></div>
+  <div id="load-more-wrap" style="text-align:center; margin-top:18px; display:none;">
+    <button class="primary" id="loadMoreBtn" onclick="loadNextPage()" style="padding:11px 26px; font-size:0.9rem;">Load More Titles (10,000+ Catalog)</button>
+  </div>
 
   <div style="margin-top:26px;padding:14px;background:#161b22;border:1px solid #30363d;border-radius:10px;">
     <strong style="color:#ff4757;display:block;margin-bottom:8px;">Full Watch Order, Filler Skip & Manga Continuation Guides:</strong>
@@ -445,20 +427,11 @@
     </div>
   </div>
 
-  <!-- Firebase App & Realtime Database Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-
   <script>
     const AMAZON_TAG = "aniguide-21";
     const FIREBASE_DB_URL = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
     const animeCache = {};
     let activePopupId = "default_v1";
-
-    // Initialize Firebase SDK for live presence & views
-    if (!firebase.apps.length) {
-      firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
-    }
 
     function formatSchedule(m) {
       if (m.nextAiringEpisode) {
@@ -474,27 +447,63 @@
       return `${m.season || ""} ${m.seasonYear || "2026"}`.trim();
     }
 
+    let currentPage = 1;
+    let currentMode = 'this_month';
+    let currentSearch = null;
+    let hasNextPage = true;
+    let isLoadingPage = false;
+
     function showTab(tab, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       document.querySelectorAll('.guide-box').forEach(g => g.classList.remove('show'));
 
-      if (tab === 'this_month' || tab === 'this_year' || tab === 'trending') {
-        loadAnime(null, tab);
+      if (tab === 'this_month' || tab === 'this_year' || tab === 'trending' || tab === 'manga') {
+        document.getElementById('anime-grid').style.display = 'grid';
+        loadAnime(null, tab, false);
       } else {
+        document.getElementById('load-more-wrap').style.display = 'none';
         document.getElementById('guide-' + tab).classList.add('show');
       }
     }
 
-    async function loadAnime(searchQuery = null, mode = 'this_month') {
+    function loadNextPage() {
+      if (!hasNextPage || isLoadingPage) return;
+      currentPage++;
+      loadAnime(currentSearch, currentMode, true);
+    }
+
+    async function loadAnime(searchQuery = null, mode = 'this_month', append = false) {
+      if (isLoadingPage) return;
+      isLoadingPage = true;
+
       const grid = document.getElementById('anime-grid');
-      grid.innerHTML = Array(10).fill('<div class="skeleton"></div>').join('');
+      const loadWrap = document.getElementById('load-more-wrap');
+      const loadBtn = document.getElementById('loadMoreBtn');
+      const statusEl = document.getElementById('catalog-status');
+
+      if (!append) {
+        currentPage = 1;
+        currentMode = mode;
+        currentSearch = searchQuery;
+        grid.innerHTML = Array(12).fill('<div class="skeleton"></div>').join('');
+        loadWrap.style.display = 'none';
+      } else if (loadBtn) {
+        loadBtn.textContent = 'Loading more...';
+      }
+
+      const isMangaMode = (mode === 'manga');
+      const mediaType = isMangaMode ? 'MANGA' : 'ANIME';
 
       const gqlQuery = `
-        query ($search: String, $season: MediaSeason, $seasonYear: Int, $sort: [MediaSort]) {
-          Page(page: 1, perPage: 24) {
-            media(search: $search, season: $season, seasonYear: $seasonYear, type: ANIME, sort: $sort, isAdult: false) {
+        query ($page: Int, $search: String, $season: MediaSeason, $seasonYear: Int, $type: MediaType, $sort: [MediaSort]) {
+          Page(page: $page, perPage: 48) {
+            pageInfo { total hasNextPage currentPage }
+            media(search: $search, season: $season, seasonYear: $seasonYear, type: $type, sort: $sort, isAdult: false) {
               id
+              type
+              chapters
+              volumes
               title { english romaji native }
               format
               episodes
@@ -524,7 +533,7 @@
         }
       `;
 
-      const vars = { sort: ["TRENDING_DESC"] };
+      const vars = { page: currentPage, type: mediaType, sort: ["POPULARITY_DESC"] };
       if (searchQuery) {
         vars.search = searchQuery;
         vars.sort = ["SEARCH_MATCH"];
@@ -535,6 +544,10 @@
       } else if (mode === 'this_year') {
         vars.seasonYear = 2026;
         vars.sort = ["SCORE_DESC"];
+      } else if (mode === 'trending') {
+        vars.sort = ["TRENDING_DESC"];
+      } else if (mode === 'manga') {
+        vars.sort = ["POPULARITY_DESC"];
       }
 
       try {
@@ -544,27 +557,38 @@
           body: JSON.stringify({ query: gqlQuery, variables: vars })
         });
         const json = await res.json();
-        const list = json.data.Page.media;
+        const pageData = json.data.Page;
+        const list = pageData.media;
+        hasNextPage = pageData.pageInfo.hasNextPage;
 
-        if (!list.length) {
-          grid.innerHTML = 'No anime found. Try another title.';
+        if (!append && !list.length) {
+          grid.innerHTML = 'No titles found. Try another search.';
+          if (statusEl) statusEl.textContent = '';
+          isLoadingPage = false;
           return;
         }
 
-        grid.innerHTML = list.map(a => {
+        const cardsHtml = list.map(a => {
           animeCache[a.id] = a;
           const title = a.title.english || a.title.romaji;
           const mangaUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' manga box set')}&tag=${AMAZON_TAG}`;
           const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' action figure hoodie')}&tag=${AMAZON_TAG}`;
+          const badgeText = a.type === 'MANGA'
+            ? `${a.format || 'MANGA'} • ${a.chapters ? a.chapters + ' Ch' : (a.status || 'Ongoing')}`
+            : formatSchedule(a);
+          const metaText = a.type === 'MANGA'
+            ? `Score: ${a.averageScore ? (a.averageScore / 10).toFixed(1) : 'Top'} • ${a.volumes ? a.volumes + ' Vols' : a.status}`
+            : `Score: ${a.averageScore ? (a.averageScore / 10).toFixed(1) : 'New'} • ${a.episodes || '?'} Eps`;
+
           return `
             <div class="card">
               <div class="poster-wrap" onclick="openDetail(${a.id})">
                 <img src="${a.coverImage.large}" alt="${title}" loading="lazy" />
-                <div class="air-badge">${formatSchedule(a)}</div>
+                <div class="air-badge">${badgeText}</div>
               </div>
               <div class="card-body">
                 <div class="card-title" onclick="openDetail(${a.id})">${title}</div>
-                <div class="card-meta">Score: ${a.averageScore ? (a.averageScore / 10).toFixed(1) : 'New'} • ${a.episodes || '?'} Eps</div>
+                <div class="card-meta">${metaText}</div>
                 <div class="btn-row">
                   <a class="buy-btn" href="${mangaUrl}" target="_blank" rel="nofollow noopener">Manga Box Sets</a>
                   <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Hoodies</a>
@@ -572,10 +596,38 @@
               </div>
             </div>`;
         }).join('');
+
+        if (append) {
+          grid.insertAdjacentHTML('beforeend', cardsHtml);
+        } else {
+          grid.innerHTML = cardsHtml;
+        }
+
+        const loadedCount = grid.querySelectorAll('.card').length;
+        const totalAvailable = pageData.pageInfo.total ? Number(pageData.pageInfo.total).toLocaleString() : '10,000+';
+        if (statusEl) {
+          statusEl.textContent = `Showing ${loadedCount.toLocaleString()} of ${totalAvailable} ${isMangaMode ? 'Manga' : 'Anime'} titles`;
+        }
+
+        if (hasNextPage) {
+          loadWrap.style.display = 'block';
+          if (loadBtn) loadBtn.textContent = `Load More (${loadedCount.toLocaleString()} loaded)`;
+        } else {
+          loadWrap.style.display = 'none';
+        }
       } catch (e) {
-        grid.innerHTML = 'Could not load anime. Check internet and refresh.';
+        if (!append) grid.innerHTML = 'Could not load catalog. Check internet and refresh.';
+      } finally {
+        isLoadingPage = false;
       }
     }
+
+    // Auto-load next batch when scrolling near bottom
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
+        loadNextPage();
+      }
+    });
 
     async function fetchSingleAnime(id) {
       if (animeCache[id]) return animeCache[id];
@@ -722,7 +774,7 @@
 
     function searchAnime() {
       const q = document.getElementById('query').value.trim();
-      loadAnime(q || null, 'this_month');
+      loadAnime(q || null, currentMode, false);
     }
 
     async function loadComments(id, highlightCommentId = null) {
@@ -864,84 +916,19 @@
         return;
       }
 
-      // Wait 5s (since native ad loads 1s after page enter)
       setTimeout(() => {
         const container = document.getElementById("container-f1020225a43a6e61284781660ae4e2a1");
         if (container && container.innerHTML.trim() === "") {
           triggerAdBlockWall();
         }
-      }, 5000);
-    }
-
-    // 1-SECOND DELAYED NATIVE AD LOADER
-    function loadDelayedNativeAd() {
-      setTimeout(() => {
-        const slot = document.getElementById("native-ad-slot");
-        if (!slot || slot.dataset.loaded) return;
-        slot.dataset.loaded = "true";
-
-        const container = document.createElement("div");
-        container.id = "container-f1020225a43a6e61284781660ae4e2a1";
-        slot.appendChild(container);
-
-        const s = document.createElement("script");
-        s.async = true;
-        s.setAttribute("data-cfasync", "false");
-        s.src = "https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1";
-        slot.appendChild(s);
-      }, 1000);
-    }
-
-    // FIREBASE LIVE VISITORS & PAGE VIEWS (Excludes Owner)
-    function initLiveAnalytics() {
-      if (location.search.includes("admin=true")) {
-        localStorage.setItem("aniguide_ignore_me", "true");
-      }
-      const isOwner = localStorage.getItem("aniguide_ignore_me") === "true";
-
-      const db = firebase.database();
-      const pageSlug = (location.pathname.replace(/[^a-zA-Z0-9]/g, "_") || "home");
-      const viewsRef = db.ref(`analytics/views/${pageSlug}`);
-      const onlineListRef = db.ref("analytics/online");
-      const connectedRef = db.ref(".info/connected");
-
-      const viewEl = document.getElementById("total-views");
-      const onlineEl = document.getElementById("online-users");
-
-      const sessionKey = "viewed_" + pageSlug;
-      if (!isOwner && !sessionStorage.getItem(sessionKey)) {
-        viewsRef.set(firebase.database.ServerValue.increment(1));
-        sessionStorage.setItem(sessionKey, "1");
-      }
-
-      viewsRef.on("value", (snap) => {
-        if (viewEl) viewEl.textContent = (snap.val() || 0).toLocaleString();
-      });
-
-      if (!isOwner) {
-        connectedRef.on("value", (snap) => {
-          if (snap.val() === true) {
-            const userRef = onlineListRef.push();
-            userRef.onDisconnect().remove();
-            userRef.set({
-              page: pageSlug,
-              joinedAt: firebase.database.ServerValue.TIMESTAMP
-            });
-          }
-        });
-      }
-
-      onlineListRef.on("value", (snap) => {
-        if (onlineEl) onlineEl.textContent = snap.numChildren();
-      });
+      }, 4000);
     }
 
     window.addEventListener("load", () => {
       initSiteConfig();
-      loadDelayedNativeAd();
       runAntiAdblock();
-      initLiveAnalytics();
 
+      // Check if opened via Admin "Go To" deep link (?anime=...&comment=...)
       const params = new URLSearchParams(window.location.search);
       const targetAnime = params.get("anime");
       const targetComment = params.get("comment");
@@ -955,5 +942,74 @@
 
   <!-- ADSTERRA SOCIAL BAR SCRIPT -->
   <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
+
+
+<script>
+(function () {
+  // 1. Owner / Admin Exclusion
+  if (location.search.includes('admin=true')) {
+    localStorage.setItem('aniguide_ignore_me', 'true');
+  }
+  const isOwner = localStorage.getItem('aniguide_ignore_me') === 'true';
+
+  // 2. Firebase Live Visitors & Page Views
+  function initAnalytics() {
+    if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
+      setTimeout(initAnalytics, 300);
+      return;
+    }
+    const db = firebase.database();
+    const pageSlug = (location.pathname.replace(/[^a-zA-Z0-9]/g, '_') || 'home');
+    
+    const viewsRef = db.ref(`analytics/views/${pageSlug}`);
+    const onlineListRef = db.ref('analytics/online');
+    const connectedRef = db.ref('.info/connected');
+
+    const viewEl = document.getElementById('total-views');
+    const onlineEl = document.getElementById('online-users');
+
+    // Count 1 view per browser session for real visitors (never for you)
+    const sessionKey = 'viewed_' + pageSlug;
+    if (!isOwner && !sessionStorage.getItem(sessionKey)) {
+      viewsRef.set(firebase.database.ServerValue.increment(1));
+      sessionStorage.setItem(sessionKey, '1');
+    }
+
+    // Listen to total page views
+    viewsRef.on('value', (snap) => {
+      if (viewEl) {
+        viewEl.textContent = (snap.val() || 0).toLocaleString();
+      }
+    });
+
+    // Track live active visitors (auto-removes on tab close)
+    if (!isOwner) {
+      connectedRef.on('value', (snap) => {
+        if (snap.val() === true) {
+          const userRef = onlineListRef.push();
+          userRef.onDisconnect().remove();
+          userRef.set({
+            page: pageSlug,
+            joinedAt: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
+      });
+    }
+
+    // Listen to live active count
+    onlineListRef.on('value', (snap) => {
+      if (onlineEl) {
+        onlineEl.textContent = snap.numChildren();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnalytics);
+  } else {
+    initAnalytics();
+  }
+})();
+</script>
 </body>
 </html>
