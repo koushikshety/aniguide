@@ -20,16 +20,20 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Pillow
-        run: pip install pillow
+      - name: Install Pillow & FFmpeg
+        run: |
+          pip install pillow
+          sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Generate rss.xml, Pin graphics, and Reels
-        run: python generate_rss.py
+      - name: Clean old temp files & generate RSS, Pins, and Reels
+        run: |
+          rm -f reels/tmp_*.jpg
+          python generate_rss.py
 
       - name: Commit and push rss.xml, pins, and reels
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add rss.xml pins/ reels/
+          git add -A rss.xml pins/ reels/
           git diff --staged --quiet || git commit -m "Auto-update daily rss.xml, pins & reels"
           git push
