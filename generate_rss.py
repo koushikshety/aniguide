@@ -1,6 +1,7 @@
 import io
 import json
 import os
+import re
 import subprocess
 import textwrap
 import urllib.request
@@ -124,9 +125,13 @@ def build_rss(items):
 
     for idx, m in enumerate(items, start=1):
         title = m["title"].get("english") or m["title"].get("romaji") or "Top Manga"
+        title = title.replace("<", "").replace(">", "")
         raw_img = m["coverImage"].get("extraLarge") or m["coverImage"].get("large") or ""
         genres = ", ".join((m.get("genres") or [])[:3])
-        raw_desc = (m.get("description") or "").replace("\n", " ")
+
+        raw_desc = re.sub(r"<[^>]+>", " ", m.get("description") or "")
+        raw_desc = raw_desc.replace("<", "").replace(">", "").replace("\n", " ")
+        raw_desc = re.sub(r"\s+", " ", raw_desc).strip()
         short_desc = (raw_desc[:140] + "...") if len(raw_desc) > 140 else raw_desc
 
         pin_filename = f"pin_{idx}.jpg"
