@@ -18,9 +18,9 @@ PINS_DIR = "pins"
 REELS_DIR = "reels"
 
 QUERY = """
-query ($page: Int) {
-  Page(page: $page, perPage: 3) {
-    media(type: MANGA, countryOfOrigin: "JP", sort: TRENDING_DESC, isAdult: false) {
+query ($page: Int, $perPage: Int, $sort: [MediaSort]) {
+  Page(page: $page, perPage: $perPage) {
+    media(type: MANGA, countryOfOrigin: "JP", sort: $sort, isAdult: false) {
       id
       title { english romaji }
       description(asHtml: false)
@@ -143,7 +143,7 @@ def build_reel_slide2(cover, title, short_desc, out_path):
         draw.text(((W - (tb[2] - tb[0])) // 2, y_text), line, font=hook_font, fill=(240, 244, 250, 255))
         y_text += 68
 
-    # Bottom CTA button (positioned cleanly above Shorts bottom UI)
+    # Bottom CTA button (positioned cleanly above Shorts/Reels UI)
     draw_pill(draw, W, 1290, 'COMMENT "MANGA" FOR DIRECT LINK', load_font(34, bold=True), (230, 0, 35, 255), pad_x=36, pad_y=20)
 
     cta_font = load_font(32, bold=True)
@@ -183,9 +183,11 @@ def create_reel_video(slide1_path, slide2_path, mp4_path):
     if res.returncode != 0:
         raise RuntimeError(res.stderr[-400:])
 
-def fetch_manga():
-    day_page = (datetime.now(timezone.utc).day % 10) + 1
-    payload = json.dumps({"query": QUERY, "variables": {"page": day_page}}).encode("utf-8")
+def fetch_page(page, per_page, sort_by):
+    payload = json.dumps({
+        "query": QUERY,
+        "variables": {"page": page, "perPage": per_page, "sort": [sort_by]},
+    }).encode("utf-8")
     req = urllib.request.Request(
         ANILIST_API,
         data=payload,
@@ -198,6 +200,24 @@ def fetch_manga():
     with urllib.request.urlopen(req, timeout=20) as resp:
         data = json.loads(resp.read().decode("utf-8"))
     return data["data"]["Page"]["media"]
+
+def fetch_manga():
+    day_of_year = datetime.now(timezone.utc).timetuple().tm_yday
+    pop_page = (day_of_year % 25) + 1      # Cycles through top 50 mainstream manga
+    trend_page = (day_of_year % 15) + 1    # Cycles through top 15 trending manga
+
+    popular = fetch_page(pop_page, 2, "POPULARITY_DESC")
+    trending = fetch_page(trend_page, 2, "TRENDING_DESC")
+
+    seen = set()
+    combined = []
+    for item in popular + trending:
+        if item["id"] not in seen:
+            seen.add(item["id"])
+            combined.append(item)
+        if len(combined) == 3:
+            break
+    return combined
 
 def build_rss(items):
     os.makedirs(PINS_DIR, exist_ok=True)
@@ -254,8 +274,8 @@ def build_rss(items):
             f"Explore {title} ({genres}) — {short_desc}\n\n"
             f"#MangaIndia #OriginalManga #MangaDeals #AnimeWatchOrder #KomaVelt"
         )
-        link = f"{SITE_URL}?manga={m['id']}&utm_source=pinterest&utm_medium=auto_pin"
-        guid = f"komavelt-{m['id']}-{date_tag}"
+        link = f"{SITE_URL}?manga={m['id']}&utm_source=social&utm_medium=auto"
+        guid = f"komavelt-{m['id']}"
 
         media_tag = (
             f'<media:content url="{escape(video_url)}" medium="video" type="video/mp4" />'
@@ -278,7 +298,7 @@ def build_rss(items):
   <channel>
     <title>KomaVelt — Original Manga Deals &amp; Anime Guides</title>
     <link>{SITE_URL}</link>
-    <description>Daily trending Japanese manga, box set deals in India, and anime watch orders from KomaVelt.</description>
+    <description>Daily popular &amp; trending Japanese manga, box set deals in India, and anime watch orders from KomaVelt.</description>
     <lastBuildDate>{now}</lastBuildDate>
 {chr(10).join(xml_items)}
   </channel>
