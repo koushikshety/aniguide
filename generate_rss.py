@@ -12,7 +12,7 @@ from xml.sax.saxutils import escape
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 SITE_URL = "https://aniguide.aniguide-hub.workers.dev/"
-RAW_BASE = "https://raw.githubusercontent.com/koushikshety/aniguide/main/"
+RAW_BASE = "https://koushikshety.github.io/aniguide/"
 ANILIST_API = "https://graphql.anilist.co"
 PINS_DIR = "pins"
 REELS_DIR = "reels"
