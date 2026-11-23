@@ -68,9 +68,12 @@ def create_branded_pin(cover_url, title, genres, out_path):
     draw.rounded_rectangle([cx - 8, cy - 8, cx + target_w + 8, cy + target_h + 8], radius=18, fill=(255, 255, 255, 45))
     canvas.paste(cover_resized, (cx, cy))
 
-    # 4. Bold wrapped manga title
+    # 4. Bold wrapped manga title (with clean "..." for long titles)
     title_font = load_font(52, bold=True)
-    lines = textwrap.wrap(title, width=22)[:2]
+    wrapped = textwrap.wrap(title, width=22)
+    lines = wrapped[:2]
+    if len(wrapped) > 2:
+        lines[1] = lines[1][:19].rstrip() + "..."
     y_text = 1075
     for line in lines:
         tb = draw.textbbox((0, 0), line, font=title_font)
@@ -80,7 +83,7 @@ def create_branded_pin(cover_url, title, genres, out_path):
 
     # 5. Genres & CTA footer
     sub_font = load_font(30, bold=False)
-    sub_text = f"{genres}  |  Canon Watch Order & Box Sets"
+    sub_text = f"{genres}  |  Canon Watch Order & Box Sets" if genres else "Canon Watch Order & Box Sets"
     sb = draw.textbbox((0, 0), sub_text, font=sub_font)
     draw.text(((W - (sb[2] - sb[0])) // 2, y_text + 16), sub_text, font=sub_font, fill=(200, 210, 225, 255))
 
