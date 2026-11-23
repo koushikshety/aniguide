@@ -37,7 +37,7 @@ def load_font(size, bold=True):
         return ImageFont.load_default()
 
 def create_branded_pin(cover_url, title, genres, out_path):
-    W, H = 1000, 1500
+    W, H = 1000, 1250
     req = urllib.request.Request(cover_url, headers={"User-Agent": "KomaVelt-RSS-Bot/1.0"})
     with urllib.request.urlopen(req, timeout=20) as resp:
         cover = Image.open(io.BytesIO(resp.read())).convert("RGB")
@@ -49,48 +49,48 @@ def create_branded_pin(cover_url, title, genres, out_path):
     draw = ImageDraw.Draw(canvas)
 
     # 2. Top badge
-    badge_font = load_font(30, bold=True)
+    badge_font = load_font(28, bold=True)
     badge_text = "ORIGINAL MANGA DEALS • AMAZON INDIA"
     bbox = draw.textbbox((0, 0), badge_text, font=badge_font)
     bw, bh = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    bx1, by1 = (W - bw) // 2 - 32, 65
-    bx2, by2 = (W + bw) // 2 + 32, 65 + bh + 28
-    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=24, fill=(230, 0, 35, 255))
-    draw.text(((W - bw) // 2, by1 + 12), badge_text, font=badge_font, fill=(255, 255, 255, 255))
+    bx1, by1 = (W - bw) // 2 - 30, 45
+    bx2, by2 = (W + bw) // 2 + 30, 45 + bh + 26
+    draw.rounded_rectangle([bx1, by1, bx2, by2], radius=22, fill=(230, 0, 35, 255))
+    draw.text(((W - bw) // 2, by1 + 11), badge_text, font=badge_font, fill=(255, 255, 255, 255))
 
     # 3. Centered crisp manga cover with subtle white border
-    target_h = 840
+    target_h = 680
     ratio = target_h / cover.height
-    target_w = min(int(cover.width * ratio), 640)
+    target_w = min(int(cover.width * ratio), 540)
     cover_resized = cover.resize((target_w, target_h), Image.Resampling.LANCZOS)
     cx = (W - target_w) // 2
-    cy = 185
-    draw.rounded_rectangle([cx - 8, cy - 8, cx + target_w + 8, cy + target_h + 8], radius=18, fill=(255, 255, 255, 45))
+    cy = 140
+    draw.rounded_rectangle([cx - 8, cy - 8, cx + target_w + 8, cy + target_h + 8], radius=16, fill=(255, 255, 255, 45))
     canvas.paste(cover_resized, (cx, cy))
 
     # 4. Bold wrapped manga title (with clean "..." for long titles)
-    title_font = load_font(52, bold=True)
-    wrapped = textwrap.wrap(title, width=22)
+    title_font = load_font(48, bold=True)
+    wrapped = textwrap.wrap(title, width=24)
     lines = wrapped[:2]
     if len(wrapped) > 2:
-        lines[1] = lines[1][:19].rstrip() + "..."
-    y_text = 1075
+        lines[1] = lines[1][:21].rstrip() + "..."
+    y_text = 860
     for line in lines:
         tb = draw.textbbox((0, 0), line, font=title_font)
         tw = tb[2] - tb[0]
         draw.text(((W - tw) // 2, y_text), line, font=title_font, fill=(255, 255, 255, 255))
-        y_text += 66
+        y_text += 58
 
     # 5. Genres & CTA footer
-    sub_font = load_font(30, bold=False)
+    sub_font = load_font(28, bold=False)
     sub_text = f"{genres}  |  Canon Watch Order & Box Sets" if genres else "Canon Watch Order & Box Sets"
     sb = draw.textbbox((0, 0), sub_text, font=sub_font)
     draw.text(((W - (sb[2] - sb[0])) // 2, y_text + 16), sub_text, font=sub_font, fill=(200, 210, 225, 255))
 
-    brand_font = load_font(34, bold=True)
-    brand_text = "KOMAVELT HUB  •  TAP FOR GUIDE"
+    brand_font = load_font(32, bold=True)
+    brand_text = "KOMAVELT HUB  •  LINK IN BIO"
     bb = draw.textbbox((0, 0), brand_text, font=brand_font)
-    draw.text(((W - (bb[2] - bb[0])) // 2, 1390), brand_text, font=brand_font, fill=(0, 229, 255, 255))
+    draw.text(((W - (bb[2] - bb[0])) // 2, 1155), brand_text, font=brand_font, fill=(0, 229, 255, 255))
 
     canvas.convert("RGB").save(out_path, "JPEG", quality=90)
 
@@ -123,7 +123,6 @@ def build_rss(items):
         raw_desc = (m.get("description") or "").replace("\n", " ")
         short_desc = (raw_desc[:140] + "...") if len(raw_desc) > 140 else raw_desc
 
-        # Overwrite pin_1.jpg..pin_3.jpg daily to keep repo lightweight; cache-bust via ?v=date_tag
         pin_filename = f"pin_{idx}.jpg"
         pin_path = os.path.join(PINS_DIR, pin_filename)
         try:
@@ -165,7 +164,7 @@ def build_rss(items):
 """
     with open("rss.xml", "w", encoding="utf-8") as f:
         f.write(rss)
-    print(f"Generated rss.xml and {len(items)} branded Pins.")
+    print(f"Generated rss.xml and {len(items)} branded graphics.")
 
 if __name__ == "__main__":
     manga_list = fetch_manga()
