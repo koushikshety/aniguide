@@ -23,9 +23,11 @@ jobs:
       - name: Install Pillow & FFmpeg
         run: |
           pip install pillow
-          sudo apt-get update && sudo apt-get install -y ffmpeg
+          sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
 
       - name: Clean old temp files & generate RSS, Pins, and Reels
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         run: |
           rm -f reels/tmp_*.jpg
           python generate_rss.py
