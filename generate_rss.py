@@ -16,6 +16,7 @@ RAW_BASE = "https://koushikshety.github.io/aniguide/"
 ANILIST_API = "https://graphql.anilist.co"
 PINS_DIR = "pins"
 REELS_DIR = "reels"
+TELEGRAM_CHAT_ID = "@KomaVeltDeals"
 
 QUERY = """
 query ($page: Int, $perPage: Int, $sort: [MediaSort]) {
@@ -70,7 +71,6 @@ def build_graphic(cover, title, genres, score, W, H, out_path):
     badge_font = load_font(32 if is_reel else 28, bold=True)
     draw_pill(draw, W, 140 if is_reel else 40, "ORIGINAL MANGA DEALS • AMAZON INDIA", badge_font, (230, 0, 35, 255))
 
-    # Cover with soft drop shadow
     target_h = 880 if is_reel else 650
     ratio = target_h / cover.height
     target_w = min(int(cover.width * ratio), 660 if is_reel else 520)
@@ -89,12 +89,10 @@ def build_graphic(cover, title, genres, score, W, H, out_path):
     draw.rounded_rectangle([cx - 6, cy - 6, cx + target_w + 6, cy + target_h + 6], radius=16, fill=(255, 255, 255, 55))
     canvas.paste(cover_resized, (cx, cy))
 
-    # Gold AniList rating pill
     if score:
         score_font = load_font(30 if is_reel else 26, bold=True)
         draw_pill(draw, W, cy + target_h - 28, f"★ {score}% RATED ON ANILIST", score_font, (245, 180, 0, 255), (15, 15, 20, 255), pad_x=24, pad_y=10)
 
-    # Bold wrapped title
     title_font = load_font(54 if is_reel else 46, bold=True)
     wrapped = textwrap.wrap(title, width=22 if is_reel else 24)
     lines = wrapped[:2]
@@ -130,7 +128,6 @@ def build_reel_slide2(cover, title, short_desc, out_path):
 
     draw_pill(draw, W, 280, "WHY YOU SHOULD READ THIS", load_font(34, bold=True), (0, 200, 230, 255), (10, 12, 20, 255))
 
-    # Story hook card
     card_x1, card_y1, card_x2, card_y2 = 90, 460, W - 90, 1180
     draw.rounded_rectangle([card_x1, card_y1, card_x2, card_y2], radius=32, fill=(255, 255, 255, 22), outline=(255, 255, 255, 65), width=2)
 
@@ -143,7 +140,6 @@ def build_reel_slide2(cover, title, short_desc, out_path):
         draw.text(((W - (tb[2] - tb[0])) // 2, y_text), line, font=hook_font, fill=(240, 244, 250, 255))
         y_text += 68
 
-    # Bottom CTA button (positioned cleanly above Shorts/Reels UI)
     draw_pill(draw, W, 1290, 'COMMENT "MANGA" FOR DIRECT LINK', load_font(34, bold=True), (230, 0, 35, 255), pad_x=36, pad_y=20)
 
     cta_font = load_font(32, bold=True)
@@ -183,6 +179,32 @@ def create_reel_video(slide1_path, slide2_path, mp4_path):
     if res.returncode != 0:
         raise RuntimeError(res.stderr[-400:])
 
+def post_to_telegram(photo_path, title, genres, short_desc, link):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    if not token or not os.path.exists(photo_path):
+        return
+    caption = (
+        f"📚 {title}\n"
+        f"🎭 {genres}\n\n"
+        f"{short_desc}\n\n"
+        f"🔥 Original Manga Deals (Amazon India) & Exact Watch Order:\n"
+        f"👉 {link}\n\n"
+        f"🐉 5,000+ Donghua & Manhua Hub:\n"
+        f"👉 {SITE_URL}donghua-manhua?utm_source=telegram&utm_medium=channel"
+    )
+    res = subprocess.run(
+        [
+            "curl", "-s", "-X", "POST",
+            f"https://api.telegram.org/bot{token}/sendPhoto",
+            "-F", f"chat_id={TELEGRAM_CHAT_ID}",
+            "-F", f"photo=@{photo_path}",
+            "-F", f"caption={caption[:1020]}",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    print(f"Telegram post ({title}): {res.stdout[:120]}")
+
 def fetch_page(page, per_page, sort_by):
     payload = json.dumps({
         "query": QUERY,
@@ -203,8 +225,8 @@ def fetch_page(page, per_page, sort_by):
 
 def fetch_manga():
     day_of_year = datetime.now(timezone.utc).timetuple().tm_yday
-    pop_page = (day_of_year % 25) + 1      # Cycles through top 50 mainstream manga
-    trend_page = (day_of_year % 15) + 1    # Cycles through top 15 trending manga
+    pop_page = (day_of_year % 25) + 1
+    trend_page = (day_of_year % 15) + 1
 
     popular = fetch_page(pop_page, 2, "POPULARITY_DESC")
     trending = fetch_page(trend_page, 2, "TRENDING_DESC")
@@ -275,7 +297,10 @@ def build_rss(items):
             f"#MangaIndia #OriginalManga #MangaDeals #AnimeWatchOrder #KomaVelt"
         )
         link = f"{SITE_URL}?manga={m['id']}&utm_source=social&utm_medium=auto"
+        tg_link = f"{SITE_URL}?manga={m['id']}&utm_source=telegram&utm_medium=channel"
         guid = f"komavelt-{m['id']}"
+
+        post_to_telegram(pin_path, title, genres, short_desc, tg_link)
 
         media_tag = (
             f'<media:content url="{escape(video_url)}" medium="video" type="video/mp4" />'
