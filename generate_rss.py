@@ -111,10 +111,13 @@ def build_graphic(cover, title, genres, score, W, H, out_path):
     sb = draw.textbbox((0, 0), sub_text, font=sub_font)
     draw.text(((W - (sb[2] - sb[0])) // 2, y_text + 16), sub_text, font=sub_font, fill=(200, 210, 225, 255))
 
-    brand_font = load_font(36 if is_reel else 32, bold=True)
-    brand_text = "KOMAVELT HUB  •  LINK IN BIO"
-    bb = draw.textbbox((0, 0), brand_text, font=brand_font)
-    draw.text(((W - (bb[2] - bb[0])) // 2, 1680 if is_reel else 1160), brand_text, font=brand_font, fill=(0, 229, 255, 255))
+    brand_font = load_font(32 if is_reel else 28, bold=True)
+    brand_text = "WATCH ORDER & MANGA  •  LINK IN BIO"
+    if is_reel:
+        draw_pill(draw, W, 1540, brand_text, brand_font, (0, 180, 216, 255), (10, 12, 20, 255), pad_x=34, pad_y=16)
+    else:
+        bb = draw.textbbox((0, 0), brand_text, font=brand_font)
+        draw.text(((W - (bb[2] - bb[0])) // 2, 1160), brand_text, font=brand_font, fill=(0, 229, 255, 255))
 
     canvas.convert("RGB").save(out_path, "JPEG", quality=90)
 
@@ -140,13 +143,13 @@ def build_reel_slide2(cover, title, short_desc, out_path):
         draw.text(((W - (tb[2] - tb[0])) // 2, y_text), line, font=hook_font, fill=(240, 244, 250, 255))
         y_text += 68
 
-    # Bottom CTA button
-    draw_pill(draw, W, 1320, "CHECK AMAZON INDIA DEALS", load_font(38, bold=True), (230, 0, 35, 255), pad_x=44, pad_y=22)
+    # Bottom CTA button (positioned cleanly above Shorts bottom UI)
+    draw_pill(draw, W, 1290, "TAP RELATED VIDEO OR BIO LINK", load_font(36, bold=True), (230, 0, 35, 255), pad_x=40, pad_y=20)
 
-    cta_font = load_font(34, bold=True)
-    cta_text = "LINK IN BIO  •  @KOMAVELT"
+    cta_font = load_font(32, bold=True)
+    cta_text = "KOMAVELT HUB  •  @KomaVeltHub"
     cb = draw.textbbox((0, 0), cta_text, font=cta_font)
-    draw.text(((W - (cb[2] - cb[0])) // 2, 1500), cta_text, font=cta_font, fill=(0, 229, 255, 255))
+    draw.text(((W - (cb[2] - cb[0])) // 2, 1435), cta_text, font=cta_font, fill=(0, 229, 255, 255))
 
     canvas.convert("RGB").save(out_path, "JPEG", quality=90)
 
@@ -245,9 +248,10 @@ def build_rss(items):
             pin_title = pin_title[:97].rstrip() + "..."
 
         pin_desc = (
-            f"Have you read {title} yet? Rate it out of 10 👇\n\n"
-            f"Explore {title} ({genres}) on KomaVelt — original manga deals on Amazon India, "
-            f"canon watch orders & box sets. {short_desc}\n\n"
+            f"Have you read {title} yet? Rate it out of 10 👇\n"
+            f"👉 Full Watch Order, Filler Guide & Original Manga Deals: Tap the Related Video OR Channel Bio Link!\n\n"
+            f"📚 KomaVelt Hub: {SITE_URL}\n"
+            f"Explore {title} ({genres}) — {short_desc}\n\n"
             f"#MangaIndia #OriginalManga #MangaDeals #AnimeWatchOrder #KomaVelt"
         )
         link = f"{SITE_URL}?manga={m['id']}&utm_source=pinterest&utm_medium=auto_pin"
