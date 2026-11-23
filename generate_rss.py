@@ -153,12 +153,12 @@ def build_reel_slide2(cover, title, short_desc, out_path):
 def create_reel_video(slide1_path, slide2_path, mp4_path):
     bgm = pick_bgm()
     if bgm:
-        start_sec = str(random.randint(10, 22))
-        audio_inputs = ["-stream_loop", "-1", "-ss", start_sec, "-i", bgm]
-        audio_filters = ["-af", "afade=t=in:st=0:d=0.4,afade=t=out:st=4.8:d=1.2"]
+        start_sec = random.randint(8, 18)
+        audio_inputs = ["-i", bgm]
+        audio_filter = f"[2:a]atrim=start={start_sec}:duration=6,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.4,afade=t=out:st=4.8:d=1.2[a]"
     else:
         audio_inputs = ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"]
-        audio_filters = []
+        audio_filter = "[2:a]atrim=duration=6,asetpts=PTS-STARTPTS[a]"
 
     cmd = [
         "ffmpeg", "-y",
@@ -168,16 +168,17 @@ def create_reel_video(slide1_path, slide2_path, mp4_path):
         "-filter_complex",
         "[0:v]scale=1080:1920,zoompan=z='min(zoom+0.0015,1.08)':d=75:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=25,setsar=1[v0];"
         "[1:v]scale=1080:1920,zoompan=z='min(zoom+0.0015,1.08)':d=75:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=25,setsar=1[v1];"
-        "[v0][v1]concat=n=2:v=1:a=0[v]",
-        "-map", "[v]", "-map", "2:a:0",
-        *audio_filters,
+        f"[v0][v1]concat=n=2:v=1:a=0[v];{audio_filter}",
+        "-map", "[v]", "-map", "[a]",
         "-t", "6",
         "-c:v", "libx264", "-preset", "fast", "-pix_fmt", "yuv420p", "-r", "25",
         "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-ac", "2",
         "-movflags", "+faststart",
         mp4_path,
     ]
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    if res.returncode != 0:
+        raise RuntimeError(res.stderr[-400:])
 
 def fetch_manga():
     day_page = (datetime.now(timezone.utc).day % 10) + 1
