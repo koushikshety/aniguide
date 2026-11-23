@@ -23,13 +23,13 @@ jobs:
       - name: Install Pillow
         run: pip install pillow
 
-      - name: Generate rss.xml and Pin graphics
+      - name: Generate rss.xml, Pin graphics, and Reels
         run: python generate_rss.py
 
-      - name: Commit and push rss.xml and pins
+      - name: Commit and push rss.xml, pins, and reels
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add rss.xml pins/
-          git diff --staged --quiet || git commit -m "Auto-update daily Pinterest rss.xml & branded pins"
+          git add rss.xml pins/ reels/
+          git diff --staged --quiet || git commit -m "Auto-update daily rss.xml, pins & reels"
           git push
