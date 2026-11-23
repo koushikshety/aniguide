@@ -152,6 +152,9 @@ def build_rss(items):
             print(f"Media generation fallback for {title}: {e}")
 
         pin_title = f"{title} Original Manga & Watch Guide | KomaVelt India"
+        if len(pin_title) > 100:
+            pin_title = pin_title[:97].rstrip() + "..."
+
         pin_desc = (
             f"Explore {title} ({genres}) on KomaVelt. Check original manga deals on Amazon India, "
             f"canon watch orders & box sets. {short_desc} "
