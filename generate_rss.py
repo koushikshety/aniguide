@@ -144,7 +144,7 @@ def build_reel_slide2(cover, title, short_desc, out_path):
         y_text += 68
 
     # Bottom CTA button (positioned cleanly above Shorts bottom UI)
-    draw_pill(draw, W, 1290, "TAP RELATED VIDEO OR BIO LINK", load_font(36, bold=True), (230, 0, 35, 255), pad_x=40, pad_y=20)
+    draw_pill(draw, W, 1290, 'COMMENT "MANGA" FOR DIRECT LINK', load_font(34, bold=True), (230, 0, 35, 255), pad_x=36, pad_y=20)
 
     cta_font = load_font(32, bold=True)
     cta_text = "KOMAVELT HUB  •  @KomaVeltHub"
@@ -248,8 +248,8 @@ def build_rss(items):
             pin_title = pin_title[:97].rstrip() + "..."
 
         pin_desc = (
-            f"Have you read {title} yet? Rate it out of 10 👇\n"
-            f"👉 Full Watch Order, Filler Guide & Original Manga Deals: Tap the Related Video OR Channel Bio Link!\n\n"
+            f"Comment \"MANGA\" and I'll send you the direct watch order & Amazon India box set link! 👇🔥\n"
+            f"👉 Or tap the Related Video / Channel Bio Link right now.\n\n"
             f"📚 KomaVelt Hub: {SITE_URL}\n"
             f"Explore {title} ({genres}) — {short_desc}\n\n"
             f"#MangaIndia #OriginalManga #MangaDeals #AnimeWatchOrder #KomaVelt"
