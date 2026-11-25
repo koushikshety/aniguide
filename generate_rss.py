@@ -1,3 +1,4 @@
+import html
 import glob
 import io
 import json
@@ -186,11 +187,11 @@ def post_to_telegram(photo_path, title, genres, short_desc, link):
     caption = (
         f"📚 {title}\n"
         f"🎭 {genres}\n\n"
-        f"{short_desc}\n\n"
+        f"{html.unescape(short_desc)}\n\n"
         f"🔥 Original Manga Deals (Amazon India) & Exact Watch Order:\n"
         f"👉 {link}\n\n"
         f"🐉 5,000+ Donghua & Manhua Hub:\n"
-        f"👉 {SITE_URL}donghua-manhua?utm_source=telegram&utm_medium=channel"
+        f"👉 {SITE_URL}donghua-manhua?utm_source=telegram&utm_medium=channel\n\n🔔 Follow for more daily anime, donghua & manga deals: @KomaVeltDeals"
     )
     res = subprocess.run(
         [

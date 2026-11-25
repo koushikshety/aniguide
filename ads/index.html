@@ -65,6 +65,7 @@
       if (type === "dm") copyText(c.dmReply, "ManyChat DM");
       if (type === "pin") copyText((c.pinterestTitle || c.title) + "\n\n" + (c.pinterestDesc || c.hookBody), "Pinterest Copy");
       if (type === "amazon") copyText(c.amazonUrl || c.targetUrl, "Amazon Link");
+      if (type === "tg") copyText("🔥 " + c.title + "\n\n" + c.hookHeadline + "\n" + c.hookBody + "\n\n👉 " + c.targetUrl + "\n\n🔔 Follow @KomaVeltDeals for more!", "Telegram Post");
     }
     function saveVault() {
       localStorage.setItem("adsterra_native", document.getElementById("nativeSlot").value);
@@ -88,6 +89,7 @@
             <button type="button" class="sec" onclick="copyField(${i}, 'dm')">Copy DM</button>
             <button type="button" class="sec" onclick="copyField(${i}, 'pin')">Copy Pin</button>
             <button type="button" class="sec" onclick="copyField(${i}, 'amazon')">Copy Amazon</button>
+            <button type="button" class="sec" onclick="copyField(${i}, 'tg')">Copy Telegram</button>
             <a class="btn sec" href="${c.targetUrl}" target="_blank">Open Page</a>
           </div>
         </article>
