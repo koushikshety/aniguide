@@ -3,33 +3,39 @@
     "id": "donghua-beginners",
     "title": "Top 5 Beginner-Friendly Donghua For Anime Fans",
     "channel": "Reels / Shorts / Pinterest",
-    "targetUrl": "https://aniguide.aniguide-hub.workers.dev/donghua-manhua.html",
+    "targetUrl": "https://aniguide.aniguide-hub.workers.dev/ads/donghua-guide.html",
     "keyword": "GUIDE",
     "hookHeadline": "Tired of waiting years for new anime seasons? Start with Donghua 🔥",
     "hookBody": "Insane 3D & 2D fights, fast power progression, and zero filler. Start with Link Click, Renegade Immortal, or Soul Land.",
-    "dmReply": "Here is the beginner Donghua & Manhua guide on AniGuide: https://aniguide.aniguide-hub.workers.dev/donghua-manhua.html",
-    "affiliateTag": "aniguide-21"
+    "dmReply": "Here is the beginner Donghua guide on AniGuide: https://aniguide.aniguide-hub.workers.dev/ads/donghua-guide.html",
+    "pinterestTitle": "5 Best Beginner-Friendly Donghua to Watch If You Love Anime",
+    "pinterestDesc": "Looking for something new after Demon Slayer or Solo Leveling? Check out Link Click, Renegade Immortal, and Soul Land in our complete beginner Donghua guide! #Donghua #AnimeRecommendations #ChineseAnime #RenegadeImmortal",
+    "amazonUrl": "https://www.amazon.in/s?k=donghua+light+novel+manga&tag=aniguide-21"
   },
   {
     "id": "upcoming-manga-2027",
     "title": "5 Must-Read Manga Before Anime Adaptations Drop",
     "channel": "Pinterest / Instagram / ManyChat",
-    "targetUrl": "https://aniguide.aniguide-hub.workers.dev/index.html",
+    "targetUrl": "https://aniguide.aniguide-hub.workers.dev/ads/upcoming-manga.html",
     "keyword": "GUIDE",
     "hookHeadline": "Read these 5 manga BEFORE anime spoilers hit your feed 🚨📚",
     "hookBody": "Kagurabachi, Dandadan, Frieren, Dungeon Meshi, and One Piece East Blue—get ahead of upcoming adaptations.",
-    "dmReply": "Check out the manga & anime guides on AniGuide: https://aniguide.aniguide-hub.workers.dev/index.html",
-    "affiliateTag": "aniguide-21"
+    "dmReply": "Here are the 5 must-read manga before their anime drops: https://aniguide.aniguide-hub.workers.dev/ads/upcoming-manga.html",
+    "pinterestTitle": "5 Must-Read Manga Series Before Their Upcoming Anime Drops",
+    "pinterestDesc": "Beat the spoilers! Read Kagurabachi, Dandadan Space Globalists, Frieren El Dorado, and more before the new anime seasons premiere. #MangaIndia #Kagurabachi #Dandadan #Frieren #MangaRecommendations",
+    "amazonUrl": "https://www.amazon.in/s?k=kagurabachi+manga+vol+1&tag=aniguide-21"
   },
   {
     "id": "jjk-watch-manga-guide",
     "title": "Jujutsu Kaisen Watch Order + Arc-by-Arc Manga Guide",
     "channel": "Reels / Shorts / Pinterest",
-    "targetUrl": "https://aniguide.aniguide-hub.workers.dev/watch-orders/jujutsu-kaisen-watch-order.html",
+    "targetUrl": "https://aniguide.aniguide-hub.workers.dev/ads/jjk-guide.html",
     "keyword": "GUIDE",
     "hookHeadline": "Confused about JJK watch order or where to continue the manga? 🤞🔥",
     "hookBody": "S1 -> JJK 0 -> S2 (Hidden Inventory & Shibuya) -> S3 Culling Game + exact manga chapters to read next.",
-    "dmReply": "Here is the complete Jujutsu Kaisen watch & manga guide: https://aniguide.aniguide-hub.workers.dev/watch-orders/jujutsu-kaisen-watch-order.html",
-    "affiliateTag": "aniguide-21"
+    "dmReply": "Here is the complete Jujutsu Kaisen watch & manga guide: https://aniguide.aniguide-hub.workers.dev/ads/jjk-guide.html",
+    "pinterestTitle": "Ultimate Jujutsu Kaisen Watch Order & Arc-by-Arc Manga Guide",
+    "pinterestDesc": "Save this spoiler-free Jujutsu Kaisen watch order (including JJK 0 & Season 3) plus the exact manga chapters and volumes to read next! #JujutsuKaisen #JJK #AnimeWatchOrder #MangaGuide",
+    "amazonUrl": "https://www.amazon.in/s?k=jujutsu+kaisen+manga+vol+16&tag=aniguide-21"
   }
 ]

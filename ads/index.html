@@ -3,134 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AniGuide Dynamic Ad Panel</title>
+  <title>AniGuide Ad & Monetization Panel</title>
   <style>
-    :root {
-      --bg: #0f1117;
-      --card: #181c26;
-      --border: #2a3040;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --accent: #ef4444;
-      --accent-hover: #dc2626;
-      --ok: #22c55e;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 16px;
-    }
-    .wrap { max-width: 860px; margin: 0 auto; }
-    h1 { font-size: 1.25rem; margin: 0 0 6px; }
-    .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; }
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    input, textarea, select {
-      width: 100%;
-      background: #10141d;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 0.9rem;
-    }
-    textarea { min-height: 76px; resize: vertical; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-    }
-    .card h2 { font-size: 1rem; margin: 0 0 6px; }
-    .tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      color: #fca5a5;
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      padding: 2px 8px;
-      border-radius: 999px;
-      margin-bottom: 8px;
-    }
-    .row-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 0.84rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    button:hover { background: var(--accent-hover); }
-    button.sec { background: #262d3d; color: var(--text); }
-    button.sec:hover { background: #333c52; }
-    .editor label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin: 10px 0 4px;
-    }
-    .toast {
-      position: fixed;
-      bottom: 16px;
-      right: 16px;
-      background: var(--ok);
-      color: #052e16;
-      font-weight: 700;
-      padding: 10px 14px;
-      border-radius: 8px;
-      display: none;
-    }
+    :root { --bg:#0f1117; --card:#181c26; --border:#2a3040; --text:#f1f5f9; --muted:#94a3b8; --accent:#ef4444; --ok:#22c55e; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); padding:16px; }
+    .wrap { max-width:900px; margin:0 auto; }
+    h1 { font-size:1.3rem; margin:0 0 6px; }
+    h2 { font-size:1.05rem; margin:0 0 8px; }
+    .sub { color:var(--muted); font-size:0.86rem; margin-bottom:14px; }
+    input, textarea { width:100%; background:#10141d; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px; font-size:0.88rem; margin-bottom:10px; }
+    textarea { min-height:70px; font-family:monospace; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:12px; margin-bottom:18px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; }
+    .tag { display:inline-block; font-size:0.74rem; color:#fca5a5; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.35); padding:2px 8px; border-radius:999px; margin-bottom:8px; }
+    .btns { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    button, a.btn { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:7px 11px; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block; }
+    button.sec, a.btn.sec { background:#262d3d; color:var(--text); }
+    .toast { position:fixed; bottom:16px; right:16px; background:var(--ok); color:#052e16; font-weight:700; padding:10px 14px; border-radius:8px; display:none; z-index:99; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>AniGuide Ad & Funnel Panel</h1>
-    <p class="sub">Driven by <code>ads/campaigns.json</code> — copy hooks, ManyChat replies, or add new ad presets cleanly inside <code>/ads/</code>.</p>
+    <h1>AniGuide Ad & Monetization Panel</h1>
+    <p class="sub">Copy Reels hooks, ManyChat DMs, Pinterest SEO copy, Amazon (<code>aniguide-21</code>) links, and Adsterra snippets.</p>
+    <input id="searchInput" type="search" placeholder="Filter campaigns..." />
+    <div id="grid" class="grid"></div>
 
-    <div class="toolbar">
-      <input id="searchInput" type="search" placeholder="Filter campaigns by title, hook, or URL..." />
-    </div>
-
-    <div id="campaignGrid" class="grid"></div>
-
-    <div class="card editor">
-      <h2>Add / Update Campaign Preset (Exports JSON)</h2>
-      <label for="fTitle">Campaign Title</label>
-      <input id="fTitle" type="text" placeholder="e.g., Solo Leveling Watch & Manhwa Guide" />
-
-      <label for="fUrl">AniGuide Target URL</label>
-      <input id="fUrl" type="url" placeholder="https://aniguide.aniguide-hub.workers.dev/watch-orders/solo-leveling-watch-order.html" />
-
-      <label for="fHook">Ad Hook Headline + Body</label>
-      <textarea id="fHook" placeholder="Hook text for Reels, Shorts, or Pinterest Pin..."></textarea>
-
-      <label for="fDm">ManyChat Auto-DM Reply</label>
-      <input id="fDm" type="text" placeholder="Comment GUIDE -> DM link message" />
-
-      <div class="row-btns">
-        <button id="addCampaignBtn" type="button">Add to Live Preview</button>
-        <button id="copyJsonBtn" class="sec" type="button">Copy Updated campaigns.json</button>
+    <div class="card">
+      <h2>Adsterra Snippet Vault (Saved Locally on Device)</h2>
+      <p class="sub">Paste your Adsterra scripts here once so you can copy them anytime from your phone.</p>
+      <textarea id="nativeSlot" placeholder="Paste Adsterra Native Banner script here..."></textarea>
+      <textarea id="socialSlot" placeholder="Paste Adsterra Social Bar script here..."></textarea>
+      <div class="btns">
+        <button type="button" onclick="saveVault()">Save Vault</button>
+        <button type="button" class="sec" onclick="copyText(document.getElementById('nativeSlot').value, 'Native Banner')">Copy Native</button>
+        <button type="button" class="sec" onclick="copyText(document.getElementById('socialSlot').value, 'Social Bar')">Copy Social Bar</button>
       </div>
     </div>
   </div>
@@ -138,92 +46,47 @@
 
   <script>
     let campaigns = [];
-    const grid = document.getElementById("campaignGrid");
-    const searchInput = document.getElementById("searchInput");
+    const grid = document.getElementById("grid");
     const toast = document.getElementById("toast");
 
-    function showToast(msg = "Copied!") {
+    function showToast(msg) {
       toast.textContent = msg;
       toast.style.display = "block";
-      setTimeout(() => { toast.style.display = "none"; }, 1600);
+      setTimeout(() => toast.style.display = "none", 1500);
     }
-
-    function copyText(text, label) {
-      navigator.clipboard.writeText(text).then(() => showToast(`${label} copied`));
+    function copyText(txt, label) {
+      if (!txt) return showToast("Empty!");
+      navigator.clipboard.writeText(txt).then(() => showToast(label + " copied"));
     }
+    function saveVault() {
+      localStorage.setItem("adsterra_native", document.getElementById("nativeSlot").value);
+      localStorage.setItem("adsterra_social", document.getElementById("socialSlot").value);
+      showToast("Vault saved");
+    }
+    document.getElementById("nativeSlot").value = localStorage.getItem("adsterra_native") || "";
+    document.getElementById("socialSlot").value = localStorage.getItem("adsterra_social") || "";
 
     function render() {
-      const q = searchInput.value.trim().toLowerCase();
-      const filtered = campaigns.filter(c =>
-        c.title.toLowerCase().includes(q) ||
-        c.hookHeadline.toLowerCase().includes(q) ||
-        c.hookBody.toLowerCase().includes(q) ||
-        c.targetUrl.toLowerCase().includes(q)
-      );
-
-      grid.innerHTML = filtered.map(c => `
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      const list = campaigns.filter(c => (c.title + c.hookHeadline + c.targetUrl).toLowerCase().includes(q));
+      grid.innerHTML = list.map(c => `
         <article class="card">
-          <span class="tag">${c.channel} • Keyword: ${c.keyword}</span>
+          <span class="tag">${c.channel} • ${c.keyword}</span>
           <h2>${c.title}</h2>
-          <p><strong>${c.hookHeadline}</strong></p>
-          <p style="color:#cbd5e1;font-size:0.88rem;">${c.hookBody}</p>
-          <p style="color:#94a3b8;font-size:0.78rem;word-break:break-all;">Target: ${c.targetUrl}</p>
-          <div class="row-btns">
-            <button type="button" onclick="copyText(${JSON.stringify(c.hookHeadline + '\n\n' + c.hookBody)}, 'Ad Hook')">Copy Hook</button>
-            <button type="button" class="sec" onclick="copyText(${JSON.stringify(c.dmReply)}, 'ManyChat DM')">Copy DM</button>
-            <button type="button" class="sec" onclick="copyText(${JSON.stringify(c.targetUrl)}, 'Target URL')">Copy URL</button>
+          <p style="font-size:0.88rem;margin:6px 0;"><strong>${c.hookHeadline}</strong></p>
+          <p style="color:#cbd5e1;font-size:0.84rem;margin:0 0 8px;">${c.hookBody}</p>
+          <div class="btns">
+            <button onclick='copyText(${JSON.stringify(c.hookHeadline + "\n\n" + c.hookBody)}, "Ad Hook")'>Copy Hook</button>
+            <button class="sec" onclick='copyText(${JSON.stringify(c.dmReply)}, "ManyChat DM")'>Copy DM</button>
+            <button class="sec" onclick='copyText(${JSON.stringify(c.pinterestTitle + "\n\n" + c.pinterestDesc)}, "Pinterest Copy")'>Copy Pin</button>
+            <button class="sec" onclick='copyText(${JSON.stringify(c.amazonUrl)}, "Amazon Link")'>Copy Amazon</button>
+            <a class="btn sec" href="${c.targetUrl}" target="_blank">Open Page</a>
           </div>
         </article>
       `).join("");
     }
-
-    fetch("./campaigns.json")
-      .then(res => res.json())
-      .then(data => {
-        campaigns = data;
-        render();
-      })
-      .catch(() => {
-        campaigns = [{
-          id: "fallback",
-          title: "Jujutsu Kaisen Watch & Manga Guide",
-          channel: "Reels / Pinterest",
-          targetUrl: "https://aniguide.aniguide-hub.workers.dev/watch-orders/jujutsu-kaisen-watch-order.html",
-          keyword: "GUIDE",
-          hookHeadline: "Confused about JJK watch order? 🤞🔥",
-          hookBody: "Watch S1 -> JJK 0 -> S2 -> S3 Culling Game.",
-          dmReply: "https://aniguide.aniguide-hub.workers.dev/watch-orders/jujutsu-kaisen-watch-order.html"
-        }];
-        render();
-      });
-
-    searchInput.addEventListener("input", render);
-
-    document.getElementById("addCampaignBtn").addEventListener("click", () => {
-      const title = document.getElementById("fTitle").value.trim();
-      const targetUrl = document.getElementById("fUrl").value.trim();
-      const hookText = document.getElementById("fHook").value.trim();
-      const dmReply = document.getElementById("fDm").value.trim() || targetUrl;
-      if (!title || !targetUrl) return;
-
-      campaigns.unshift({
-        id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-        title,
-        channel: "Reels / Shorts / Pinterest",
-        targetUrl,
-        keyword: "GUIDE",
-        hookHeadline: hookText.split("\n")[0] || title,
-        hookBody: hookText.split("\n").slice(1).join(" ") || "Check full guide on AniGuide.",
-        dmReply,
-        affiliateTag: "aniguide-21"
-      });
-      render();
-      showToast("Added to preview");
-    });
-
-    document.getElementById("copyJsonBtn").addEventListener("click", () => {
-      copyText(JSON.stringify(campaigns, null, 2), "campaigns.json");
-    });
+    fetch("./campaigns.json").then(r => r.json()).then(d => { campaigns = d; render(); });
+    document.getElementById("searchInput").addEventListener("input", render);
   </script>
 </body>
 </html>
