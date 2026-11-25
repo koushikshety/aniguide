@@ -10,39 +10,21 @@
   <meta property="og:image" content="https://aniguide.aniguide-hub.workers.dev/assets/Komavelt1.png" />
   <link rel="icon" type="image/png" href="/assets/Komavelt.png" />
   <style>
-    :root {
-      --bg:#090d14; --card:rgba(22,27,34,.85); --border:rgba(255,255,255,.1);
-      --accent:#ff4757; --grad:linear-gradient(135deg,#ff4757,#7c3aed);
-      --green:#238636; --blue:#1f6feb; --text:#f0f6fc; --muted:#8b949e;
-    }
+    :root { --bg:#090d14; --card:rgba(22,27,34,.85); --border:rgba(255,255,255,.1); --accent:#ff4757; --grad:linear-gradient(135deg,#ff4757,#7c3aed); --green:#238636; --blue:#1f6feb; --text:#f0f6fc; --muted:#8b949e; }
     * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,sans-serif; }
-    body {
-      background:radial-gradient(circle at top,#161b29 0%,var(--bg) 55%);
-      color:var(--text); padding:14px; max-width:1100px; margin:auto; min-height:100vh;
-    }
-    .top-notice {
-      display:none; background:linear-gradient(90deg,rgba(245,158,11,.16),rgba(124,58,237,.16));
-      border:1px solid rgba(245,158,11,.5); color:#fde68a; border-radius:12px;
-      padding:10px 14px; margin-bottom:12px; font-size:.85rem; line-height:1.45; backdrop-filter:blur(8px);
-    }
+    body { background:radial-gradient(circle at top,#161b29 0%,var(--bg) 55%); color:var(--text); padding:14px; max-width:1100px; margin:auto; min-height:100vh; }
+    .top-notice { display:none; background:linear-gradient(90deg,rgba(245,158,11,.16),rgba(124,58,237,.16)); border:1px solid rgba(245,158,11,.5); color:#fde68a; border-radius:12px; padding:10px 14px; margin-bottom:12px; font-size:.85rem; line-height:1.45; }
     .top-notice.show { display:block; }
     header { text-align:center; padding:14px 0; border-bottom:1px solid var(--border); }
     header h1 { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:2rem; font-weight:900; }
     header p { color:var(--muted); font-size:.88rem; margin-top:4px; }
     .ctas { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:12px; }
-    .btn-pill {
-      display:inline-flex; align-items:center; gap:7px; text-decoration:none; font-weight:800;
-      font-size:.86rem; padding:9px 18px; border-radius:999px; transition:transform .2s;
-    }
-    .btn-pill:hover { transform:translateY(-2px); }
-    .btn-cn { background:linear-gradient(135deg,#f59e0b,#ff4757); color:#fff; box-shadow:0 6px 20px rgba(245,158,11,.3); }
+    .btn-pill { display:inline-flex; align-items:center; gap:7px; text-decoration:none; font-weight:800; font-size:.86rem; padding:9px 18px; border-radius:999px; }
+    .btn-cn { background:linear-gradient(135deg,#f59e0b,#ff4757); color:#fff; }
     .btn-tg { background:rgba(31,111,235,.15); border:1px solid var(--blue); color:#79c0ff; }
     .tabs { display:flex; gap:8px; overflow-x:auto; margin:14px 0 10px; padding-bottom:4px; scrollbar-width:none; }
     .tabs::-webkit-scrollbar { display:none; }
-    .tab-btn {
-      background:var(--card); color:var(--text); border:1px solid var(--border);
-      padding:8px 14px; border-radius:999px; cursor:pointer; white-space:nowrap; font-size:.82rem; font-weight:600;
-    }
+    .tab-btn { background:var(--card); color:var(--text); border:1px solid var(--border); padding:8px 14px; border-radius:999px; cursor:pointer; white-space:nowrap; font-size:.82rem; font-weight:600; }
     .tab-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
     .guide-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; display:none; }
     .guide-box.show { display:block; }
@@ -51,29 +33,15 @@
     .guide-cta { display:inline-block; margin-top:10px; background:var(--green); color:#fff; text-decoration:none; padding:8px 14px; border-radius:8px; font-size:.82rem; font-weight:700; }
     .ad-slot { margin:12px 0; text-align:center; min-height:20px; }
     .search-box { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
-    .search-box input {
-      flex:1; min-width:170px; padding:11px 13px; border-radius:10px; border:1px solid var(--border);
-      background:var(--card); color:var(--text); font-size:.94rem; outline:none;
-    }
-    .search-box input:focus { border-color:var(--accent); }
+    .search-box input { flex:1; min-width:170px; padding:11px 13px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:.94rem; outline:none; }
     button.primary { background:var(--accent); color:#fff; border:none; padding:0 16px; min-height:42px; border-radius:10px; font-weight:800; cursor:pointer; }
     button.surprise { background:var(--grad); color:#fff; border:none; padding:0 14px; min-height:42px; border-radius:10px; font-weight:800; cursor:pointer; font-size:.84rem; }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:13px; }
-    .card {
-      background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;
-      display:flex; flex-direction:column; justify-content:space-between; transition:transform .2s,border-color .2s;
-    }
-    .card:hover { transform:translateY(-4px); border-color:rgba(255,71,87,.5); }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; }
     .poster-wrap { position:relative; cursor:pointer; overflow:hidden; }
     .poster-wrap img { width:100%; height:225px; object-fit:cover; display:block; }
-    .air-badge {
-      position:absolute; top:7px; left:7px; right:38px; background:rgba(9,13,20,.88);
-      border-left:3px solid var(--accent); color:#ff8b96; font-size:.68rem; font-weight:700; padding:4px 6px; border-radius:5px;
-    }
-    .fav-btn {
-      position:absolute; top:7px; right:7px; width:28px; height:28px; border-radius:50%; border:none;
-      background:rgba(9,13,20,.82); color:#fff; cursor:pointer; font-size:.85rem; display:grid; place-items:center;
-    }
+    .air-badge { position:absolute; top:7px; left:7px; right:38px; background:rgba(9,13,20,.88); border-left:3px solid var(--accent); color:#ff8b96; font-size:.68rem; font-weight:700; padding:4px 6px; border-radius:5px; }
+    .fav-btn { position:absolute; top:7px; right:7px; width:28px; height:28px; border-radius:50%; border:none; background:rgba(9,13,20,.82); color:#fff; cursor:pointer; font-size:.85rem; }
     .card-body { padding:10px; display:flex; flex-direction:column; gap:6px; }
     .card-title { font-size:.88rem; font-weight:700; cursor:pointer; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .card-meta { font-size:.75rem; color:var(--muted); }
@@ -82,7 +50,7 @@
     .buy-btn { background:var(--green); } .merch-btn { background:var(--blue); }
     .skeleton { height:310px; border-radius:12px; background:linear-gradient(90deg,#161b22 25%,#21262d 50%,#161b22 75%); background-size:200% 100%; animation:shimmer 1.2s infinite; }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-    .overlay { position:fixed; inset:0; z-index:60; background:rgba(0,0,0,.85); backdrop-filter:blur(6px); display:none; justify-content:center; align-items:flex-end; }
+    .overlay { position:fixed; inset:0; z-index:60; background:rgba(0,0,0,.85); display:none; justify-content:center; align-items:flex-end; }
     .overlay.open { display:flex; }
     .sheet { background:#0d1117; width:100%; max-width:840px; height:92vh; border-radius:18px 18px 0 0; overflow-y:auto; border:1px solid var(--border); position:relative; }
     .close-btn { position:sticky; top:12px; float:right; margin:12px; z-index:20; background:rgba(13,17,23,.85); color:#fff; border:1px solid rgba(255,255,255,.2); width:34px; height:34px; border-radius:50%; cursor:pointer; }
@@ -91,7 +59,7 @@
     .hero-bg img { width:100%; height:100%; object-fit:cover; }
     .hero-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(13,17,23,.2),#0d1117); }
     .hero-content { position:relative; z-index:2; }
-    .hero-poster { width:132px; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,.85); border:2px solid rgba(255,255,255,.2); }
+    .hero-poster { width:132px; border-radius:10px; border:2px solid rgba(255,255,255,.2); }
     .d-panel { padding:16px; }
     .meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; font-size:.82rem; color:#c9d1d9; margin:12px 0; }
     .tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
@@ -101,14 +69,14 @@
     .two-col { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
     .c-list { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
     .c-item { background:var(--card); border:1px solid var(--border); padding:9px 11px; border-radius:8px; font-size:.84rem; }
-    .popup { position:fixed; bottom:16px; left:16px; right:16px; max-width:365px; margin:auto; z-index:80; background:#161b22; border:1px solid #484f58; border-radius:14px; padding:15px; box-shadow:0 16px 36px rgba(0,0,0,.85); display:none; }
+    .popup { position:fixed; bottom:16px; left:16px; right:16px; max-width:365px; margin:auto; z-index:80; background:#161b22; border:1px solid #484f58; border-radius:14px; padding:15px; display:none; }
     .popup.show { display:block; }
     .popup-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
     .popup-opt { background:var(--bg); border:1px solid var(--border); color:var(--text); padding:8px 10px; border-radius:8px; font-size:.8rem; cursor:pointer; text-align:left; }
     .popup-opt.selected { border-color:var(--accent); background:rgba(255,71,87,.15); }
     .other-box { display:none; margin-top:10px; } .other-box.show { display:block; }
     .other-box input { width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:9px; border-radius:8px; margin:6px 0; }
-    .ab-wall { position:fixed; inset:0; z-index:9999; background:rgba(9,11,16,.96); backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center; padding:18px; }
+    .ab-wall { position:fixed; inset:0; z-index:9999; background:rgba(9,11,16,.96); display:none; align-items:center; justify-content:center; padding:18px; }
     .ab-wall.active { display:flex; }
     .ab-card { background:#161b22; border:1px solid var(--accent); border-radius:16px; max-width:400px; width:100%; padding:22px; text-align:center; }
     .links-box { margin-top:24px; padding:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; font-size:.84rem; line-height:1.8; }
@@ -120,7 +88,6 @@
   <div class="top-notice show" id="topNotice">
     <span id="topNoticeText">✨ Welcome to KomaVelt, nakama! 💖 So glad you're here — grab your favorite watch orders, explore 5,000+ Donghua, and make yourself at home! 🎌🔥</span>
   </div>
-
   <header>
     <img src="/assets/Komavelt.gif" alt="KomaVelt" style="width:88px;height:88px;border-radius:16px;object-fit:cover;margin-bottom:6px;border:1px solid var(--border);" />
     <h1>KomaVelt</h1>
@@ -130,34 +97,27 @@
       <a class="btn-pill btn-tg" href="https://t.me/KomaVeltDeals" target="_blank" rel="noopener">✈️ Join @KomaVeltDeals</a>
     </div>
   </header>
-
   <div class="tabs" id="tabsBar"></div>
   <div class="guide-box" id="guideBox"></div>
-
   <div class="ad-slot" id="native-ad-slot">
     <script async data-cfasync="false" src="https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1"></script>
     <div id="container-f1020225a43a6e61284781660ae4e2a1"></div>
   </div>
-
   <div class="search-box">
     <input type="text" id="query" placeholder="Search any anime or manga (e.g. Solo Leveling, Chainsaw Man)..." onkeydown="if(event.key==='Enter') searchAnime()" />
     <button class="primary" onclick="searchAnime()">Search</button>
     <button class="surprise" onclick="surpriseMe()">🎲 Surprise Me</button>
   </div>
-
   <div id="catalog-status" style="font-size:.78rem;color:var(--muted);margin-bottom:10px;"></div>
   <div class="grid" id="anime-grid"></div>
   <div id="load-more-wrap" style="text-align:center;margin-top:16px;display:none;">
     <button class="primary" id="loadMoreBtn" onclick="loadNextPage()" style="padding:10px 24px;">Load More Titles</button>
   </div>
-
   <div class="links-box" id="watchOrderLinks"></div>
   <footer>As an Amazon Associate, KomaVelt earns from qualifying purchases. Live data via AniList API.</footer>
-
   <div class="overlay" id="detailOverlay" onclick="if(event.target===this) closeDetail()">
     <div class="sheet"><button class="close-btn" onclick="closeDetail()">✕</button><div id="detailContent"></div></div>
   </div>
-
   <div class="popup" id="surveyPopup">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <strong id="popupTitle" style="font-size:.9rem;"></strong>
@@ -171,7 +131,6 @@
       <button class="surprise" style="width:100%;" onclick="submitOtherSurvey()">Submit Feedback</button>
     </div>
   </div>
-
   <div class="ab-wall" id="abWall">
     <div class="ab-card">
       <div style="font-size:2.2rem;">🛡️</div>
@@ -180,92 +139,87 @@
       <button class="surprise" style="width:100%;" onclick="location.reload()">I've Disabled It — Reload</button>
     </div>
   </div>
-
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
     const AMAZON_TAG = "aniguide-21", DB_URL = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
-    if (!firebase.apps.length) firebase.initializeApp({ databaseURL: DB_URL });
-
-    // Dynamic Data: Tabs, Guides & Footer Links (Zero Hardcoded HTML Bloat)
-    const TABS = [
-      ["this_month","New This Month"],["this_year","Best of 2026"],["trending","Trending"],
-      ["manga","📚 Manga (10k+)"],["saved","❤️ Watchlist"],
-      ["naruto","Naruto"],["onepiece","One Piece"],["bleach","Bleach"],["aot","Attack on Titan"],
-      ["fate","Fate"],["ds","Demon Slayer"],["jjk","JJK"],["dbz","Dragon Ball"],["hxh","HxH"]
-    ];
+    try { if (typeof firebase !== "undefined" && !firebase.apps.length) firebase.initializeApp({ databaseURL: DB_URL }); } catch (e) {}
+    const TABS = [["this_month","New This Month"],["this_year","Best of 2026"],["trending","Trending"],["manga","📚 Manga (10k+)"],["saved","❤️ Watchlist"],["naruto","Naruto"],["onepiece","One Piece"],["bleach","Bleach"],["aot","Attack on Titan"],["fate","Fate"],["ds","Demon Slayer"],["jjk","JJK"],["dbz","Dragon Ball"],["hxh","HxH"]];
     const GUIDES = {
-      naruto: { t:"Naruto & Shippuden Filler Skip (Save 150+ Hrs)", q:"Naruto+Manga+Box+Set", l:["<b>Naruto:</b> Watch 1–25, 27–96, 98–100, 107–135. Skip 136–219.","<b>Shippuden:</b> Skip filler arcs; watch <i>The Last</i> movie after Ep 493."] },
-      onepiece: { t:"One Piece Essential Watch Order", q:"One+Piece+Manga+Box+Set", l:["<b>East Blue:</b> 1–61 (Skip 54–60).","<b>Alabasta–Wano–Egghead:</b> Watch G-8 (196–206), Marineford (385–516), Wano (890–1085), Egghead (1086+)."] },
-      bleach: { t:"Bleach & TYBW Filler Skip Guide", q:"Bleach+Manga+Box+Set", l:["<b>Skip:</b> Bount (64–108), New Captain (168–189), Zanpakuto (230–265).","<b>Sequel:</b> <i>Thousand-Year Blood War</i> is 100% Canon."] },
-      aot: { t:"Attack on Titan Complete Order", q:"Attack+on+Titan+Manga+Box+Set", l:["S1 (1–25) → No Regrets OVA → S2 → S3 → Final Season (60–87) → Final Chapters Specials 1 & 2."] },
-      fate: { t:"Fate Series Recommended Order", q:"Fate+stay+night+manga", l:["1. <b>Unlimited Blade Works (2014)</b> → 2. <b>Heaven's Feel Trilogy</b> → 3. <b>Fate/Zero</b>."] },
-      ds: { t:"Demon Slayer Chronological Order", q:"Demon+Slayer+Manga+Box+Set", l:["S1 → Mugen Train → Entertainment District → Swordsmith Village → Hashira Training → Infinity Castle Trilogy."] },
-      jjk: { t:"Jujutsu Kaisen Watch Order", q:"Jujutsu+Kaisen+Manga+Set", l:["<b>Release:</b> S1 (1–24) → <i>JJK 0</i> Movie → S2 (25–47)."] },
-      dbz: { t:"Dragon Ball Canon Order (Zero Filler)", q:"Dragon+Ball+Z+Manga+Box+Set", l:["Dragon Ball (1–153) → DBZ Kai (1–167) → DB Super (1–131) → Broly → Super Hero → Daima."] },
-      hxh: { t:"Hunter x Hunter (2011) Guide", q:"Hunter+x+Hunter+Manga", l:["Ep 1–148 (100% Canon — only skip recap Ep 13 & 26)."] }
+      naruto:{t:"Naruto & Shippuden Filler Skip",q:"Naruto+Manga+Box+Set",l:["<b>Naruto:</b> Watch 1–25, 27–96, 98–100, 107–135. Skip 136–219.","<b>Shippuden:</b> Skip filler arcs; watch <i>The Last</i> after Ep 493."]},
+      onepiece:{t:"One Piece Essential Watch Order",q:"One+Piece+Manga+Box+Set",l:["<b>East Blue:</b> 1–61 (Skip 54–60).","<b>Arcs:</b> G-8 (196–206), Marineford (385–516), Wano (890–1085), Egghead (1086+)."]},
+      bleach:{t:"Bleach & TYBW Filler Skip Guide",q:"Bleach+Manga+Box+Set",l:["<b>Skip:</b> Bount (64–108), New Captain (168–189), Zanpakuto (230–265).","<b>Sequel:</b> <i>TYBW</i> is 100% Canon."]},
+      aot:{t:"Attack on Titan Complete Order",q:"Attack+on+Titan+Manga+Box+Set",l:["S1 (1–25) → No Regrets OVA → S2 → S3 → Final Season (60–87) → Final Chapters Specials 1 & 2."]},
+      fate:{t:"Fate Series Recommended Order",q:"Fate+stay+night+manga",l:["1. <b>Unlimited Blade Works (2014)</b> → 2. <b>Heaven's Feel Trilogy</b> → 3. <b>Fate/Zero</b>."]},
+      ds:{t:"Demon Slayer Chronological Order",q:"Demon+Slayer+Manga+Box+Set",l:["S1 → Mugen Train → Entertainment District → Swordsmith Village → Hashira Training → Infinity Castle."]},
+      jjk:{t:"Jujutsu Kaisen Watch Order",q:"Jujutsu+Kaisen+Manga+Set",l:["<b>Release:</b> S1 (1–24) → <i>JJK 0</i> Movie → S2 (25–47)."]},
+      dbz:{t:"Dragon Ball Canon Order",q:"Dragon+Ball+Z+Manga+Box+Set",l:["Dragon Ball (1–153) → DBZ Kai (1–167) → DB Super (1–131) → Broly → Super Hero → Daima."]},
+      hxh:{t:"Hunter x Hunter (2011) Guide",q:"Hunter+x+Hunter+Manga",l:["Ep 1–148 (100% Canon — skip recap Ep 13 & 26)."]}
     };
     const FOOTER_GUIDES = ["naruto","one-piece","bleach","solo-leveling","chainsaw-man","dandadan","attack-on-titan","jujutsu-kaisen","demon-slayer","my-hero-academia","black-clover","fate-series","dragon-ball","hunter-x-hunter"];
     const QUESTIONS = [
-      { id:"q_source", title:"Where did you discover KomaVelt? ✨", opts:["Instagram","YouTube","Telegram","Pinterest","Google","Other"] },
-      { id:"q_fav", title:"What do you enjoy most on KomaVelt? 🔥", opts:["Watch Orders","Donghua Hub","2026 Schedule","Manga Deals","Other"] },
-      { id:"q_next", title:"What should we add next? 💡", opts:["More Donghua","Filler Calc","Manga Picks","Merch Deals","Other"] }
+      {id:"q_source",title:"Where did you discover KomaVelt? ✨",opts:["Instagram","YouTube","Telegram","Pinterest","Google","Other"]},
+      {id:"q_fav",title:"What do you enjoy most on KomaVelt? 🔥",opts:["Watch Orders","Donghua Hub","2026 Schedule","Manga Deals","Other"]},
+      {id:"q_next",title:"What should we add next? 💡",opts:["More Donghua","Filler Calc","Manga Picks","Merch Deals","Other"]}
     ];
-
-    document.getElementById("tabsBar").innerHTML = TABS.map(([id,label],i) => `<button class="tab-btn ${i===0?'active':''}" onclick="showTab('${id}',this)">${label}</button>`).join("");
-    document.getElementById("watchOrderLinks").innerHTML = `<strong style="color:var(--accent);display:block;margin-bottom:4px;">Full Watch Order &amp; Filler Guides:</strong>` +
-      FOOTER_GUIDES.map(s => `<a href="watch-orders/${s}-watch-order.html">${s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</a>`).join(" • ");
-
-    const cache = {};
-    let page = 1, mode = "this_month", searchQ = null, hasNext = true, loading = false, activePopId = "q_source", selOpt = "";
-    const getSaved = () => JSON.parse(localStorage.getItem("kv_saved") || "{}");
-
-    function toggleSave(e, id) {
-      e.stopPropagation();
-      const s = getSaved();
-      if (s[id]) delete s[id]; else if (cache[id]) s[id] = cache[id];
-      localStorage.setItem("kv_saved", JSON.stringify(s));
-      e.currentTarget.textContent = s[id] ? "❤️" : "🤍";
-      if (mode === "saved") renderCards(Object.values(s), false);
-    }
-
-    function fmtSched(m) {
-      if (m.nextAiringEpisode) {
-        const d = new Date(m.nextAiringEpisode.airingAt * 1000);
-        return `Ep ${m.nextAiringEpisode.episode} • ${d.toLocaleDateString(undefined,{day:"2-digit",month:"short"})}`;
-      }
-      return `${m.season||""} ${m.seasonYear||"2026"}`.trim();
-    }
-
-    function showTab(tab, btn) {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const gBox = document.getElementById("guideBox");
-      if (GUIDES[tab]) {
-        const g = GUIDES[tab];
-        gBox.innerHTML = `<h2>${g.t}</h2><ul>${g.l.map(x=>`<li>${x}</li>`).join("")}</ul><a class="guide-cta" href="https://www.amazon.in/s?k=${g.q}&tag=${AMAZON_TAG}" target="_blank" rel="nofollow noopener">Shop Official Manga Box Sets on Amazon</a>`;
-        gBox.classList.add("show");
-        return;
-      }
+    document.getElementById("tabsBar").innerHTML = TABS.map(([id,l],i)=>`<button class="tab-btn ${i===0?'active':''}" onclick="showTab('${id}',this)">${l}</button>`).join("");
+    document.getElementById("watchOrderLinks").innerHTML = `<strong style="color:var(--accent);display:block;margin-bottom:4px;">Full Watch Order &amp; Filler Guides:</strong>` + FOOTER_GUIDES.map(s=>`<a href="watch-orders/${s}-watch-order.html">${s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</a>`).join(" • ");
+    const cache = {}; let page=1, mode="this_month", searchQ=null, hasNext=true, loading=false, activePopId="q_source", selOpt="";
+    const getSaved = () => JSON.parse(localStorage.getItem("kv_saved")||"{}");
+    function toggleSave(e,id){e.stopPropagation();const s=getSaved();if(s[id])delete s[id];else if(cache[id])s[id]=cache[id];localStorage.setItem("kv_saved",JSON.stringify(s));e.currentTarget.textContent=s[id]?"❤️":"🤍";if(mode==="saved")renderCards(Object.values(s),false);}
+    function fmtSched(m){if(m.nextAiringEpisode){const d=new Date(m.nextAiringEpisode.airingAt*1000);return`Ep ${m.nextAiringEpisode.episode} • ${d.toLocaleDateString(undefined,{day:"2-digit",month:"short"})}`;}return`${m.season||""} ${m.seasonYear||"2026"}`.trim();}
+    function showTab(tab,btn){
+      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+      const gBox=document.getElementById("guideBox");
+      if(GUIDES[tab]){const g=GUIDES[tab];gBox.innerHTML=`<h2>${g.t}</h2><ul>${g.l.map(x=>`<li>${x}</li>`).join("")}</ul><a class="guide-cta" href="https://www.amazon.in/s?k=${g.q}&tag=${AMAZON_TAG}" target="_blank" rel="nofollow noopener">Shop Official Manga Box Sets on Amazon</a>`;gBox.classList.add("show");return;}
       gBox.classList.remove("show");
-      if (tab === "saved") {
-        mode = "saved";
-        const list = Object.values(getSaved());
-        document.getElementById("load-more-wrap").style.display = "none";
-        document.getElementById("catalog-status").textContent = `❤️ ${list.length} Saved Titles in Your Watchlist`;
-        renderCards(list, false);
-        return;
-      }
-      loadAnime(null, tab, false);
+      if(tab==="saved"){mode="saved";const list=Object.values(getSaved());document.getElementById("load-more-wrap").style.display="none";document.getElementById("catalog-status").textContent=`❤️ ${list.length} Saved Titles in Your Watchlist`;renderCards(list,false);return;}
+      loadAnime(null,tab,false);
     }
-
-    function renderCards(list, append) {
-      const grid = document.getElementById("anime-grid"), saved = getSaved();
-      if (!append && !list.length) { grid.innerHTML = "<p style='color:var(--muted);'>No titles found here yet.</p>"; return; }
-      const html = list.map(a => {
-        cache[a.id] = a;
-        const t = a.title.english || a.title.romaji;
-        const badge = a.type==="MANGA" ? `MANGA • ${a.chapters?a.chapters+" Ch":a.status}` : fmtSched(a);
-        const meta = `⭐ ${a.averageScore?(a.averageScore/10).toFixed(1):"New"} • ${a.type==="MANGA"?(a.volumes?a.volumes+" Vols":a.status):(a.episodes||"?")+" Eps"}`;
-        return `<div class="card">
-          <div class="poster-wrap" onclick
+    function renderCards(list,append){
+      const grid=document.getElementById("anime-grid"),saved=getSaved();
+      if(!append&&!list.length){grid.innerHTML="<p style='color:var(--muted);'>No titles found here yet.</p>";return;}
+      const html=list.map(a=>{
+        cache[a.id]=a;const t=a.title.english||a.title.romaji;
+        const badge=a.type==="MANGA"?`MANGA • ${a.chapters?a.chapters+" Ch":a.status}`:fmtSched(a);
+        const meta=`⭐ ${a.averageScore?(a.averageScore/10).toFixed(1):"New"} • ${a.type==="MANGA"?(a.volumes?a.volumes+" Vols":a.status):(a.episodes||"?")+" Eps"}`;
+        return`<div class="card"><div class="poster-wrap" onclick="openDetail(${a.id})"><img src="${a.coverImage.large}" alt="${t}" loading="lazy" /><div class="air-badge">${badge}</div><button class="fav-btn" onclick="toggleSave(event,${a.id})">${saved[a.id]?"❤️":"🤍"}</button></div><div class="card-body"><div class="card-title" onclick="openDetail(${a.id})">${t}</div><div class="card-meta">${meta}</div><div class="btn-row"><a class="buy-btn" href="https://www.amazon.in/s?k=${encodeURIComponent(t+' manga box set')}&tag=${AMAZON_TAG}" target="_blank" rel="nofollow noopener">Manga Box Sets</a><a class="merch-btn" href="https://www.amazon.in/s?k=${encodeURIComponent(t+' action figure hoodie')}&tag=${AMAZON_TAG}" target="_blank" rel="nofollow noopener">Figures &amp; Hoodies</a></div></div></div>`;
+      }).join("");
+      append?grid.insertAdjacentHTML("beforeend",html):(grid.innerHTML=html);
+    }
+    async function loadAnime(q=null,m="this_month",append=false){
+      if(loading)return;loading=true;const grid=document.getElementById("anime-grid"),wrap=document.getElementById("load-more-wrap");
+      if(!append){page=1;mode=m;searchQ=q;grid.innerHTML=Array(10).fill('<div class="skeleton"></div>').join("");wrap.style.display="none";}
+      const vars={page,type:m==="manga"?"MANGA":"ANIME",sort:q?["SEARCH_MATCH"]:m==="this_year"?["SCORE_DESC"]:m==="manga"?["POPULARITY_DESC"]:["TRENDING_DESC"]};
+      if(q)vars.search=q;else if(m==="this_month"){vars.season="FALL";vars.seasonYear=2026;}else if(m==="this_year")vars.seasonYear=2026;
+      const gql=`query($page:Int,$search:String,$season:MediaSeason,$seasonYear:Int,$type:MediaType,$sort:[MediaSort]){Page(page:$page,perPage:40){pageInfo{total hasNextPage}media(search:$search,season:$season,seasonYear:$seasonYear,type:$type,sort:$sort,isAdult:false){id type chapters volumes title{english romaji native}format episodes status duration season seasonYear averageScore description(asHtml:false) bannerImage coverImage{extraLarge large} nextAiringEpisode{airingAt episode} genres}}}`;
+      try{const res=await fetch("https://graphql.anilist.co",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:gql,variables:vars})});const pd=(await res.json()).data.Page;hasNext=pd.pageInfo.hasNextPage;renderCards(pd.media,append);document.getElementById("catalog-status").textContent=`Showing ${grid.querySelectorAll(".card").length} of ${(pd.pageInfo.total||10000).toLocaleString()} titles`;wrap.style.display=hasNext?"block":"none";}
+      catch{if(!append)grid.innerHTML="Could not load catalog.";}finally{loading=false;}
+    }
+    const loadNextPage=()=>{if(hasNext&&!loading&&mode!=="saved"){page++;loadAnime(searchQ,mode,true);}};
+    const searchAnime=()=>loadAnime(document.getElementById("query").value.trim()||null,mode==="saved"?"trending":mode,false);
+    const surpriseMe=()=>{const ids=Object.keys(cache);if(ids.length)openDetail(Number(ids[Math.floor(Math.random()*ids.length)]));};
+    window.addEventListener("scroll",()=>{if(innerHeight+scrollY>=document.body.offsetHeight-600)loadNextPage();});
+    async function openDetail(id){
+      const a=cache[id];if(!a)return;const t=a.title.english||a.title.romaji;
+      document.getElementById("detailContent").innerHTML=`<div class="hero"><div class="hero-bg"><img src="${a.bannerImage||a.coverImage.extraLarge}" /></div><div class="hero-content"><img class="hero-poster" src="${a.coverImage.extraLarge}" /><h2 style="margin-top:8px;">${t}</h2><p style="font-size:.8rem;color:var(--muted);">${a.title.romaji} • ${fmtSched(a)}</p><div style="display:flex;gap:8px;justify-content:center;margin-top:10px;"><a class="buy-btn" style="padding:8px 14px;" href="https://www.amazon.in/s?k=${encodeURIComponent(t+' manga box set')}&tag=${AMAZON_TAG}" target="_blank">Buy Manga</a><a class="merch-btn" style="padding:8px 14px;" href="https://www.amazon.in/s?k=${encodeURIComponent(t+' figure hoodie')}&tag=${AMAZON_TAG}" target="_blank">Merch</a></div></div></div><div class="d-panel"><p style="font-size:.86rem;line-height:1.6;color:#c9d1d9;">${(a.description||"Summary coming soon.").replace(/<[^>]*>/g,"")}</p><div class="meta-grid"><div><b>Type:</b> ${a.format||"TV"}</div><div><b>Status:</b> ${a.status}</div><div><b>Episodes:</b> ${a.episodes||"Ongoing"}</div><div><b>Score:</b> ${a.averageScore||"New"}%</div></div><div class="tags">${(a.genres||[]).map(g=>`<span class="tag">${g}</span>`).join("")}</div></div><div class="comments"><h3>Comments</h3><textarea id="cText" rows="2" placeholder="Write a comment *"></textarea><div class="two-col"><input id="cName" value="${localStorage.getItem('ag_name')||''}" placeholder="Name *" /><input id="cEmail" value="${localStorage.getItem('ag_email')||''}" placeholder="Email *" /></div><button class="surprise" style="margin-top:8px;padding:0 18px;" onclick="postComment(${id})">Post Comment</button><div class="c-list" id="cList"></div></div>`;
+      document.getElementById("detailOverlay").classList.add("open");loadComments(id);
+    }
+    const closeDetail=()=>document.getElementById("detailOverlay").classList.remove("open");
+    async function loadComments(id){try{const d=await(await fetch(`${DB_URL}/comments/${id}.json`)).json();document.getElementById("cList").innerHTML=d?Object.values(d).reverse().map(c=>`<div class="c-item"><strong style="color:#ff8b96;">${c.name}</strong> <small style="color:var(--muted);">${c.date}</small><p style="margin-top:4px;">${c.text}</p></div>`).join(""):""}catch{}}
+    async function postComment(id){const text=document.getElementById("cText").value.trim(),name=document.getElementById("cName").value.trim(),email=document.getElementById("cEmail").value.trim();if(!text||!name||!email)return alert("Enter Comment, Name, and Email.");localStorage.setItem("ag_name",name);localStorage.setItem("ag_email",email);await fetch(`${DB_URL}/comments/${id}.json`,{method:"POST",body:JSON.stringify({name,text,animeTitle:cache[id]?.title?.english||"",seen:false,date:new Date().toLocaleDateString()})});document.getElementById("cText").value="";loadComments(id);}
+    async function initConfig(){
+      const q=QUESTIONS[new Date().getDate()%QUESTIONS.length];let title=q.title,opts=q.opts,show=true;activePopId=q.id;
+      try{const cfg=await(await fetch(`${DB_URL}/site_config.json`)).json();if(cfg?.notice){if(cfg.notice.active&&cfg.notice.text)document.getElementById("topNoticeText").textContent=cfg.notice.text;else if(cfg.notice.active===false)document.getElementById("topNotice").classList.remove("show");}if(cfg?.popup){if(cfg.popup.active===false)show=false;else if(cfg.popup.id){activePopId=cfg.popup.id;title=cfg.popup.title||title;opts=cfg.popup.options||opts;}}}catch{}
+      if(show&&!localStorage.getItem("ag_seen_"+activePopId)){document.getElementById("popupTitle").textContent=title;document.getElementById("popupOptions").innerHTML=opts.map(o=>`<button class="popup-opt" onclick="pickOpt(this,'${o.replace(/'/g,"")}')">${o}</button>`).join("");setTimeout(()=>document.getElementById("surveyPopup").classList.add("show"),5500);}
+    }
+    function pickOpt(btn,src){document.querySelectorAll(".popup-opt").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");selOpt=src;document.getElementById("otherLabel").innerHTML=src.toLowerCase().includes("other")?'Please specify <span style="color:var(--accent)">*</span>':`Selected "${src}" — optional comment:`;document.getElementById("otherBox").classList.add("show");document.getElementById("otherInput").focus();}
+    function submitOtherSurvey(){const detail=document.getElementById("otherInput").value.trim();if(selOpt.toLowerCase().includes("other")&&!detail)return alert("Please write a short comment.");localStorage.setItem("ag_seen_"+activePopId,detail||selOpt);document.getElementById("surveyPopup").classList.remove("show");fetch(`${DB_URL}/visitor_sources.json`,{method:"POST",body:JSON.stringify({popupId:activePopId,source:selOpt||"Other",detail,time:Date.now()})});}
+    const closeSurvey=()=>{localStorage.setItem("ag_seen_"+activePopId,"dismissed");document.getElementById("surveyPopup").classList.remove("show");};
+    (function(){if(location.search.includes("admin=true"))localStorage.setItem("aniguide_ignore_me","true");if(localStorage.getItem("aniguide_ignore_me")==="true"||typeof firebase==="undefined"||!firebase.apps.length)return;const db=firebase.database(),slug="home";if(!sessionStorage.getItem("viewed_"+slug)){db.ref(`analytics/views/${slug}`).set(firebase.database.ServerValue.increment(1));sessionStorage.setItem("viewed_"+slug,"1");}db.ref(".info/connected").on("value",s=>{if(s.val()){const r=db.ref("analytics/online").push();r.onDisconnect().remove();r.set({page:slug,joinedAt:firebase.database.ServerValue.TIMESTAMP});}});})();
+    window.addEventListener("load",()=>{initConfig();fetch("https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1",{method:"HEAD",mode:"no-cors",cache:"no-store"}).catch(()=>{document.getElementById("abWall").classList.add("active");});});
+    loadAnime();
+  </script>
+  <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
+</body>
+</html>
