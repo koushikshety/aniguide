@@ -196,9 +196,9 @@ def post_to_telegram(photo_path, title, genres, short_desc, link):
         [
             "curl", "-sS", "-w", "\nHTTP:%{http_code}", "-X", "POST",
             f"https://api.telegram.org/bot{token}/sendPhoto",
-            "-F", f"chat_id={TELEGRAM_CHAT_ID}",
+            "--form-string", f"chat_id={TELEGRAM_CHAT_ID}",
             "-F", f"photo=@{photo_path}",
-            "-F", f"caption={caption[:1020]}",
+            "--form-string", f"caption={caption[:1020]}",
         ],
         capture_output=True,
         text=True,
