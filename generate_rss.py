@@ -337,3 +337,8 @@ def build_rss(items):
 if __name__ == "__main__":
     manga_list = fetch_manga()
     build_rss(manga_list)
+
+
+# Auto-rotate daily Donghua campaigns & Telegram post
+from dynamic_donghua import update_daily_donghua
+update_daily_donghua(post_to_telegram)
