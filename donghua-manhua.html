@@ -3,343 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AniGuide — Donghua & Manhua Catalog, 2026 Releases & Cultivation Guides</title>
-  <meta name="description" content="Explore top Chinese Donghua and Manhua including Renegade Immortal, Battle Through the Heavens, Soul Land, Against the Gods, and Martial Peak." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
+  <title>KomaVelt — Donghua &amp; Manhua Hub (5,000+ Titles)</title>
+  <meta name="description" content="Explore top Chinese 3D Donghua and Manhua on KomaVelt including Renegade Immortal, Battle Through the Heavens, and Soul Land." />
+  <link rel="icon" type="image/png" href="/assets/Komavelt.png" />
   <style>
-    :root {
-      --bg: #0d1117;
-      --card: #161b22;
-      --border: #30363d;
-      --accent: #ff4757;
-      --gold: #f59e0b;
-      --green: #238636;
-      --blue: #1f6feb;
-      --text: #f0f6fc;
-      --muted: #8b949e;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 14px; max-width: 1080px; margin: auto; -webkit-font-smoothing: antialiased; }
-
-    nav {
-      display: flex; justify-content: space-between; align-items: center; gap: 10px;
-      padding-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap;
-    }
-    .back-link {
-      color: #58a6ff; text-decoration: none; font-size: 0.85rem; font-weight: 700;
-      background: var(--card); border: 1px solid var(--border); padding: 6px 12px; border-radius: 8px;
-    }
-
-    header { text-align: center; padding: 16px 0 10px; }
-    header h1 { color: var(--gold); font-size: 1.8rem; letter-spacing: -0.5px; }
-    header p { color: var(--muted); font-size: 0.88rem; margin-top: 5px; }
-
-    .tabs { display: flex; gap: 8px; overflow-x: auto; margin: 12px 0; padding-bottom: 6px; scrollbar-width: none; }
-    .tab-btn {
-      background: var(--card); color: var(--text); border: 1px solid var(--border);
-      padding: 8px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; font-weight: 600;
-    }
-    .tab-btn.active { background: var(--gold); border-color: var(--gold); color: #0d1117; font-weight: 800; }
-
-    .ad-slot { margin: 12px 0; text-align: center; min-height: 90px; }
-
-    .search-box { display: flex; gap: 8px; margin-bottom: 12px; }
-    .search-box input { flex: 1; padding: 11px 13px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 0.95rem; outline: none; }
-    .search-box input:focus { border-color: var(--gold); }
-    button.primary { background: var(--gold); color: #0d1117; border: none; padding: 0 18px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(162px, 1fr)); gap: 13px; }
-    .card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .poster-wrap { position: relative; overflow: hidden; }
-    .poster-wrap img { width: 100%; height: 225px; object-fit: cover; display: block; }
-    .air-badge {
-      position: absolute; top: 7px; left: 7px; right: 7px;
-      background: rgba(13, 17, 23, 0.92); border-left: 3px solid var(--gold);
-      color: #fde68a; font-size: 0.7rem; font-weight: 700; padding: 4px 6px; border-radius: 4px;
-    }
-    .card-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .card-title { font-size: 0.9rem; font-weight: bold; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-meta { font-size: 0.76rem; color: var(--muted); }
-    .btn-row { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
-    .buy-btn { display: block; text-align: center; background: var(--green); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
-    .merch-btn { display: block; text-align: center; background: var(--blue); color: #fff; text-decoration: none; padding: 7px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; }
-
-    .skeleton {
-      height: 310px; border-radius: 10px;
-      background: linear-gradient(90deg, #161b22 25%, #21262d 50%, #161b22 75%);
-      background-size: 200% 100%; animation: shimmer 1.2s infinite;
-    }
-    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border); }
+    :root { --bg:#090d14; --card:rgba(22,27,34,.85); --border:rgba(255,255,255,.1); --gold:#f59e0b; --green:#238636; --blue:#1f6feb; --text:#f0f6fc; --muted:#8b949e; }
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,sans-serif; }
+    body { background:radial-gradient(circle at top,#1c1610 0%,var(--bg) 55%); color:var(--text); padding:14px; max-width:1100px; margin:auto; min-height:100vh; }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:10px; padding-bottom:12px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .nav-btn { text-decoration:none; font-size:.83rem; font-weight:700; padding:7px 13px; border-radius:999px; }
+    .back { background:var(--card); border:1px solid var(--border); color:#58a6ff; }
+    .tg { background:rgba(245,158,11,.15); border:1px solid var(--gold); color:#fde68a; }
+    header { text-align:center; padding:16px 0 10px; }
+    header h1 { color:var(--gold); font-size:1.8rem; font-weight:900; }
+    header p { color:var(--muted); font-size:.86rem; margin-top:4px; }
+    .tabs { display:flex; gap:8px; overflow-x:auto; margin:12px 0; padding-bottom:4px; scrollbar-width:none; }
+    .tab-btn { background:var(--card); color:var(--text); border:1px solid var(--border); padding:8px 15px; border-radius:999px; cursor:pointer; white-space:nowrap; font-size:.83rem; font-weight:700; }
+    .tab-btn.active { background:var(--gold); border-color:var(--gold); color:#090d14; }
+    .ad-slot { margin:12px 0; text-align:center; min-height:90px; }
+    .search-box { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+    .search-box input { flex:1; min-width:170px; padding:11px 13px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:.94rem; outline:none; }
+    .search-box input:focus { border-color:var(--gold); }
+    button.primary { background:var(--gold); color:#090d14; border:none; padding:0 16px; min-height:42px; border-radius:10px; font-weight:800; cursor:pointer; }
+    button.surprise { background:linear-gradient(135deg,#f59e0b,#ff4757); color:#fff; border:none; padding:0 14px; min-height:42px; border-radius:10px; font-weight:800; cursor:pointer; font-size:.84rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:13px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; transition:transform .2s,border-color .2s; }
+    .card:hover { transform:translateY(-4px); border-color:var(--gold); }
+    .card.glow { border-color:var(--gold); box-shadow:0 0 24px rgba(245,158,11,.75); }
+    .poster-wrap { position:relative; }
+    .poster-wrap img { width:100%; height:225px; object-fit:cover; display:block; }
+    .air-badge { position:absolute; top:7px; left:7px; right:7px; background:rgba(9,13,20,.9); border-left:3px solid var(--gold); color:#fde68a; font-size:.68rem; font-weight:700; padding:4px 6px; border-radius:5px; }
+    .card-body { padding:10px; display:flex; flex-direction:column; gap:6px; }
+    .card-title { font-size:.88rem; font-weight:700; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .card-meta { font-size:.75rem; color:var(--muted); }
+    .buy-btn,.merch-btn { display:block; text-align:center; color:#fff; text-decoration:none; padding:7px; border-radius:7px; font-size:.76rem; font-weight:700; }
+    .buy-btn { background:var(--green); } .merch-btn { background:var(--blue); }
+    .skeleton { height:310px; border-radius:12px; background:linear-gradient(90deg,#161b22 25%,#21262d 50%,#161b22 75%); background-size:200% 100%; animation:shimmer 1.2s infinite; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .bridge { margin:24px auto; max-width:860px; padding:14px 18px; border-radius:12px; background:linear-gradient(135deg,#181e2c,#0f172a); border:1px solid rgba(255,71,87,.45); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+    footer { text-align:center; color:var(--muted); font-size:.78rem; margin-top:22px; padding-top:14px; border-top:1px solid var(--border); }
   </style>
 </head>
 <body>
-
   <nav>
-    <a class="back-link" href="index.html">← Anime & Manga Home</a>
-    <div id="live-stats-bar" style="display:inline-flex; gap:10px; align-items:center; font-size:12px; padding:5px 12px; background:#161b22; border:1px solid #30363d; color:#f1f5f9; border-radius:999px;">
-      <span style="display:flex; align-items:center;">
-        <span style="display:inline-block; width:7px; height:7px; background:#22c55e; border-radius:50%; margin-right:5px; box-shadow:0 0 6px #22c55e;"></span>
-        <strong id="online-users" style="margin-right:3px;">0</strong> Live
-      </span>
-      <span style="color:#64748b;">|</span>
-      <span>👁️ <strong id="total-views">0</strong></span>
-    </div>
+    <a class="nav-btn back" href="index.html">← KomaVelt Home</a>
+    <a class="nav-btn tg" href="https://t.me/KomaVeltDeals" target="_blank" rel="noopener">✈️ Daily Drops: @KomaVeltDeals</a>
   </nav>
 
   <header>
-    <h1>🐉 Donghua & Manhua Hub</h1>
-    <p>3D Cultivation Donghua, Chinese Webtoons & Novel Box Sets</p>
+    <h1>🐉 KomaVelt Donghua &amp; Manhua Hub</h1>
+    <p>3D Cultivation Donghua, Chinese Webtoons &amp; Novel Box Sets</p>
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchCatalog('DONGHUA', this)">🔥 Popular Donghua</button>
-    <button class="tab-btn" onclick="switchCatalog('DONGHUA_NEW', this)">🆕 New 2026 Donghua</button>
-    <button class="tab-btn" onclick="switchCatalog('MANHUA', this)">📜 All Manhua (5,000+)</button>
+    <button class="tab-btn active" onclick="switchCat('DONGHUA',this)">🔥 Popular Donghua</button>
+    <button class="tab-btn" onclick="switchCat('DONGHUA_NEW',this)">🆕 New 2026 Donghua</button>
+    <button class="tab-btn" onclick="switchCat('MANHUA',this)">📜 All Manhua (5,000+)</button>
   </div>
 
-  <!-- 1-Second Delayed Native Ad -->
   <div class="ad-slot" id="native-ad-slot"></div>
 
   <div class="search-box">
     <input type="text" id="cnQuery" placeholder="Search Donghua or Manhua (e.g. Renegade Immortal, Soul Land)..." onkeydown="if(event.key==='Enter') searchCn()" />
     <button class="primary" onclick="searchCn()">Search</button>
+    <button class="surprise" onclick="randomPick()">🎲 Random Pick</button>
   </div>
 
-  <div id="catalog-status" style="font-size:0.8rem; color:#8b949e; margin-bottom:10px;"></div>
+  <div id="catalog-status" style="font-size:.78rem;color:var(--muted);margin-bottom:10px;"></div>
   <div class="grid" id="cn-grid"></div>
-  <div id="load-more-wrap" style="text-align:center; margin-top:18px; display:none;">
-    <button class="primary" id="loadMoreBtn" onclick="loadNextCnPage()" style="padding:11px 26px; font-size:0.9rem;">Load More Titles</button>
+  <div id="load-more-wrap" style="text-align:center;margin-top:16px;display:none;">
+    <button class="primary" id="loadMoreBtn" onclick="loadNext()" style="padding:10px 24px;">Load More Titles</button>
   </div>
 
-  <footer>
-    <p><a href="index.html" style="color:#58a6ff; text-decoration:none;">Back to AniGuide Main</a> • Live Chinese Animation & Manhua Data via AniList API</p>
-  </footer>
+  <div class="bridge">
+    <div>
+      <div style="font-weight:800;font-size:.94rem;">▶ Ready to Watch? Stream Official 1080p–4K Episodes Free</div>
+      <div style="font-size:.76rem;color:#94a3b8;">Official embeds, episode selector, auto-next &amp; live chat on AniStream.</div>
+    </div>
+    <a href="https://anistream.aniguide-hub.workers.dev/watch.html" target="_blank" rel="noopener" style="background:#ff4757;color:#fff;text-decoration:none;font-weight:800;font-size:.84rem;padding:10px 16px;border-radius:8px;">Watch on AniStream →</a>
+  </div>
+
+  <footer><a href="index.html" style="color:#58a6ff;text-decoration:none;">Back to KomaVelt Main</a> • Live Data via AniList API</footer>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
-    const AMAZON_TAG = "aniguide-21";
-    const FIREBASE_DB_URL = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const AMAZON_TAG = "aniguide-21", DB_URL = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
+    if (!firebase.apps.length) firebase.initializeApp({ databaseURL: DB_URL });
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
+    let page = 1, mode = "DONGHUA", q = null, hasNext = true, loading = false;
+    function switchCat(m, btn) { document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); document.getElementById("cnQuery").value=""; loadCn(null,m,false); }
+    const searchCn = () => loadCn(document.getElementById("cnQuery").value.trim()||null, mode, false);
+    const loadNext = () => { if (hasNext && !loading) { page++; loadCn(q, mode, true); } };
+    function randomPick() {
+      const cards = document.querySelectorAll("#cn-grid .card"); if (!cards.length) return;
+      cards.forEach(c=>c.classList.remove("glow"));
+      const pick = cards[Math.floor(Math.random()*cards.length)];
+      pick.classList.add("glow"); pick.scrollIntoView({behavior:"smooth",block:"center"});
     }
 
-    let cnPage = 1;
-    let cnMode = "DONGHUA";
-    let cnSearch = null;
-    let cnHasNext = true;
-    let cnLoading = false;
-
-    function switchCatalog(mode, btn) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('cnQuery').value = '';
-      loadCnCatalog(null, mode, false);
-    }
-
-    function searchCn() {
-      const q = document.getElementById('cnQuery').value.trim();
-      loadCnCatalog(q || null, cnMode, false);
-    }
-
-    function loadNextCnPage() {
-      if (!cnHasNext || cnLoading) return;
-      cnPage++;
-      loadCnCatalog(cnSearch, cnMode, true);
-    }
-
-    async function loadCnCatalog(searchQuery = null, mode = "DONGHUA", append = false) {
-      if (cnLoading) return;
-      cnLoading = true;
-
-      const grid = document.getElementById('cn-grid');
-      const loadWrap = document.getElementById('load-more-wrap');
-      const loadBtn = document.getElementById('loadMoreBtn');
-      const statusEl = document.getElementById('catalog-status');
-
-      if (!append) {
-        cnPage = 1;
-        cnMode = mode;
-        cnSearch = searchQuery;
-        grid.innerHTML = Array(12).fill('<div class="skeleton"></div>').join('');
-        loadWrap.style.display = 'none';
-      } else if (loadBtn) {
-        loadBtn.textContent = 'Loading more...';
-      }
-
-      const isManhua = (mode === "MANHUA");
-      const mediaType = isManhua ? "MANGA" : "ANIME";
-      const sortOrder = (mode === "DONGHUA_NEW") ? ["START_DATE_DESC"] : ["POPULARITY_DESC"];
-
-      const query = `
-        query ($page: Int, $search: String, $type: MediaType, $sort: [MediaSort]) {
-          Page(page: $page, perPage: 48) {
-            pageInfo { total hasNextPage }
-            media(search: $search, type: $type, countryOfOrigin: "CN", sort: $sort, isAdult: false) {
-              id
-              type
-              title { english romaji }
-              episodes
-              chapters
-              status
-              averageScore
-              coverImage { large }
-            }
-          }
-        }
-      `;
-
-      const vars = {
-        page: cnPage,
-        type: mediaType,
-        sort: searchQuery ? ["SEARCH_MATCH"] : sortOrder
-      };
-      if (searchQuery) vars.search = searchQuery;
-
+    async function loadCn(search = null, m = "DONGHUA", append = false) {
+      if (loading) return; loading = true;
+      const grid = document.getElementById("cn-grid"), wrap = document.getElementById("load-more-wrap");
+      if (!append) { page=1; mode=m; q=search; grid.innerHTML=Array(10).fill('<div class="skeleton"></div>').join(""); wrap.style.display="none"; }
+      const isManhua = m === "MANHUA";
+      const vars = { page, type: isManhua?"MANGA":"ANIME", sort: search?["SEARCH_MATCH"]:m==="DONGHUA_NEW"?["START_DATE_DESC"]:["POPULARITY_DESC"] };
+      if (search) vars.search = search;
+      const gql = `query($page:Int,$search:String,$type:MediaType,$sort:[MediaSort]){Page(page:$page,perPage:40){pageInfo{total hasNextPage}media(search:$search,type:$type,countryOfOrigin:"CN",sort:$sort,isAdult:false){id title{english romaji}episodes chapters status averageScore coverImage{large}}}}`;
       try {
-        const res = await fetch('https://graphql.anilist.co', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ query, variables: vars })
-        });
-        const json = await res.json();
-        const pageData = json.data.Page;
-        const list = pageData.media;
-        cnHasNext = pageData.pageInfo.hasNextPage;
-
-        if (!append && !list.length) {
-          grid.innerHTML = 'No Donghua or Manhua found. Try another search.';
-          statusEl.textContent = '';
-          cnLoading = false;
-          return;
-        }
-
-        const html = list.map(item => {
-          const title = item.title.english || item.title.romaji;
-          const badge = isManhua
-            ? `MANHUA • ${item.chapters ? item.chapters + ' Ch' : item.status}`
-            : `DONGHUA • ${item.episodes ? item.episodes + ' Eps' : item.status}`;
-          const novelUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' novel manga')}&tag=${AMAZON_TAG}`;
-          const merchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(title + ' figure merch')}&tag=${AMAZON_TAG}`;
-
-          return `
-            <div class="card">
-              <div class="poster-wrap">
-                <img src="${item.coverImage.large}" alt="${title}" loading="lazy" />
-                <div class="air-badge">${badge}</div>
+        const pd = (await (await fetch("https://graphql.anilist.co",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:gql,variables:vars})})).json()).data.Page;
+        hasNext = pd.pageInfo.hasNextPage;
+        const html = pd.media.map(i => {
+          const t = i.title.english || i.title.romaji;
+          const badge = isManhua ? `MANHUA • ${i.chapters?i.chapters+" Ch":i.status}` : `DONGHUA • ${i.episodes?i.episodes+" Eps":i.status}`;
+          return `<div class="card"><div class="poster-wrap"><img src="${i.coverImage.large}" alt="${t}" loading="lazy" /><div class="air-badge">${badge}</div></div>
+            <div class="card-body"><div class="card-title">${t}</div><div class="card-meta">⭐ ${i.averageScore?(i.averageScore/10).toFixed(1):"Top"} • ${i.status}</div>
+              <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+                <a class="buy-btn" href="https://www.amazon.in/s?k=${encodeURIComponent(t+' novel manga')}&tag=${AMAZON_TAG}" target="_blank" rel="nofollow noopener">Novels &amp; Books</a>
+                <a class="merch-btn" href="https://www.amazon.in/s?k=${encodeURIComponent(t+' figure merch')}&tag=${AMAZON_TAG}" target="_blank" rel="nofollow noopener">Figures &amp; Merch</a>
               </div>
-              <div class="card-body">
-                <div class="card-title">${title}</div>
-                <div class="card-meta">Score: ${item.averageScore ? (item.averageScore / 10).toFixed(1) : 'Top'} • ${item.status}</div>
-                <div class="btn-row">
-                  <a class="buy-btn" href="${novelUrl}" target="_blank" rel="nofollow noopener">Novels & Books</a>
-                  <a class="merch-btn" href="${merchUrl}" target="_blank" rel="nofollow noopener">Figures & Merch</a>
-                </div>
-              </div>
-            </div>`;
-        }).join('');
-
-        if (append) {
-          grid.insertAdjacentHTML('beforeend', html);
-        } else {
-          grid.innerHTML = html;
-        }
-
-        const loadedCount = grid.querySelectorAll('.card').length;
-        const totalAvail = pageData.pageInfo.total ? Number(pageData.pageInfo.total).toLocaleString() : '5,000+';
-        statusEl.textContent = `Showing ${loadedCount.toLocaleString()} of ${totalAvail} Chinese ${isManhua ? 'Manhua' : 'Donghua'} titles`;
-
-        if (cnHasNext) {
-          loadWrap.style.display = 'block';
-          loadBtn.textContent = `Load More (${loadedCount.toLocaleString()} loaded)`;
-        } else {
-          loadWrap.style.display = 'none';
-        }
-      } catch (e) {
-        if (!append) grid.innerHTML = 'Could not load catalog. Check internet and refresh.';
-      } finally {
-        cnLoading = false;
-      }
+            </div></div>`;
+        }).join("");
+        append ? grid.insertAdjacentHTML("beforeend", html) : (grid.innerHTML = html || "No results found.");
+        document.getElementById("catalog-status").textContent = `Showing ${grid.querySelectorAll(".card").length} of ${(pd.pageInfo.total||5000).toLocaleString()} titles`;
+        wrap.style.display = hasNext ? "block" : "none";
+      } catch { if (!append) grid.innerHTML = "Could not load catalog."; } finally { loading = false; }
     }
 
-    window.addEventListener('scroll', () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
-        loadNextCnPage();
-      }
-    });
+    window.addEventListener("scroll", () => { if (innerHeight + scrollY >= document.body.offsetHeight - 600) loadNext(); });
+    window.addEventListener("DOMContentLoaded", () => setTimeout(() => {
+      const slot = document.getElementById("native-ad-slot");
+      slot.innerHTML = '<div id="container-f1020225a43a6e61284781660ae4e2a1"></div>';
+      const s = document.createElement("script"); s.async = true; s.setAttribute("data-cfasync","false"); s.src = "https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1"; slot.appendChild(s);
+    }, 1000));
 
-    // 1-Second Delayed Native Ad
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const slot = document.getElementById('native-ad-slot');
-        if (!slot || slot.dataset.loaded) return;
-        slot.dataset.loaded = 'true';
-
-        const container = document.createElement('div');
-        container.id = 'container-f1020225a43a6e61284781660ae4e2a1';
-        slot.appendChild(container);
-
-        const s = document.createElement('script');
-        s.async = true;
-        s.setAttribute('data-cfasync', 'false');
-        s.src = 'https://bicea.org/21/f1020225a43a6e61284781660ae4e2a1';
-        slot.appendChild(s);
-      }, 1000);
-    });
-
-    // Firebase Live Visitors & Views (Excludes Owner)
+    // Silent Admin-Only Analytics (Excludes Owner)
     (function () {
-      if (location.search.includes('admin=true')) {
-        localStorage.setItem('aniguide_ignore_me', 'true');
-      }
-      const isOwner = localStorage.getItem('aniguide_ignore_me') === 'true';
-      const db = firebase.database();
-      const pageSlug = 'donghua_manhua_html';
-      const viewsRef = db.ref(`analytics/views/${pageSlug}`);
-      const onlineListRef = db.ref('analytics/online');
-
-      const sessionKey = 'viewed_' + pageSlug;
-      if (!isOwner && !sessionStorage.getItem(sessionKey)) {
-        viewsRef.set(firebase.database.ServerValue.increment(1));
-        sessionStorage.setItem(sessionKey, '1');
-      }
-
-      viewsRef.on('value', (snap) => {
-        document.getElementById('total-views').textContent = (snap.val() || 0).toLocaleString();
-      });
-
-      if (!isOwner) {
-        db.ref('.info/connected').on('value', (snap) => {
-          if (snap.val() === true) {
-            const userRef = onlineListRef.push();
-            userRef.onDisconnect().remove();
-            userRef.set({ page: pageSlug, joinedAt: firebase.database.ServerValue.TIMESTAMP });
-          }
-        });
-      }
-
-      onlineListRef.on('value', (snap) => {
-        document.getElementById('online-users').textContent = snap.numChildren();
-      });
+      if (location.search.includes("admin=true")) localStorage.setItem("aniguide_ignore_me","true");
+      if (localStorage.getItem("aniguide_ignore_me") === "true") return;
+      const db = firebase.database(), slug = "donghua_manhua_html";
+      if (!sessionStorage.getItem("viewed_"+slug)) { db.ref(`analytics/views/${slug}`).set(firebase.database.ServerValue.increment(1)); sessionStorage.setItem("viewed_"+slug,"1"); }
+      db.ref(".info/connected").on("value", s => { if (s.val()) { const r = db.ref("analytics/online").push(); r.onDisconnect().remove(); r.set({page:slug,joinedAt:firebase.database.ServerValue.TIMESTAMP}); } });
     })();
-
-    loadCnCatalog(null, 'DONGHUA', false);
+    loadCn();
   </script>
   <script data-cfasync="false" src="https://bicea.org/14/1ecfac0403e1bd6f4edc371cd8359df1"></script>
-
-<div id="anistream-bridge-cta" style="margin:24px auto;max-width:860px;padding:14px 18px;border-radius:12px;background:linear-gradient(135deg,#181e2c,#0f172a);border:1px solid rgba(255,71,87,0.45);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;color:#f1f5f9;">
-  <div>
-    <div style="font-weight:800;font-size:0.95rem;">▶ Ready to Watch? Stream Official 1080p–4K Episodes Free</div>
-    <div style="font-size:0.78rem;color:#94a3b8;">Official embeds, episode selector, auto-next & live community chat on AniStream.</div>
-  </div>
-  <a href="https://anistream.aniguide-hub.workers.dev/watch.html" target="_blank" rel="noopener" style="background:#ff4757;color:#fff;text-decoration:none;font-weight:800;font-size:0.85rem;padding:10px 16px;border-radius:8px;white-space:nowrap;">Watch on AniStream →</a>
-</div>
-
 </body>
 </html>
