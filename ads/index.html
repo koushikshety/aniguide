@@ -31,8 +31,7 @@
     <div id="grid" class="grid"></div>
 
     <div class="card">
-      <h2>Adsterra Snippet Vault (Saved Locally on Device)</h2>
-      <p class="sub">Paste your Adsterra scripts here once so you can copy them anytime from your phone.</p>
+      <h2>Adsterra Snippet Vault (Saved Locally)</h2>
       <textarea id="nativeSlot" placeholder="Paste Adsterra Native Banner script here..."></textarea>
       <textarea id="socialSlot" placeholder="Paste Adsterra Social Bar script here..."></textarea>
       <div class="btns">
@@ -46,6 +45,7 @@
 
   <script>
     let campaigns = [];
+    let filtered = [];
     const grid = document.getElementById("grid");
     const toast = document.getElementById("toast");
 
@@ -58,6 +58,14 @@
       if (!txt) return showToast("Empty!");
       navigator.clipboard.writeText(txt).then(() => showToast(label + " copied"));
     }
+    function copyField(idx, type) {
+      const c = filtered[idx];
+      if (!c) return;
+      if (type === "hook") copyText(c.hookHeadline + "\n\n" + c.hookBody, "Ad Hook");
+      if (type === "dm") copyText(c.dmReply, "ManyChat DM");
+      if (type === "pin") copyText((c.pinterestTitle || c.title) + "\n\n" + (c.pinterestDesc || c.hookBody), "Pinterest Copy");
+      if (type === "amazon") copyText(c.amazonUrl || c.targetUrl, "Amazon Link");
+    }
     function saveVault() {
       localStorage.setItem("adsterra_native", document.getElementById("nativeSlot").value);
       localStorage.setItem("adsterra_social", document.getElementById("socialSlot").value);
@@ -68,24 +76,24 @@
 
     function render() {
       const q = document.getElementById("searchInput").value.trim().toLowerCase();
-      const list = campaigns.filter(c => (c.title + c.hookHeadline + c.targetUrl).toLowerCase().includes(q));
-      grid.innerHTML = list.map(c => `
+      filtered = campaigns.filter(c => (c.title + c.hookHeadline + c.targetUrl).toLowerCase().includes(q));
+      grid.innerHTML = filtered.map((c, i) => `
         <article class="card">
           <span class="tag">${c.channel} • ${c.keyword}</span>
           <h2>${c.title}</h2>
           <p style="font-size:0.88rem;margin:6px 0;"><strong>${c.hookHeadline}</strong></p>
           <p style="color:#cbd5e1;font-size:0.84rem;margin:0 0 8px;">${c.hookBody}</p>
           <div class="btns">
-            <button onclick='copyText(${JSON.stringify(c.hookHeadline + "\n\n" + c.hookBody)}, "Ad Hook")'>Copy Hook</button>
-            <button class="sec" onclick='copyText(${JSON.stringify(c.dmReply)}, "ManyChat DM")'>Copy DM</button>
-            <button class="sec" onclick='copyText(${JSON.stringify(c.pinterestTitle + "\n\n" + c.pinterestDesc)}, "Pinterest Copy")'>Copy Pin</button>
-            <button class="sec" onclick='copyText(${JSON.stringify(c.amazonUrl)}, "Amazon Link")'>Copy Amazon</button>
+            <button type="button" onclick="copyField(${i}, 'hook')">Copy Hook</button>
+            <button type="button" class="sec" onclick="copyField(${i}, 'dm')">Copy DM</button>
+            <button type="button" class="sec" onclick="copyField(${i}, 'pin')">Copy Pin</button>
+            <button type="button" class="sec" onclick="copyField(${i}, 'amazon')">Copy Amazon</button>
             <a class="btn sec" href="${c.targetUrl}" target="_blank">Open Page</a>
           </div>
         </article>
       `).join("");
     }
-    fetch("./campaigns.json").then(r => r.json()).then(d => { campaigns = d; render(); });
+    fetch("./campaigns.json?v=" + Date.now()).then(r => r.json()).then(d => { campaigns = d; render(); });
     document.getElementById("searchInput").addEventListener("input", render);
   </script>
 </body>
