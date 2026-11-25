@@ -70,7 +70,9 @@ def update_daily_donghua(post_to_telegram_fn=None):
             if img_url:
                 tmp_img = f"/tmp/donghua_{m['id']}.jpg"
                 try:
-                    urllib.request.urlretrieve(img_url, tmp_img)
+                    req_img = urllib.request.Request(img_url, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req_img, timeout=20) as r, open(tmp_img, "wb") as out_f:
+                        out_f.write(r.read())
                     tg_link = f"{SITE_URL}donghua-manhua.html?utm_source=telegram&utm_medium=channel"
                     post_to_telegram_fn(tmp_img, f"{title} (Donghua)", genres, short_desc, tg_link)
                 except Exception as e:
