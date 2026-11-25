@@ -4,52 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>AniGuide Admin Control</title>
+  <title>KomaVelt Admin Control</title>
+  <link rel="icon" type="image/png" href="/assets/Komavelt.png" />
   <style>
-    :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --accent: #ff4757; --green: #238636; --blue: #1f6feb; --purple: #7c3aed; --text: #f0f6fc; --muted: #8b949e; }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 16px; max-width: 900px; margin: auto; }
-    h1 { color: var(--accent); font-size: 1.5rem; margin-bottom: 14px; }
-    .box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .box h2 { font-size: 1.05rem; margin-bottom: 10px; color: #ff8b96; }
-    input, textarea {
-      width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text);
-      padding: 10px 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 10px;
-    }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    button {
-      background: var(--accent); color: #fff; border: none; padding: 9px 14px;
-      border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.82rem;
-    }
-    button.green { background: var(--green); }
-    button.blue { background: var(--blue); }
-    button.purple { background: var(--purple); }
-    button.gray { background: #30363d; }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-    .stat { background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 8px; text-align: center; }
-    .stat strong { display: block; font-size: 1.3rem; color: var(--accent); }
-    .other-notes {
-      margin-top: 12px; padding: 11px 13px; background: var(--bg);
-      border: 1px solid var(--border); border-radius: 8px; font-size: 0.84rem;
-      color: #c9d1d9; line-height: 1.6;
-    }
-    .sub-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
-    .sub-tab {
-      background: var(--bg); border: 1px solid var(--border); color: var(--muted);
-      padding: 7px 14px; border-radius: 20px; font-size: 0.82rem; cursor: pointer;
-    }
-    .sub-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .c-card { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
-    .c-card.unread { border-left: 3px solid var(--accent); }
-    .c-head { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; gap: 8px; }
-    .c-text { font-size: 0.9rem; margin-bottom: 10px; line-height: 1.45; }
-    .admin-badge { background: var(--accent); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 6px; }
-    #panel { display: none; }
+    :root { --bg:#090d14; --card:#161b22; --border:#30363d; --accent:#ff4757; --green:#238636; --blue:#1f6feb; --purple:#7c3aed; --gold:#f59e0b; --text:#f0f6fc; --muted:#8b949e; }
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,sans-serif; }
+    body { background:var(--bg); color:var(--text); padding:16px; max-width:900px; margin:auto; }
+    h1 { color:var(--accent); font-size:1.5rem; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+    .badge { font-size:.72rem; padding:4px 10px; border-radius:999px; background:#1f2937; color:#22c55e; border:1px solid #374151; font-weight:700; }
+    .box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; }
+    .box h2 { font-size:1.02rem; margin-bottom:10px; color:#ff8b96; }
+    input { width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:10px 12px; border-radius:8px; font-size:.9rem; margin-bottom:10px; outline:none; }
+    input:focus { border-color:var(--accent); }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    button { background:var(--accent); color:#fff; border:none; padding:9px 14px; border-radius:8px; font-weight:700; cursor:pointer; font-size:.82rem; }
+    button.green { background:var(--green); } button.blue { background:var(--blue); }
+    button.purple { background:var(--purple); } button.gold { background:var(--gold); color:#090d14; } button.gray { background:#30363d; }
+    .stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px; }
+    .stat { background:var(--bg); border:1px solid var(--border); padding:10px; border-radius:8px; text-align:center; }
+    .stat strong { display:block; font-size:1.35rem; color:var(--accent); }
+    .notes-box { margin-top:12px; padding:11px 13px; background:var(--bg); border:1px solid var(--border); border-radius:8px; font-size:.84rem; color:#c9d1d9; line-height:1.65; max-height:220px; overflow-y:auto; }
+    .sub-tabs { display:flex; gap:8px; margin-bottom:12px; }
+    .sub-tab { background:var(--bg); border:1px solid var(--border); color:var(--muted); padding:7px 14px; border-radius:20px; font-size:.82rem; cursor:pointer; }
+    .sub-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .c-card { background:var(--bg); border:1px solid var(--border); padding:12px; border-radius:8px; margin-bottom:10px; }
+    .c-card.unread { border-left:3px solid var(--accent); }
+    .c-head { display:flex; justify-content:space-between; font-size:.8rem; color:var(--muted); margin-bottom:6px; gap:8px; }
+    .c-text { font-size:.9rem; margin-bottom:10px; line-height:1.45; }
+    .admin-badge { background:var(--accent); color:#fff; padding:2px 6px; border-radius:4px; font-size:.7rem; margin-left:6px; }
+    .list-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #21262d; font-size:.82rem; }
+    #panel { display:none; }
   </style>
 </head>
 <body>
 
-  <h1>🛡️ AniGuide Owner Dashboard</h1>
+  <h1>
+    <span>🛡️ KomaVelt Owner Dashboard</span>
+    <span id="owner-status-badge" class="badge">✓ Your Device Ignored</span>
+  </h1>
 
   <!-- Login Gate -->
   <div class="box" id="loginBox">
@@ -58,38 +50,41 @@
     <button onclick="unlockAdmin()">Unlock Dashboard</button>
   </div>
 
+  <!-- Protected Admin Panel -->
   <div id="panel">
-    <!-- 1. Top Notice Bar Control -->
+    <!-- 1. Top Notice Bar -->
     <div class="box">
       <h2>1. Top Notice Banner (Stays until you remove it)</h2>
-      <input type="text" id="noticeText" placeholder="e.g. Server busy — all functions work normally until next Monday." />
+      <input type="text" id="noticeText" placeholder="e.g. ✨ Welcome to KomaVelt, nakama! 💖..." />
       <div class="row">
         <button class="green" onclick="saveNotice(true)">Publish Notice</button>
-        <button class="gray" onclick="saveNotice(false)">Remove Notice</button>
+        <button class="gold" onclick="fillWelcome()">✨ Fill Warm Welcome</button>
+        <button class="gray" onclick="saveNotice(false)">Hide Notice</button>
       </div>
-      <p id="noticeStatus" style="font-size:0.8rem;color:var(--muted);margin-top:8px;"></p>
+      <p id="noticeStatus" style="font-size:.8rem;color:var(--muted);margin-top:8px;"></p>
     </div>
 
-    <!-- 2. Create New One-Time Popup for All Visitors -->
+    <!-- 2. Dynamic / Custom Feedback Popup -->
     <div class="box">
-      <h2>2. Push New One-Time Popup (To Both New & Old Visitors)</h2>
-      <input type="text" id="popTitle" placeholder="Popup Question (e.g. Which 2026 anime guide should we add next?)" />
-      <input type="text" id="popOptions" placeholder="Comma-separated options (e.g. Instagram, Friends, YouTube, Google, Telegram, Other)" />
+      <h2>2. Visitor Feedback Popup Control</h2>
+      <input type="text" id="popTitle" placeholder="Custom Question (e.g. Which 2026 anime guide should we add next?)" />
+      <input type="text" id="popOptions" placeholder="Comma-separated options (e.g. Instagram, YouTube, Telegram, Pinterest, Other)" />
       <div class="row">
-        <button class="blue" onclick="publishPopup()">Push New Popup Now</button>
+        <button class="blue" onclick="publishPopup()">Push Custom Popup</button>
+        <button class="purple" onclick="useDynamicPopup()">🔄 Use Daily Auto-Rotating Questions</button>
         <button class="gray" onclick="disablePopup()">Turn Off Popup</button>
       </div>
-      <p id="popupStatus" style="font-size:0.8rem;color:var(--muted);margin-top:8px;"></p>
+      <p id="popupStatus" style="font-size:.8rem;color:var(--muted);margin-top:8px;"></p>
     </div>
 
-    <!-- 3. Visitor Feedback & Survey Stats -->
+    <!-- 3. Visitor Survey & Comments -->
     <div class="box">
-      <h2>3. Visitor Survey & Feedback Answers</h2>
+      <h2>3. Visitor Survey &amp; Feedback Answers</h2>
       <div class="stat-grid" id="surveyStats">Loading...</div>
       <div id="otherNotesWrap"></div>
     </div>
 
-    <!-- 4. All Comments & Admin Reply -->
+    <!-- 4. Comments Inbox -->
     <div class="box">
       <h2>4. Anime Comments Inbox</h2>
       <div class="sub-tabs">
@@ -99,125 +94,47 @@
       <input type="text" id="commentSearch" placeholder="Filter by anime title, user name, or text..." oninput="renderComments()" />
       <div id="allComments">Loading comments...</div>
     </div>
+
+    <!-- 5. Live Visitors & Page Views (Protected Behind PIN) -->
+    <div class="box">
+      <h2>5. Live Visitors &amp; Total Site Views (Excludes You)</h2>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:14px;">
+        <div class="stat">
+          <span style="font-size:.72rem;color:var(--muted);">🟢 LIVE WATCHING NOW</span>
+          <strong id="admin-live-count" style="color:#22c55e;">0</strong>
+        </div>
+        <div class="stat">
+          <span style="font-size:.72rem;color:var(--muted);">👁️ TOTAL SITE VIEWS</span>
+          <strong id="admin-total-views" style="color:#38bdf8;">0</strong>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:.78rem;color:var(--muted);margin-bottom:6px;font-weight:600;">Active Visitors Right Now (By Page):</div>
+        <div id="admin-active-pages" class="notes-box" style="margin-top:0;">No active visitors right now.</div>
+      </div>
+
+      <div>
+        <div class="row" style="justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:.78rem;color:var(--muted);font-weight:600;">Views Breakdown Per Page:</span>
+          <button class="gray" style="padding:4px 10px;font-size:.74rem;color:#f85149;" onclick="resetAnalyticsViews()">Reset Counts</button>
+        </div>
+        <div id="admin-views-breakdown" class="notes-box" style="margin-top:0;">Loading views...</div>
+      </div>
+    </div>
   </div>
 
-  
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
-    if (!firebase.apps.length) {
-      firebase.initializeApp({ databaseURL: "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app" });
-    }
-  </script>
-<div id="admin-analytics-card" class="card" style="background:#161b22; border:1px solid #30363d; border-radius:10px; padding:16px; margin-top:16px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-      <h3 style="margin:0; color:#ff4757; font-size:1rem;">5. Live Visitors &amp; Page Views</h3>
-      <span id="owner-status-badge" style="font-size:11px; padding:3px 8px; border-radius:999px; background:#1f2937; color:#22c55e; border:1px solid #374151;"></span>
-    </div>
-
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-bottom:14px;">
-      <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:12px;">
-        <div style="font-size:11px; color:#8b949e; margin-bottom:4px;">🟢 LIVE WATCHING NOW</div>
-        <div id="admin-live-count" style="font-size:1.6rem; font-weight:700; color:#22c55e;">0</div>
-      </div>
-      <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:12px;">
-        <div style="font-size:11px; color:#8b949e; margin-bottom:4px;">👁️ TOTAL SITE VIEWS</div>
-        <div id="admin-total-views" style="font-size:1.6rem; font-weight:700; color:#38bdf8;">0</div>
-      </div>
-    </div>
-
-    <div style="margin-bottom:12px;">
-      <div style="font-size:12px; color:#8b949e; margin-bottom:6px; font-weight:600;">Active Visitors Right Now (By Page):</div>
-      <div id="admin-active-pages" style="font-size:12px; color:#c9d1d9; background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:10px;">No active visitors right now.</div>
-    </div>
-
-    <div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <span style="font-size:12px; color:#8b949e; font-weight:600;">Views Breakdown Per Guide:</span>
-        <button onclick="resetAnalyticsViews()" style="background:#21262d; color:#f85149; border:1px solid #30363d; border-radius:6px; padding:4px 10px; font-size:11px; cursor:pointer;">Reset Counts</button>
-      </div>
-      <div id="admin-views-breakdown" style="font-size:12px; color:#c9d1d9; background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:10px; max-height:240px; overflow-y:auto;">Loading views...</div>
-    </div>
-  </div>
-
-
-<script>
-(function () {
-  localStorage.setItem('aniguide_ignore_me', 'true');
-  const badge = document.getElementById('owner-status-badge');
-  if (badge) badge.textContent = '✓ Your Device Ignored';
-
-  function initAdminAnalytics() {
-    if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
-      setTimeout(initAdminAnalytics, 300);
-      return;
-    }
-    const db = firebase.database();
-
-    // 1. Live active visitors & which page they are viewing
-    db.ref('analytics/online').on('value', (snap) => {
-      const countEl = document.getElementById('admin-live-count');
-      const activeBox = document.getElementById('admin-active-pages');
-      if (countEl) countEl.textContent = snap.numChildren();
-
-      if (!activeBox) return;
-      if (!snap.exists()) {
-        activeBox.textContent = 'No active visitors right now.';
-        return;
-      }
-      const pageCounts = {};
-      snap.forEach((child) => {
-        const p = (child.val() && child.val().page) || 'home';
-        pageCounts[p] = (pageCounts[p] || 0) + 1;
-      });
-      activeBox.innerHTML = Object.entries(pageCounts)
-        .map(([page, cnt]) => `<div style="display:flex; justify-content:space-between; padding:3px 0;"><span>📄 ${page}</span><strong style="color:#22c55e;">${cnt} online</strong></div>`)
-        .join('');
-    });
-
-    // 2. Total & per-page views breakdown
-    db.ref('analytics/views').on('value', (snap) => {
-      const totalEl = document.getElementById('admin-total-views');
-      const listEl = document.getElementById('admin-views-breakdown');
-      const data = snap.val() || {};
-
-      let total = 0;
-      const entries = Object.entries(data).sort((a, b) => b[1] - a[1]);
-      entries.forEach(([, v]) => { total += Number(v) || 0; });
-
-      if (totalEl) totalEl.textContent = total.toLocaleString();
-      if (!listEl) return;
-
-      if (entries.length === 0) {
-        listEl.textContent = 'No views recorded yet.';
-        return;
-      }
-      listEl.innerHTML = entries
-        .map(([page, cnt]) => `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #21262d;"><span>${page}</span><strong style="color:#38bdf8;">${Number(cnt).toLocaleString()}</strong></div>`)
-        .join('');
-    });
-  }
-
-  window.resetAnalyticsViews = function () {
-    if (!confirm('Reset all page view counts to 0?')) return;
-    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-      firebase.database().ref('analytics/views').remove();
-    }
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAdminAnalytics);
-  } else {
-    initAdminAnalytics();
-  }
-})();
-</script>
-
-<script>
     const DB = "https://aniguide-web-default-rtdb.asia-southeast1.firebasedatabase.app";
+    if (!firebase.apps.length) firebase.initializeApp({ databaseURL: DB });
+    localStorage.setItem("aniguide_ignore_me", "true");
+
     let ADMIN_PIN = sessionStorage.getItem("ag_admin_pin") || "";
     let cachedComments = [];
     let currentFilter = "new";
+    let analyticsStarted = false;
 
     if (ADMIN_PIN) unlockAdmin(true);
 
@@ -237,12 +154,15 @@
       document.getElementById("loginBox").style.display = "none";
       document.getElementById("panel").style.display = "block";
       loadDashboard();
+      if (!analyticsStarted) { analyticsStarted = true; startLiveAnalytics(); }
+    }
+
+    function fillWelcome() {
+      document.getElementById("noticeText").value = "✨ Welcome to KomaVelt, nakama! 💖 So glad you're here — grab your favorite watch orders, explore 5,000+ Donghua, and make yourself at home! 🎌🔥";
     }
 
     async function loadDashboard() {
-      // 1. Load Config
-      const cfgRes = await fetch(`${DB}/site_config.json`);
-      const cfg = (await cfgRes.json()) || {};
+      const cfg = (await (await fetch(`${DB}/site_config.json`)).json()) || {};
       if (cfg.notice) {
         document.getElementById("noticeText").value = cfg.notice.text || "";
         document.getElementById("noticeStatus").textContent = cfg.notice.active ? "Status: LIVE on website" : "Status: Hidden";
@@ -250,47 +170,71 @@
       if (cfg.popup) {
         document.getElementById("popTitle").value = cfg.popup.title || "";
         document.getElementById("popOptions").value = (cfg.popup.options || []).join(", ");
-        document.getElementById("popupStatus").textContent = cfg.popup.active ? `Active Popup ID: ${cfg.popup.id}` : "Popup Off";
+        document.getElementById("popupStatus").textContent = cfg.popup.active === false
+          ? "Popup: Turned Off"
+          : (cfg.popup.id ? `Custom Popup Active (${cfg.popup.id})` : "Mode: Daily Auto-Rotating Questions");
+      } else {
+        document.getElementById("popupStatus").textContent = "Mode: Daily Auto-Rotating Questions";
       }
 
-      // 2. Load Survey Answers
-      const sRes = await fetch(`${DB}/visitor_sources.json`);
-      const sData = (await sRes.json()) || {};
-      const counts = {};
-      const otherNotes = [];
+      // Survey Stats + All Custom Comments
+      const sData = (await (await fetch(`${DB}/visitor_sources.json`)).json()) || {};
+      const counts = {}, notes = [];
       Object.values(sData).forEach(item => {
-        if (item && item.source) {
-          counts[item.source] = (counts[item.source] || 0) + 1;
-          if (item.detail) {
-            const when = item.time ? new Date(item.time).toLocaleDateString() : "";
-            otherNotes.push(`• <strong>${item.detail}</strong> <small style="color:var(--muted);">(${when})</small>`);
-          }
+        if (!item || !item.source) return;
+        counts[item.source] = (counts[item.source] || 0) + 1;
+        if (item.detail) {
+          const when = item.time ? new Date(item.time).toLocaleDateString() : "";
+          notes.push(`• <span style="color:#ff8b96;">[${item.source}]</span> <strong>${item.detail}</strong> <small style="color:var(--muted);">(${when})</small>`);
         }
       });
 
       document.getElementById("surveyStats").innerHTML = Object.keys(counts).length
         ? Object.entries(counts).map(([k, v]) => `<div class="stat"><strong>${v}</strong><span>${k}</span></div>`).join("")
-        : "<p style='color:var(--muted);font-size:0.85rem;'>No survey responses yet.</p>";
+        : "<p style='color:var(--muted);font-size:.85rem;'>No survey responses yet.</p>";
 
-      document.getElementById("otherNotesWrap").innerHTML = otherNotes.length
-        ? `<div class="other-notes"><strong style="color:#ff8b96;display:block;margin-bottom:4px;">Custom "Other" Visitor Responses:</strong>${otherNotes.reverse().join("<br>")}</div>`
+      document.getElementById("otherNotesWrap").innerHTML = notes.length
+        ? `<div class="notes-box"><strong style="color:#ff8b96;display:block;margin-bottom:4px;">Visitor Feedback Comments:</strong>${notes.reverse().join("<br>")}</div>`
         : "";
 
-      // 3. Load All Comments
-      const cRes = await fetch(`${DB}/comments.json`);
-      const cData = (await cRes.json()) || {};
+      // Comments
+      const cData = (await (await fetch(`${DB}/comments.json`)).json()) || {};
       cachedComments = [];
-
       Object.entries(cData).forEach(([animeId, thread]) => {
         if (!thread) return;
         Object.entries(thread).forEach(([commentId, c]) => {
-          if (!c || !c.text) return;
-          cachedComments.push({ animeId, commentId, ...c });
+          if (c && c.text) cachedComments.push({ animeId, commentId, ...c });
         });
       });
-
       cachedComments.reverse();
       renderComments();
+    }
+
+    function startLiveAnalytics() {
+      const db = firebase.database();
+      db.ref("analytics/online").on("value", snap => {
+        document.getElementById("admin-live-count").textContent = snap.numChildren();
+        const box = document.getElementById("admin-active-pages");
+        if (!snap.exists()) { box.textContent = "No active visitors right now."; return; }
+        const pages = {};
+        snap.forEach(c => { const p = (c.val() && c.val().page) || "home"; pages[p] = (pages[p] || 0) + 1; });
+        box.innerHTML = Object.entries(pages).map(([p, cnt]) => `<div class="list-row"><span>📄 ${p}</span><strong style="color:#22c55e;">${cnt} online</strong></div>`).join("");
+      });
+
+      db.ref("analytics/views").on("value", snap => {
+        const data = snap.val() || {};
+        const entries = Object.entries(data).sort((a, b) => b[1] - a[1]);
+        const total = entries.reduce((sum, [, v]) => sum + (Number(v) || 0), 0);
+        document.getElementById("admin-total-views").textContent = total.toLocaleString();
+        document.getElementById("admin-views-breakdown").innerHTML = entries.length
+          ? entries.map(([p, cnt]) => `<div class="list-row"><span>${p}</span><strong style="color:#38bdf8;">${Number(cnt).toLocaleString()}</strong></div>`).join("")
+          : "No views recorded yet.";
+      });
+    }
+
+    function resetAnalyticsViews() {
+      if (!confirm("Reset all page view counts to 0?")) return;
+      firebase.database().ref("analytics/views").remove();
     }
 
     function switchCommentFilter(mode, btn) {
@@ -311,108 +255,80 @@
         const isSeen = Boolean(c.seen || c.isAdmin);
         if (currentFilter === "new" && isSeen) return false;
         if (currentFilter === "seen" && !isSeen) return false;
-        const blob = `${c.name || ""} ${c.animeTitle || ""} ${c.text || ""}`.toLowerCase();
-        return blob.includes(q);
+        return `${c.name || ""} ${c.animeTitle || ""} ${c.text || ""}`.toLowerCase().includes(q);
       });
 
       const container = document.getElementById("allComments");
       if (!filtered.length) {
-        container.innerHTML = `<p style='color:var(--muted);font-size:0.85rem;'>No ${currentFilter === "new" ? "new unread" : "seen"} comments right now.</p>`;
+        container.innerHTML = `<p style='color:var(--muted);font-size:.85rem;'>No ${currentFilter === "new" ? "new unread" : "seen"} comments right now.</p>`;
         return;
       }
 
       container.innerHTML = filtered.map(c => {
         const safeTitle = (c.animeTitle || "").replace(/'/g, "");
         const gotoUrl = `index.html?anime=${encodeURIComponent(c.animeId)}&comment=${encodeURIComponent(c.commentId)}`;
-        return `
-          <div class="c-card ${!c.seen && !c.isAdmin ? "unread" : ""}">
-            <div class="c-head">
-              <span><strong>${c.name}</strong> ${c.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + c.animeId}</span>
-              <span>${c.date || ''}</span>
-            </div>
-            <div class="c-text">${c.text}</div>
-            <div class="row" style="margin-bottom:8px;">
-              ${!c.seen && !c.isAdmin ? `<button class="blue" onclick="markSeen('${c.animeId}', '${c.commentId}')">✓ Seen</button>` : ""}
-              <button class="purple" onclick="window.open('${gotoUrl}', '_blank')">↗ Go To</button>
-              <button class="gray" onclick="deleteComment('${c.animeId}', '${c.commentId}')">Delete</button>
-            </div>
-            <div class="row">
-              <input type="text" id="rep_${c.commentId}" placeholder="Reply as Admin (auto-marks Seen)..." style="flex:1;margin:0;" />
-              <button class="green" onclick="replyComment('${c.animeId}', '${safeTitle}', '${c.commentId}')">Reply</button>
-            </div>
+        return `<div class="c-card ${!c.seen && !c.isAdmin ? "unread" : ""}">
+          <div class="c-head">
+            <span><strong>${c.name}</strong>${c.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''} • ${c.animeTitle || 'Anime #' + c.animeId}</span>
+            <span>${c.date || ''}</span>
           </div>
-        `;
+          <div class="c-text">${c.text}</div>
+          <div class="row" style="margin-bottom:8px;">
+            ${!c.seen && !c.isAdmin ? `<button class="blue" onclick="markSeen('${c.animeId}','${c.commentId}')">✓ Seen</button>` : ""}
+            <button class="purple" onclick="window.open('${gotoUrl}','_blank')">↗ Go To</button>
+            <button class="gray" onclick="deleteComment('${c.animeId}','${c.commentId}')">Delete</button>
+          </div>
+          <div class="row">
+            <input type="text" id="rep_${c.commentId}" placeholder="Reply as KomaVelt Admin..." style="flex:1;margin:0;" />
+            <button class="green" onclick="replyComment('${c.animeId}','${safeTitle}','${c.commentId}')">Reply</button>
+          </div>
+        </div>`;
       }).join("");
     }
 
     async function markSeen(animeId, commentId) {
-      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, {
-        method: "PATCH",
-        body: JSON.stringify({ seen: true, adminPin: ADMIN_PIN })
-      });
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, { method: "PATCH", body: JSON.stringify({ seen: true, adminPin: ADMIN_PIN }) });
       loadDashboard();
     }
 
     async function saveNotice(active) {
       const text = document.getElementById("noticeText").value.trim();
-      await fetch(`${DB}/site_config/notice.json`, {
-        method: "PUT",
-        body: JSON.stringify({ active, text, adminPin: ADMIN_PIN })
-      });
+      await fetch(`${DB}/site_config/notice.json`, { method: "PUT", body: JSON.stringify({ active, text, adminPin: ADMIN_PIN }) });
       loadDashboard();
     }
 
     async function publishPopup() {
       const title = document.getElementById("popTitle").value.trim();
-      const rawOpts = document.getElementById("popOptions").value.trim();
-      if (!title || !rawOpts) return alert("Enter popup title and options.");
-      const options = rawOpts.split(",").map(s => s.trim()).filter(Boolean);
-      const id = "pop_" + Date.now();
-      await fetch(`${DB}/site_config/popup.json`, {
-        method: "PUT",
-        body: JSON.stringify({ active: true, id, title, options, adminPin: ADMIN_PIN })
-      });
+      const options = document.getElementById("popOptions").value.split(",").map(s => s.trim()).filter(Boolean);
+      if (!title || !options.length) return alert("Enter popup title and options.");
+      await fetch(`${DB}/site_config/popup.json`, { method: "PUT", body: JSON.stringify({ active: true, id: "pop_" + Date.now(), title, options, adminPin: ADMIN_PIN }) });
+      loadDashboard();
+    }
+
+    async function useDynamicPopup() {
+      await fetch(`${DB}/site_config/popup.json`, { method: "PUT", body: JSON.stringify({ active: true, id: "", title: "", options: [], adminPin: ADMIN_PIN }) });
       loadDashboard();
     }
 
     async function disablePopup() {
-      await fetch(`${DB}/site_config/popup.json`, {
-        method: "PUT",
-        body: JSON.stringify({ active: false, adminPin: ADMIN_PIN })
-      });
+      await fetch(`${DB}/site_config/popup.json`, { method: "PUT", body: JSON.stringify({ active: false, adminPin: ADMIN_PIN }) });
       loadDashboard();
     }
 
     async function replyComment(animeId, animeTitle, commentId) {
       const text = document.getElementById("rep_" + commentId).value.trim();
       if (!text) return;
-      // 1. Post Admin Reply (marked seen: true)
       await fetch(`${DB}/comments/${animeId}.json`, {
         method: "POST",
-        body: JSON.stringify({
-          name: "AniGuide Admin",
-          text,
-          animeTitle,
-          isAdmin: true,
-          seen: true,
-          date: new Date().toLocaleDateString(),
-          adminPin: ADMIN_PIN
-        })
+        body: JSON.stringify({ name: "KomaVelt Admin", text, animeTitle, isAdmin: true, seen: true, date: new Date().toLocaleDateString(), adminPin: ADMIN_PIN })
       });
-      // 2. Mark original visitor comment as seen: true so it leaves New Comments
-      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, {
-        method: "PATCH",
-        body: JSON.stringify({ seen: true, adminPin: ADMIN_PIN })
-      });
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, { method: "PATCH", body: JSON.stringify({ seen: true, adminPin: ADMIN_PIN }) });
       loadDashboard();
     }
 
     async function deleteComment(animeId, commentId) {
       if (!confirm("Delete this comment?")) return;
-      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, {
-        method: "PUT",
-        body: JSON.stringify({ deleted: true, adminPin: ADMIN_PIN })
-      });
+      await fetch(`${DB}/comments/${animeId}/${commentId}.json`, { method: "PUT", body: JSON.stringify({ deleted: true, adminPin: ADMIN_PIN }) });
       await fetch(`${DB}/comments/${animeId}/${commentId}.json`, { method: "DELETE" });
       loadDashboard();
     }
