@@ -194,7 +194,7 @@ def post_to_telegram(photo_path, title, genres, short_desc, link):
     )
     res = subprocess.run(
         [
-            "curl", "-s", "-X", "POST",
+            "curl", "-sS", "-w", "\nHTTP:%{http_code}", "-X", "POST",
             f"https://api.telegram.org/bot{token}/sendPhoto",
             "-F", f"chat_id={TELEGRAM_CHAT_ID}",
             "-F", f"photo=@{photo_path}",
@@ -203,7 +203,7 @@ def post_to_telegram(photo_path, title, genres, short_desc, link):
         capture_output=True,
         text=True,
     )
-    print(f"Telegram post ({title}): {res.stdout[:120]}")
+    print(f"Telegram post ({title}) [code={res.returncode}]: {res.stdout.strip()} {res.stderr.strip()}")
 
 def fetch_page(page, per_page, sort_by):
     payload = json.dumps({
