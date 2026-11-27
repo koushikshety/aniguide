@@ -34,6 +34,17 @@ query ($page: Int, $perPage: Int, $sort: [MediaSort]) {
 }
 """
 
+def sanitize_text(text):
+    text = html.unescape(text or "")
+    text = re.sub(
+        r"</?(?:br|i|b|p|em|strong|a|span|div|h[1-6]|ul|ol|li)\b[^>]*>",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = text.replace("<", "").replace(">", "").replace("\n", " ")
+    return re.sub(r"\s+", " ", text).strip()
+
 def load_font(size, bold=True):
     path = (
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -148,6 +159,11 @@ def build_reel_slide2(cover, title, short_desc, out_path):
     cb = draw.textbbox((0, 0), cta_text, font=cta_font)
     draw.text(((W - (cb[2] - cb[0])) // 2, 1435), cta_text, font=cta_font, fill=(0, 229, 255, 255))
 
+    eng_font = load_font(28, bold=True)
+    eng_text = "SUBSCRIBE / FOLLOW  •  COMMENT  •  SHARE"
+    eb = draw.textbbox((0, 0), eng_text, font=eng_font)
+    draw.text(((W - (eb[2] - eb[0])) // 2, 1500), eng_text, font=eng_font, fill=(255, 215, 0, 255))
+
     canvas.convert("RGB").save(out_path, "JPEG", quality=90)
 
 def create_reel_video(slide1_path, slide2_path, mp4_path):
@@ -187,11 +203,13 @@ def post_to_telegram(photo_path, title, genres, short_desc, link):
     caption = (
         f"📚 {title}\n"
         f"🎭 {genres}\n\n"
-        f"{html.unescape(short_desc)}\n\n"
+        f"{sanitize_text(short_desc)}\n\n"
         f"🔥 Original Manga Deals (Amazon India) & Exact Watch Order:\n"
         f"👉 {link}\n\n"
         f"🐉 5,000+ Donghua & Manhua Hub:\n"
-        f"👉 {SITE_URL}donghua-manhua?utm_source=telegram&utm_medium=channel\n\n🔔 Follow for more daily anime, donghua & manga deals: @KomaVeltDeals"
+        f"👉 {SITE_URL}donghua-manhua?utm_source=telegram&utm_medium=channel\n\n"
+        f"🔔 Follow & Join @KomaVeltDeals for daily anime, donghua & manga deals!\n"
+        f"💬 Comment your favorite series below & 📤 Share with an anime friend!"
     )
     res = subprocess.run(
         [
@@ -250,15 +268,12 @@ def build_rss(items):
     xml_items = []
 
     for idx, m in enumerate(items, start=1):
-        title = m["title"].get("english") or m["title"].get("romaji") or "Top Manga"
-        title = title.replace("<", "").replace(">", "")
+        title = sanitize_text(m["title"].get("english") or m["title"].get("romaji") or "Top Manga")
         raw_img = m["coverImage"].get("extraLarge") or m["coverImage"].get("large") or ""
         genres = ", ".join((m.get("genres") or [])[:3])
         score = m.get("averageScore")
 
-        raw_desc = re.sub(r"<[^>]+>", " ", m.get("description") or "")
-        raw_desc = raw_desc.replace("<", "").replace(">", "").replace("\n", " ")
-        raw_desc = re.sub(r"\s+", " ", raw_desc).strip()
+        raw_desc = sanitize_text(m.get("description") or "")
         short_desc = (raw_desc[:160] + "...") if len(raw_desc) > 160 else raw_desc
 
         pin_filename = f"pin_{idx}.jpg"
@@ -293,6 +308,8 @@ def build_rss(items):
         pin_desc = (
             f"Comment \"MANGA\" and I'll send you the direct watch order & Amazon India box set link! 👇🔥\n"
             f"👉 Or tap the Related Video / Channel Bio Link right now.\n\n"
+            f"🔔 Subscribe & Follow for daily anime, donghua & manga deals!\n"
+            f"💬 Comment your favorite series below & 📤 Share this with an anime fan!\n\n"
             f"📚 KomaVelt Hub: {SITE_URL}\n"
             f"Explore {title} ({genres}) — {short_desc}\n\n"
             f"#MangaIndia #OriginalManga #MangaDeals #AnimeWatchOrder #KomaVelt"
@@ -337,7 +354,6 @@ def build_rss(items):
 if __name__ == "__main__":
     manga_list = fetch_manga()
     build_rss(manga_list)
-
 
 # Auto-rotate daily Donghua campaigns & Telegram post
 from dynamic_donghua import update_daily_donghua
